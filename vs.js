@@ -20,7 +20,8 @@ function loadPeer(cb){if(LOCAL||window.PHRelay)return cb(true);const s=document.
 function localConn(room,host){const bc=new BroadcastChannel('phvs-'+room),h={open:false,_on:{},on(t,f){this._on[t]=f},send(d){bc.postMessage({from:host?'h':'g',d})},close(){bc.close()}};
   bc.onmessage=e=>{const m=e.data;if(m.from===(host?'h':'g'))return;if(m.d&&m.d.__hello&&!h.open){h.open=true;bc.postMessage({from:host?'h':'g',d:{__hello:1}});h._on.open&&h._on.open();return}if(!m.d.__hello)h._on.data&&h._on.data(m.d)};
   setTimeout(()=>bc.postMessage({from:host?'h':'g',d:{__hello:1}}),50);return h}
-function menu(){
+function gfont(){if(el('phVg'))return;const l=document.createElement('link');l.id='phVg';l.rel='stylesheet';l.href='https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/galmuri.css';document.head.appendChild(l);const st=document.createElement('style');st.textContent='.phV-in:not(.code){font-family:"Galmuri11",-apple-system,"Apple SD Gothic Neo",sans-serif!important}';document.head.appendChild(st)} /* 이름 입력도 게임 글꼴(갈무리)로 */
+function menu(){gfont();
   const nm=cfg.name()||'';
   modal('ONLINE PLAY',`<label class="phV-l">NAME</label><input class="phV-in" id="phVn" maxlength="8" placeholder="닉네임" value="${esc(nm)}">
    <button class="phV-b" id="phVh">CREATE ROOM</button><div class="phV-or">OR JOIN WITH CODE</div>
