@@ -50,8 +50,8 @@ html,body{margin:0;min-height:100%;background:#1c1d22;color:var(--txt);font-fami
 .tg{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
 .tg span{font-size:11px;color:#c9c9d4;border:1.5px solid #3a3b47;border-radius:7px;padding:3px 7px 2px;line-height:1.2}
 .tg span.nw{color:var(--c);border-color:var(--c);font-family:var(--en);font-weight:700;font-size:9px;letter-spacing:.1em;padding:4px 6px 3px}
-.pl{flex-shrink:0;font-family:var(--en);font-weight:700;font-size:12px;letter-spacing:.12em;color:var(--c);border:2.5px solid var(--c);border-radius:12px;padding:12px 11px 11px;background:color-mix(in srgb,var(--c) 10%,transparent)}
-@media (max-width:370px){.ic{width:50px;height:50px}.nm b{font-size:18px}.pl{padding:10px 8px 9px;font-size:11px}}
+.pl{flex-shrink:0;font-family:var(--en);font-weight:700;font-size:9px;letter-spacing:.1em;color:var(--c);border:2px solid var(--c);border-radius:8px;padding:7px 7px 6px;background:color-mix(in srgb,var(--c) 10%,transparent)}
+@media (max-width:370px){.ic{width:50px;height:50px}.nm b{font-size:18px}.pl{padding:6px 6px 5px;font-size:8px}}
 .ft{text-align:center;color:#6c6d7c;font-size:11px;line-height:1.8;margin-top:28px}
 .inst{margin:18px auto 0;font-size:11px;color:#8f90a0;line-height:1.7;text-align:center}
 </style>
@@ -69,14 +69,14 @@ html,body{margin:0;min-height:100%;background:#1c1d22;color:var(--txt);font-fami
 </div>
 <script>
 const G=[
- {id:"petris",en:"PETRIS",nm:"페트리스",c:"#7ad35a",ds:"게임보이 감성 블록 쌓기.",tg:["블록","대결","랭킹"]},
+ {id:"petris",en:"PETRIS",nm:"페트리스",c:"#7ad35a",ds:"게임보이 감성 블록 쌓기 퍼즐",tg:["블록","대결","랭킹"]},
  {id:"switchpang",en:"SWITCH PANG",nm:"스위치팡",c:"#f2b000",ds:"옆 조각과 바꿔서 셋이면 팡!",tg:["퍼즐","대결","랭킹"]},
- {id:"fruitpang",en:"MARBLE PANG",nm:"구슬팡",c:"#ff6ec7",ds:"같은 구슬끼리 합쳐서 하트 구슬까지!",tg:["합체","퍼즐","랭킹"],nw:1},
- {id:"mines",en:"MINESWEEPER",nm:"지뢰찾기",c:"#6ea0ff",ds:"추억의 지뢰찾기.",tg:["클래식","랭킹"]},
- {id:"pang",en:"PANGYA PANGYA",nm:"팡야팡야",c:"#ff6b9a",ds:"같은 모양 넷이면 팡! 떨어지는 연쇄 퍼즐.",tg:["연쇄","퍼즐","대결"]},
- {id:"bricks",en:"BRICKS",nm:"벽돌깨기",c:"#46e09a",ds:"우주 벽돌깨기 · 아이템.",tg:["아케이드","아이템","랭킹"]},
- {id:"twinstar",en:"TWIN STAR",nm:"트윈스타",c:"#3fd0ff",ds:"둘이서 같은 하늘을 지키는 우주 슈팅.",tg:["슈팅","협동","랭킹"],nw:1},
- {id:"peekaboo",en:"PEEKABOO",nm:"틀린그림 · 숨은그림",c:"#8fd3ff",ds:"다른 곳 찾기와 숨은 물건 찾기.",tg:["찾기","랭킹"],nw:1},
+ {id:"fruitpang",en:"MARBLE PANG",nm:"구슬팡",c:"#ff6ec7",ds:"같은 구슬 합쳐서 하트까지!",tg:["합체","퍼즐","랭킹"],nw:1},
+ {id:"mines",en:"MINESWEEPER",nm:"지뢰찾기",c:"#6ea0ff",ds:"숫자 보고 지뢰를 피해 가요",tg:["클래식","랭킹"]},
+ {id:"pang",en:"PANGYA PANGYA",nm:"팡야팡야",c:"#ff6b9a",ds:"같은 모양 넷이면 연쇄 팡!",tg:["연쇄","퍼즐","대결"]},
+ {id:"bricks",en:"BRICKS",nm:"벽돌깨기",c:"#46e09a",ds:"아이템 쓰며 우주 벽돌깨기",tg:["아케이드","아이템","랭킹"]},
+ {id:"twinstar",en:"TWIN STAR",nm:"트윈스타",c:"#3fd0ff",ds:"둘이 함께 지키는 우주 슈팅",tg:["슈팅","협동","랭킹"],nw:1},
+ {id:"peekaboo",en:"PEEKABOO",nm:"틀린그림 · 숨은그림",c:"#8fd3ff",ds:"다른 곳과 숨은 물건 찾기",tg:["찾기","랭킹"],nw:1},
  {id:"hangulbi",en:"HANGULBI",nm:"한글비타자게임",c:"#3fc9b0",ds:"헷갈리는 우리말이 비처럼!",tg:["타자","우리말"]}];
 /* 게임 썸네일 = 각 게임의 웹앱 아이콘 */
 const IC={petris:"icon-180.png",switchpang:"apple-touch-icon.png",fruitpang:"icon-180.png",mines:"icon-180.png",pang:"apple-touch-icon.png",bricks:"icon-180.png",twinstar:"icon-180.png",peekaboo:"icon-180.png",hangulbi:"apple-touch-icon.png"};
