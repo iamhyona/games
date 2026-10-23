@@ -65,11 +65,12 @@ html,body{margin:0;min-height:100%;background:#1c1d22;color:var(--txt);font-fami
 <script>
 const G=[
  {id:"petris",nm:"페트리스",en:"PETRIS",c:"#7ad35a",ds:"게임보이 감성 블록 쌓기. 친구랑 대전도 돼요.",tg:["퍼즐","대전","랭킹"]},
- {id:"pang",nm:"팡",en:"PANG",c:"#ff6b9a",ds:"같은 모양 넷이면 팡! 떨어지는 연쇄 퍼즐.",tg:["연쇄","퍼즐","랭킹"]},
+ {id:"pang",nm:"팡야팡야",en:"PANGYA PANGYA",c:"#ff6b9a",ds:"같은 모양 넷이면 팡! 떨어지는 연쇄 퍼즐.",tg:["연쇄","퍼즐","랭킹"]},
  {id:"switchpang",nm:"스위치팡",en:"SWITCH PANG",c:"#f2b000",ds:"옆 조각과 바꿔서 셋이면 팡! 시간 안에 최고 점수.",tg:["매치3","타임어택","랭킹"]},
  {id:"bricks",nm:"벽돌깨기",en:"BRICKS",c:"#46e09a",ds:"네온 레트로 벽돌깨기. 10스테이지와 아이템.",tg:["아케이드","아이템","랭킹"]},
  {id:"mines",nm:"지뢰찾기",en:"MINESWEEPER",c:"#6ea0ff",ds:"추억의 지뢰찾기. 난이도별 최단 시간 랭킹.",tg:["클래식","두뇌","랭킹"]},
- {id:"hangulbi",nm:"한글비타자게임",en:"HANGULBI",c:"#3fc9b0",ds:"헷갈리는 우리말이 비처럼! 터뜨리면 뜻이 나와요.",tg:["타자","맞춤법","손풀기"]}];
+ {id:"hangulbi",nm:"한글비타자게임",en:"HANGULBI",c:"#3fc9b0",ds:"헷갈리는 우리말이 비처럼! 터뜨리면 뜻이 나와요.",tg:["타자","맞춤법","손풀기"]},
+ {id:"twinstar",nm:"트윈스타",en:"TWIN STAR",c:"#3fd0ff",ds:"친구와 둘이서 같은 하늘을 지키는 우주 슈팅. 혼자도 돼요.",tg:["슈팅","협동","랭킹"]}];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 document.getElementById("grid").innerHTML=G.map((g,i)=>`<a class="card" style="--c:${g.c}" href="https://iamhyona.github.io/${g.id}/">
  <div class="th"><img src="t-${g.id}.jpg" alt="${esc(g.nm)} 미리보기" loading="${i<2?"eager":"lazy"}" width="600" height="315"><span class="no">${String(i+1).padStart(2,"0")}</span></div>
