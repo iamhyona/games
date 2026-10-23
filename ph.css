@@ -1,0 +1,34 @@
+/* ===== 공통 UI (PETRIS·스위치팡·팡팡·벽돌깨기 통일) ===== */
+.lcd-label{display:flex;align-items:center;gap:8px;padding:11px 10px 9px;white-space:nowrap;overflow:hidden;box-sizing:border-box;width:100%;flex-shrink:0}
+.lcd-label .ln{flex:1 1 0;min-width:0;overflow:hidden;display:flex;justify-content:flex-end;height:7px}
+.lcd-label .ln:last-child{transform:scaleX(-1)}
+.lcd-label .ln canvas{display:block;image-rendering:pixelated}
+.lcd-label>span{flex:0 0 auto}
+.lcd-label .copy{font-family:"Press Start 2P",monospace;font-size:8px;letter-spacing:1px;color:#b4b4cc;line-height:1}
+.phS{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:0 20px 16px;box-sizing:border-box;z-index:6;overflow:hidden}
+.phS-sp{min-height:0;flex-basis:0;flex-shrink:1}
+.phS>*:not(.phS-sp){flex-shrink:0}
+.phS-sp.a{flex:0 0 24%}.phS-sp.b{flex:0 0 8%}.phS-sp.c{flex:1 1 0}
+.phS-logo{height:72px;width:min(300px,82vw);display:flex;align-items:center;justify-content:center}
+.phS-logo svg{display:block;width:100%;height:auto;max-height:100%;filter:drop-shadow(0 0 5px rgba(255,255,255,.12))}
+.phS-show{height:36px;margin-top:14px;display:flex;gap:3px;align-items:center;justify-content:center}
+.phS-show img,.phS-show svg{width:34px;height:34px;display:block}
+.phS-btns{display:flex;flex-direction:column;gap:12px;align-items:center;width:100%}
+.phS .phS-b,.phT .phS-b{position:relative!important;width:232px!important;max-width:100%!important;height:52px!important;border:3px solid var(--phB,#5d5f70)!important;box-shadow:inset 0 0 0 3px var(--phBg,#131419),inset 0 0 0 5px var(--phR,#2a2b33)!important;background:var(--phBg,#131419)!important;color:var(--phT,#f2f2f7)!important;font:700 14px "Silkscreen",monospace!important;letter-spacing:.18em!important;cursor:pointer!important;border-radius:0!important;padding:0!important;margin:0!important;text-shadow:none!important;-webkit-tap-highlight-color:transparent!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.phS .phS-b::before,.phS .phS-b::after,.phT .phS-b::before,.phT .phS-b::after{content:none!important;display:none!important}
+.phS .phS-b:active,.phT .phS-b:active{transform:translateY(2px)!important}
+.phS .phS-b.gold{border-color:#d9a400!important;box-shadow:none!important;color:#f2b000!important}
+.phS-credit{color:var(--phC,#6c6d7c);font-size:11px;line-height:1.7;text-align:center}
+.phS-credit small{display:block;font:8px "Silkscreen",monospace;letter-spacing:.06em;opacity:.85;margin-bottom:6px}
+.phT{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(8,9,12,.88);padding:20px;box-sizing:border-box}
+.phT-c{width:min(320px,100%);background:#131419;border:3px solid #5d5f70;box-shadow:inset 0 0 0 3px #131419,inset 0 0 0 5px #2a2b33;padding:22px 18px 18px;color:#e9e9f0;text-align:center;box-sizing:border-box}
+.phT-h{font:700 15px "Silkscreen",monospace;letter-spacing:.18em;color:#f2b000;margin-bottom:6px}
+.phT-g{font-size:12px;color:#a8a9b8;margin-bottom:16px;line-height:1.6}
+.phT-r{display:grid;grid-template-columns:auto 1fr;gap:9px 10px;align-items:center;text-align:left;margin-bottom:18px}
+.phT-r kbd{justify-self:end;font-family:inherit;font-size:11px;border:1px solid #4a4b58;border-radius:4px;padding:3px 6px;color:#f2f2f7;white-space:nowrap;background:#0b0b0f}
+.phT-r span{font-size:12px;color:#c9c9d4;line-height:1.5}
+.phT-k{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:#a8a9b8;margin:0 0 14px;cursor:pointer;user-select:none;-webkit-user-select:none}
+.phT-k input{appearance:none;-webkit-appearance:none;width:16px;height:16px;border:2px solid #6c6d7c;margin:0;display:grid;place-items:center;background:#0b0b0f;border-radius:0;cursor:pointer}
+.phT-k input:checked{border-color:#f2b000;background:#f2b000}
+.phT-k input:checked::after{content:"";width:4px;height:8px;border:solid #131419;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+.phT .phS-b{margin:0 auto!important;--phB:#5d5f70;--phT:#f2f2f7;--phBg:#131419;--phR:#2a2b33}
