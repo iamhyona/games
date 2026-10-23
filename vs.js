@@ -15,7 +15,7 @@ function chip(txt){let c=el('phVc');if(!c){c=document.createElement('div');c.id=
 function code4(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<4;i++)c+=a[Math.floor(Math.random()*a.length)];return c}
 function cleanup(){try{conn&&conn.close()}catch(e){}try{peer&&peer.destroy()}catch(e){}peer=null;conn=null;API.active=false;chip(null);clearTimeout(scT)}
 function send(d){try{if(conn&&conn.open)conn.send(d)}catch(e){}}
-function loadPeer(cb){if(LOCAL||window.Peer)return cb(true);const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js';s.onload=()=>cb(true);s.onerror=()=>cb(false);document.head.appendChild(s)}
+function loadPeer(cb){if(LOCAL||window.PHRelay)return cb(true);const s=document.createElement('script');s.src='../games/relay.js?v=1';s.onload=()=>cb(true);s.onerror=()=>cb(false);document.head.appendChild(s)} /* 중계 서버 방식 (휴대폰 데이터에서도 연결) */
 /* 테스트용 가짜 연결 (BroadcastChannel) */
 function localConn(room,host){const bc=new BroadcastChannel('phvs-'+room),h={open:false,_on:{},on(t,f){this._on[t]=f},send(d){bc.postMessage({from:host?'h':'g',d})},close(){bc.close()}};
   bc.onmessage=e=>{const m=e.data;if(m.from===(host?'h':'g'))return;if(m.d&&m.d.__hello&&!h.open){h.open=true;bc.postMessage({from:host?'h':'g',d:{__hello:1}});h._on.open&&h._on.open();return}if(!m.d.__hello)h._on.data&&h._on.data(m.d)};
@@ -31,14 +31,11 @@ function menu(){
 }
 function host(){cleanup();isHost=true;code=code4();modal('CREATING','<p class="phV-m">잠시만요…</p>');
   if(LOCAL){showCode();setup(localConn(code,true));return}
-  loadPeer(ok=>{if(!ok)return fail('load');peer=new Peer('phvs-'+cfg.id+'-'+code,OPTS);
-    peer.on('open',showCode);peer.on('connection',c=>{if(conn&&conn.open){c.close();return}setup(c)});
-    peer.on('error',e=>{if(e.type==='unavailable-id')host();else fail(e.type)})})}
+  loadPeer(ok=>{if(!ok)return fail('load');peer=PHRelay.host(cfg.id,code,{onReady:showCode,onConn:c=>setup(c),onError:t=>fail(t)})})}
 function showCode(){modal('ROOM CODE',`<div class="phV-code">${code}</div><p class="phV-m">친구에게 이 코드를 알려 주세요.<br>친구가 들어오면 바로 시작해요.</p><div class="phV-dots"><i></i><i></i><i></i></div>`)}
 function join(c){cleanup();isHost=false;code=c;modal('CONNECTING',`<div class="phV-code">${esc(c)}</div><p class="phV-m">방에 들어가는 중…</p>`);
   if(LOCAL){setup(localConn(c,false));return}
-  loadPeer(ok=>{if(!ok)return fail('load');peer=new Peer(OPTS);peer.on('open',()=>setup(peer.connect('phvs-'+cfg.id+'-'+c,{reliable:true})));
-    peer.on('error',e=>fail(e.type==='peer-unavailable'?'nofound':e.type));const my=peer;setTimeout(()=>{if(peer===my&&!(conn&&conn.open))fail('timeout')},20000)})}
+  loadPeer(ok=>{if(!ok)return fail('load');peer=PHRelay.join(cfg.id,c,{onConn:cc=>setup(cc),onError:t=>fail(t)})})}
 function fail(t){const msg=t==='nofound'?'그 코드의 방을 찾을 수 없어요.<br>코드를 다시 확인해 주세요.':t==='load'||t==='network'||t==='server-error'?'연결 서버에 접속하지 못했어요.<br>잠시 후 다시 해 주세요.':'연결에 실패했어요.<br>와이파이나 데이터를 바꿔서 다시 해 보세요.';
   cleanup();modal('WOOPS!',`<p class="phV-m">${msg}</p><button class="phV-b" id="phVr">RETRY</button>`);el('phVr').onclick=menu}
 function setup(c){conn=c;c.on('open',()=>{send({t:'hi',name:cfg.name()||'익명'});if(isHost)setTimeout(go,500)});c.on('data',onData);c.on('close',onClose);c.on('error',onClose)}
