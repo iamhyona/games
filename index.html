@@ -15,41 +15,42 @@
 <meta name="theme-color" content="#0b0b0f">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GAMES">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 <style>
 @font-face{font-family:"NeoDunggeunmo";src:url(https://cdn.jsdelivr.net/npm/@kfonts/neodgm@0.5.0/neodgm.woff2) format("woff2");font-display:swap}
-:root{--bg:#0b0b0f;--scr:#14151a;--line:#2c2d36;--line2:#363743;--txt:#f2f2f7;--sub:#8f90a0;--gold:#f2b000;--f:"NeoDunggeunmo",ui-monospace,monospace;--en:"Silkscreen",var(--f)}
+:root{--bg:#0b0b0f;--line:#2c2d36;--line2:#363743;--txt:#f2f2f7;--sub:#8f90a0;--gold:#f2b000;--f:"NeoDunggeunmo",ui-monospace,monospace;--en:"Silkscreen",var(--f)}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:#1c1d22;color:var(--txt);font-family:var(--f);-webkit-font-smoothing:none;-webkit-tap-highlight-color:transparent}
-.ph{width:100%;max-width:460px;min-height:100vh;margin:0 auto;background:var(--bg);padding:10px 12px 28px;display:flex;flex-direction:column}
+.ph{width:100%;max-width:460px;min-height:100vh;margin:0 auto;background:var(--bg);padding:calc(env(safe-area-inset-top,0px) + 10px) 12px calc(env(safe-area-inset-bottom,0px) + 28px);display:flex;flex-direction:column}
 @media (min-width:520px){.ph{max-width:560px;border-radius:30px;margin:16px auto;min-height:calc(100vh - 32px);box-shadow:0 20px 50px rgba(0,0,0,.55);padding:14px 22px 34px}}
-@media (min-width:800px){.ph{max-width:900px}}
 .hd{display:flex;align-items:center;gap:8px;justify-content:center;padding:6px 4px 14px;color:#c9c9d4;font-size:11px;letter-spacing:.1em;white-space:nowrap;font-family:var(--en)}
 .rb{display:grid;grid-template-columns:repeat(21,4px);grid-template-rows:4px 4px;gap:1px;overflow:hidden;flex-shrink:1}.rb i{display:block}.rb.r{transform:scaleX(-1)}
 @media (max-width:370px){.rb{grid-template-columns:repeat(14,4px)}}
-.top{text-align:center;padding:18px 0 22px}
+.top{text-align:center;padding:14px 0 20px}
 .logo{font-family:var(--en);font-weight:700;font-size:34px;letter-spacing:.06em;line-height:1.05;color:#fff;text-shadow:0 0 10px rgba(242,176,0,.55),0 0 24px rgba(242,176,0,.25)}
 .logo b{display:block;color:var(--gold);font-size:15px;letter-spacing:.42em;margin-top:8px;text-shadow:none}
 .lead{color:var(--sub);font-size:13px;margin-top:14px;line-height:1.6}
-.grid{display:grid;grid-template-columns:1fr;gap:14px}
-@media (min-width:800px){.grid{grid-template-columns:1fr 1fr;gap:18px}}
-.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;border:2px solid var(--line2);border-radius:14px;background:linear-gradient(180deg,#1a1b21,#131419);overflow:hidden;transition:transform .15s,border-color .15s,box-shadow .15s}
-.card:hover,.card:focus-visible{transform:translateY(-3px);border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 10px 26px rgba(0,0,0,.45),0 0 22px color-mix(in srgb,var(--c) 30%,transparent);outline:none}
-.card:active{transform:translateY(1px)}
-.th{position:relative;aspect-ratio:1200/630;background:#0e0f13;border-bottom:2px solid var(--line)}
-.th img{display:block;width:100%;height:100%;object-fit:cover;image-rendering:auto}
-.no{position:absolute;left:8px;top:8px;font-family:var(--en);font-weight:700;font-size:11px;color:#fff;background:rgba(10,11,14,.78);border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:3px 7px;letter-spacing:.08em}
-.bd{display:flex;align-items:center;gap:12px;padding:12px 14px 14px}
-.tx{flex:1;min-width:0}
-.nm{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.nm b{font-size:18px;font-weight:400;color:#fff}
-.nm em{font-style:normal;font-family:var(--en);font-weight:700;font-size:10px;letter-spacing:.12em;color:var(--c)}
-.ds{color:var(--sub);font-size:12px;margin-top:6px;line-height:1.5}
-.tg{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
-.tg span{font-size:10px;color:#c9c9d4;border:1px solid var(--line2);border-radius:5px;padding:2px 6px}
-.go{flex-shrink:0;font-family:var(--en);font-weight:700;font-size:12px;letter-spacing:.12em;color:var(--c);border:2px solid var(--c);border-radius:9px;padding:9px 11px;background:color-mix(in srgb,var(--c) 10%,transparent)}
+.list{display:flex;flex-direction:column;gap:10px}
+.it{position:relative;display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;border:2px solid var(--line2);border-radius:12px;background:#131419;padding:14px 14px 13px;transition:transform .12s,border-color .12s,box-shadow .12s}
+.it:hover,.it:focus-visible{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 0 18px color-mix(in srgb,var(--c) 28%,transparent);outline:none}
+.it:active{transform:scale(.985)}
+.no{font-family:var(--en);font-weight:700;font-size:10px;color:#6c6d7c;letter-spacing:.06em;width:18px;flex-shrink:0}
+.tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.lg svg{display:block;height:24px;width:auto;max-width:100%}
+.nm{display:flex;align-items:baseline;gap:8px;min-width:0}
+.nm b{font-size:14px;font-weight:400;color:#fff;white-space:nowrap}
+.nm span{font-size:11px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{font-family:var(--en);font-weight:700;font-size:8px;letter-spacing:.1em;color:var(--c);border:1px solid var(--c);border-radius:4px;padding:2px 4px;margin-left:2px;flex-shrink:0}
+.go{flex-shrink:0;width:28px;height:28px;display:grid;place-items:center;color:var(--c)}
+.go svg{width:12px;height:12px;display:block}
 .ft{text-align:center;color:#6c6d7c;font-size:11px;line-height:1.8;margin-top:28px}
+.inst{margin:18px auto 0;font-size:11px;color:#8f90a0;line-height:1.7;text-align:center}
 </style>
 </head>
 <body>
@@ -59,24 +60,31 @@ html,body{margin:0;min-height:100%;background:#1c1d22;color:var(--txt);font-fami
     <div class="logo">PARK HYONA<b>GAMES</b></div>
     <div class="lead">박현아가 심심해서 만든 비상업적 게임 모음<br>골라서 플레이하세요!</div>
   </div>
-  <div class="grid" id="grid"></div>
+  <div class="list" id="list"></div>
+  <div class="inst" id="inst">공유 버튼 → 홈 화면에 추가하면<br>앱처럼 열리고 게임도 그 안에서 열려요</div>
   <div class="ft">모든 게임은 무료 · 비상업적 용도예요<br>휴대폰에서 가장 잘 돌아가요</div>
 </div>
 <script>
 const G=[
- {id:"petris",nm:"페트리스",en:"PETRIS",c:"#7ad35a",ds:"게임보이 감성 블록 쌓기. 친구랑 대전도 돼요.",tg:["퍼즐","대전","랭킹"]},
- {id:"pang",nm:"팡야팡야",en:"PANGYA PANGYA",c:"#ff6b9a",ds:"같은 모양 넷이면 팡! 떨어지는 연쇄 퍼즐.",tg:["연쇄","퍼즐","랭킹"]},
- {id:"switchpang",nm:"스위치팡",en:"SWITCH PANG",c:"#f2b000",ds:"옆 조각과 바꿔서 셋이면 팡! 시간 안에 최고 점수.",tg:["매치3","타임어택","랭킹"]},
- {id:"bricks",nm:"벽돌깨기",en:"BRICKS",c:"#46e09a",ds:"네온 레트로 벽돌깨기. 10스테이지와 아이템.",tg:["아케이드","아이템","랭킹"]},
- {id:"mines",nm:"지뢰찾기",en:"MINESWEEPER",c:"#6ea0ff",ds:"추억의 지뢰찾기. 난이도별 최단 시간 랭킹.",tg:["클래식","두뇌","랭킹"]},
- {id:"hangulbi",nm:"한글비타자게임",en:"HANGULBI",c:"#3fc9b0",ds:"헷갈리는 우리말이 비처럼! 터뜨리면 뜻이 나와요.",tg:["타자","맞춤법","손풀기"]},
- {id:"twinstar",nm:"트윈스타",en:"TWIN STAR",c:"#3fd0ff",ds:"친구와 둘이서 같은 하늘을 지키는 우주 슈팅. 혼자도 돼요.",tg:["슈팅","협동","랭킹"]}];
+ {id:"petris",lg:"PETRIS",nm:"페트리스",c:"#7ad35a",ds:"게임보이 감성 블록 쌓기",t:"VS"},
+ {id:"pang",lg:"PANGYA PANGYA",nm:"팡야팡야",c:"#ff6b9a",ds:"같은 모양 넷이면 팡! 연쇄 퍼즐",t:"VS"},
+ {id:"switchpang",lg:"SWITCH PANG",nm:"스위치팡",c:"#f2b000",ds:"옆 조각과 바꿔서 셋이면 팡!",t:"VS"},
+ {id:"bricks",lg:"BRICKS",nm:"벽돌깨기",c:"#46e09a",ds:"우주 벽돌깨기 · 아이템",t:"VS"},
+ {id:"mines",lg:"MINESWEEPER",nm:"지뢰찾기",c:"#6ea0ff",ds:"추억의 지뢰찾기"},
+ {id:"hangulbi",lg:"HANGULBI",nm:"한글비타자게임",c:"#3fc9b0",ds:"헷갈리는 우리말이 비처럼!"},
+ {id:"twinstar",lg:"TWIN STAR",nm:"트윈스타",c:"#3fd0ff",ds:"둘이서 같은 하늘을 지키는 우주 슈팅",t:"CO-OP"},
+ {id:"mandu",lg:"MANDU PANG",nm:"만두팡",c:"#ffb05c",ds:"팡팡이를 합쳐서 교자만두 빚기",t:"NEW"}];
+/* 게임 타이틀과 같은 도트 글씨 (5×7) */
+const F={A:"01110100011000111111100011000110001",B:"11110100011000111110100011000111110",C:"01111100001000010000100001000001111",D:"11110100011000110001100011000111110",E:"11111100001000011110100001000011111",G:"01111100001000010111100011000101111",H:"10001100011000111111100011000110001",I:"11111001000010000100001000010011111",K:"10001100101010011000101001001010001",L:"10000100001000010000100001000011111",M:"10001110111010110101100011000110001",N:"10001110011010110011100011000110001",O:"01110100011000110001100011000101110",P:"11110100011000111110100001000010000",R:"11110100011000111110101001001010001",S:"01111100001000001110000010000111110",T:"11111001000010000100001000010000100",U:"10001100011000110001100011000101110",W:"10001100011000110101101011010101010",Y:"10001100010101000100001000010000100"};
+const PAL=["#e8284f","#f26a0d","#f2b000","#10b870","#00a8e0","#2a5ef0","#8a3cf0"];
+function dots(word){const c=10;let o="",x=0,k=0;for(const ch of word){if(ch===" "){x+=c*3;continue}const g=F[ch],col=PAL[k++%7];if(g)for(let y=0;y<7;y++)for(let i=0;i<5;i++)o+=`<circle cx="${x+i*c+c/2}" cy="${y*c+c/2}" r="${c*.4}" fill="${g[y*5+i]==="1"?col:"rgba(255,255,255,.06)"}"/>`;x+=c*6}
+ return `<svg viewBox="0 0 ${x-c} ${7*c}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${word}">${o}</svg>`}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-document.getElementById("grid").innerHTML=G.map((g,i)=>`<a class="card" style="--c:${g.c}" href="https://iamhyona.github.io/${g.id}/">
- <div class="th"><img src="t-${g.id}.jpg" alt="${esc(g.nm)} 미리보기" loading="${i<2?"eager":"lazy"}" width="600" height="315"><span class="no">${String(i+1).padStart(2,"0")}</span></div>
- <div class="bd"><div class="tx"><div class="nm"><b>${esc(g.nm)}</b><em>${g.en}</em></div><div class="ds">${esc(g.ds)}</div><div class="tg">${g.tg.map(t=>`<span>${t}</span>`).join("")}</div></div><span class="go">PLAY</span></div></a>`).join("");
+const ARR='<svg viewBox="0 0 6 10" shape-rendering="crispEdges" fill="currentColor"><rect x="0" y="0" width="2" height="2"/><rect x="2" y="2" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect x="2" y="6" width="2" height="2"/><rect x="0" y="8" width="2" height="2"/></svg>';
+document.getElementById("list").innerHTML=G.map((g,i)=>`<a class="it" style="--c:${g.c}" href="/${g.id}/"><span class="no">${String(i+1).padStart(2,"0")}</span><div class="tx"><div class="lg">${dots(g.lg)}</div><div class="nm"><b>${esc(g.nm)}</b><span>${esc(g.ds)}</span>${g.t?`<i class="tag">${g.t}</i>`:""}</div></div><span class="go">${ARR}</span></a>`).join("");
 const RB=["#e8284f","#f26a0d","#f2b000","#10b870","#00a8e0","#3a5bd9","#8a3cf0"];
 ["rb1","rb2"].forEach(id=>{const el=document.getElementById(id);let h="";for(let r=0;r<2;r++)for(let c=0;c<21;c++)h+=`<i style="background:${RB[(c+r*3)%7]}"></i>`;el.innerHTML=h});
+try{if(navigator.standalone||matchMedia("(display-mode: standalone)").matches)document.getElementById("inst").remove()}catch(e){}
 </script>
 </body>
 </html>
