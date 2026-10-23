@@ -47,3 +47,7 @@ html .vs .mode-btn[data-m],html .ob.md[data-m],html #modeOv .ob[data-m],html #ov
 html .vs .mode-btn[data-m]:hover,html .vs .mode-btn[data-m]:active,html .vs .mode-btn[data-m]:focus-visible,html .ob.md[data-m]:active,html #modeOv .ob[data-m]:active,html #ovMode .btn[data-m]:active{background:var(--lvA)!important;color:var(--lvT)!important;border-color:var(--lv)!important;box-shadow:inset 0 0 0 2px var(--lvA),inset 0 0 0 4px var(--lvA)!important}
 #modeOv,#ovMode{background:#0b0c10!important}
 html .vs .mode-btn[data-m] small,html .ob.md[data-m] small,html #modeOv .ob[data-m] small,html #ovMode .btn[data-m] small{color:inherit!important;opacity:.8!important}
+/* 모드·레벨 버튼 설명글 숨김, 높이 통일 */
+html .vs .mode-btn[data-m] small,html .ob.md[data-m] small,html #modeOv .ob[data-m] small,html #ovMode .btn[data-m] small,html .gmT .gmb small{display:none!important}
+html .vs .mode-btn[data-m],html .ob.md[data-m],html #modeOv .ob[data-m],html #ovMode .btn[data-m]{height:52px!important;min-height:52px!important;padding-top:0!important;padding-bottom:0!important;justify-content:center!important;box-sizing:border-box!important}
+html .gmT .gmb{min-height:40px!important}
