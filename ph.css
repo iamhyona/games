@@ -32,3 +32,7 @@
 .phT-k input:checked{border-color:#f2b000;background:#f2b000}
 .phT-k input:checked::after{content:"";width:4px;height:8px;border:solid #131419;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
 .phT .phS-b{margin:0 auto!important;--phB:#5d5f70;--phT:#f2f2f7;--phBg:#131419;--phR:#2a2b33}
+/* 상단 탭 공통 (모드·랭킹): 밝은 회색 · 선택 시 톤온톤으로 은은하게 */
+html .vs .mt-btn,html .rk-tabs button,html .gmT .gmb{font:700 11px "Silkscreen",monospace!important;letter-spacing:.02em!important;color:#b9bdc3!important;background:transparent!important;border:2px solid rgba(200,204,210,.32)!important;box-shadow:none!important;text-shadow:none!important;border-radius:0!important;white-space:nowrap!important;overflow:hidden;padding-left:2px!important;padding-right:2px!important}
+html .vs .mt-btn.on,html .rk-tabs button.on,html .gmT .gmb.on{color:#f4f6f8!important;background:rgba(220,226,232,.13)!important;border-color:rgba(232,236,242,.65)!important}
+html .gmT .gmb small{color:inherit!important}
