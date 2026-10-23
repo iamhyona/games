@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PARK HYONA GAMES</title>
+<meta name="description" content="박현아가 심심해서 만든 비상업적 게임 모음. 골라서 플레이하세요!">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PARK HYONA GAMES">
+<meta property="og:description" content="박현아가 심심해서 만든 비상업적 게임 모음. 골라서 플레이하세요!">
+<meta property="og:image" content="https://iamhyona.github.io/games/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:url" content="https://iamhyona.github.io/games/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0b0b0f">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"NeoDunggeunmo";src:url(https://cdn.jsdelivr.net/npm/@kfonts/neodgm@0.5.0/neodgm.woff2) format("woff2");font-display:swap}
+:root{--bg:#0b0b0f;--scr:#14151a;--line:#2c2d36;--line2:#363743;--txt:#f2f2f7;--sub:#8f90a0;--gold:#f2b000;--f:"NeoDunggeunmo",ui-monospace,monospace;--en:"Silkscreen",var(--f)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#1c1d22;color:var(--txt);font-family:var(--f);-webkit-font-smoothing:none;-webkit-tap-highlight-color:transparent}
+.ph{width:100%;max-width:460px;min-height:100vh;margin:0 auto;background:var(--bg);padding:10px 12px 28px;display:flex;flex-direction:column}
+@media (min-width:520px){.ph{max-width:880px;border-radius:30px;margin:16px auto;min-height:calc(100vh - 32px);box-shadow:0 20px 50px rgba(0,0,0,.55);padding:14px 22px 34px}}
+.hd{display:flex;align-items:center;gap:8px;justify-content:center;padding:6px 4px 14px;color:#c9c9d4;font-size:11px;letter-spacing:.1em;white-space:nowrap;font-family:var(--en)}
+.rb{display:grid;grid-template-columns:repeat(21,4px);grid-template-rows:4px 4px;gap:1px;overflow:hidden;flex-shrink:1}.rb i{display:block}.rb.r{transform:scaleX(-1)}
+@media (max-width:370px){.rb{grid-template-columns:repeat(14,4px)}}
+.top{text-align:center;padding:18px 0 22px}
+.logo{font-family:var(--en);font-weight:700;font-size:34px;letter-spacing:.06em;line-height:1.05;color:#fff;text-shadow:0 0 10px rgba(242,176,0,.55),0 0 24px rgba(242,176,0,.25)}
+.logo b{display:block;color:var(--gold);font-size:15px;letter-spacing:.42em;margin-top:8px;text-shadow:none}
+.lead{color:var(--sub);font-size:13px;margin-top:14px;line-height:1.6}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:520px){.grid{grid-template-columns:1fr 1fr;gap:18px}}
+.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;border:2px solid var(--line2);border-radius:14px;background:linear-gradient(180deg,#1a1b21,#131419);overflow:hidden;transition:transform .15s,border-color .15s,box-shadow .15s}
+.card:hover,.card:focus-visible{transform:translateY(-3px);border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 10px 26px rgba(0,0,0,.45),0 0 22px color-mix(in srgb,var(--c) 30%,transparent);outline:none}
+.card:active{transform:translateY(1px)}
+.th{position:relative;aspect-ratio:1200/630;background:#0e0f13;border-bottom:2px solid var(--line)}
+.th img{display:block;width:100%;height:100%;object-fit:cover;image-rendering:auto}
+.no{position:absolute;left:8px;top:8px;font-family:var(--en);font-weight:700;font-size:11px;color:#fff;background:rgba(10,11,14,.78);border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:3px 7px;letter-spacing:.08em}
+.bd{display:flex;align-items:center;gap:12px;padding:12px 14px 14px}
+.tx{flex:1;min-width:0}
+.nm{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.nm b{font-size:18px;font-weight:400;color:#fff}
+.nm em{font-style:normal;font-family:var(--en);font-weight:700;font-size:10px;letter-spacing:.12em;color:var(--c)}
+.ds{color:var(--sub);font-size:12px;margin-top:6px;line-height:1.5}
+.tg{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.tg span{font-size:10px;color:#c9c9d4;border:1px solid var(--line2);border-radius:5px;padding:2px 6px}
+.go{flex-shrink:0;font-family:var(--en);font-weight:700;font-size:12px;letter-spacing:.12em;color:var(--c);border:2px solid var(--c);border-radius:9px;padding:9px 11px;background:color-mix(in srgb,var(--c) 10%,transparent)}
+.ft{text-align:center;color:#6c6d7c;font-size:11px;line-height:1.8;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="ph">
+  <div class="hd"><span class="rb" id="rb1"></span><span>© 2026 PARK HYONA</span><span class="rb r" id="rb2"></span></div>
+  <div class="top">
+    <div class="logo">PARK HYONA<b>GAMES</b></div>
+    <div class="lead">박현아가 심심해서 만든 비상업적 게임 모음<br>골라서 플레이하세요!</div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="ft">모든 게임은 무료 · 비상업적 용도예요<br>휴대폰에서 가장 잘 돌아가요</div>
+</div>
+<script>
+const G=[
+ {id:"petris",nm:"페트리스",en:"PETRIS",c:"#7ad35a",ds:"게임보이 감성 블록 쌓기. 친구랑 대전도 돼요.",tg:["퍼즐","대전","랭킹"]},
+ {id:"pang",nm:"팡",en:"PANG",c:"#ff6b9a",ds:"같은 모양 넷이면 팡! 떨어지는 연쇄 퍼즐.",tg:["연쇄","퍼즐","랭킹"]},
+ {id:"switchpang",nm:"스위치팡",en:"SWITCH PANG",c:"#f2b000",ds:"옆 조각과 바꿔서 셋이면 팡! 시간 안에 최고 점수.",tg:["매치3","타임어택","랭킹"]},
+ {id:"bricks",nm:"벽돌깨기",en:"BRICKS",c:"#46e09a",ds:"네온 레트로 벽돌깨기. 10스테이지와 아이템.",tg:["아케이드","아이템","랭킹"]},
+ {id:"mines",nm:"지뢰찾기",en:"MINESWEEPER",c:"#6ea0ff",ds:"추억의 지뢰찾기. 난이도별 최단 시간 랭킹.",tg:["클래식","두뇌","랭킹"]},
+ {id:"hangulbi",nm:"한글비타자게임",en:"HANGULBI",c:"#3fc9b0",ds:"헷갈리는 우리말이 비처럼! 터뜨리면 뜻이 나와요.",tg:["타자","맞춤법","손풀기"]}];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+document.getElementById("grid").innerHTML=G.map((g,i)=>`<a class="card" style="--c:${g.c}" href="https://iamhyona.github.io/${g.id}/">
+ <div class="th"><img src="t-${g.id}.jpg" alt="${esc(g.nm)} 미리보기" loading="${i<2?"eager":"lazy"}" width="600" height="315"><span class="no">${String(i+1).padStart(2,"0")}</span></div>
+ <div class="bd"><div class="tx"><div class="nm"><b>${esc(g.nm)}</b><em>${g.en}</em></div><div class="ds">${esc(g.ds)}</div><div class="tg">${g.tg.map(t=>`<span>${t}</span>`).join("")}</div></div><span class="go">PLAY</span></div></a>`).join("");
+const RB=["#e8284f","#f26a0d","#f2b000","#10b870","#00a8e0","#3a5bd9","#8a3cf0"];
+["rb1","rb2"].forEach(id=>{const el=document.getElementById(id);let h="";for(let r=0;r<2;r++)for(let c=0;c<21;c++)h+=`<i style="background:${RB[(c+r*3)%7]}"></i>`;el.innerHTML=h});
+</script>
+</body>
+</html>
