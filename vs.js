@@ -27,6 +27,7 @@ function menu(){gfont();
    <button class="phV-b" id="phVh">CREATE ROOM</button><div class="phV-or">OR JOIN WITH CODE</div>
    <div class="phV-row"><input class="phV-in code" id="phVc" maxlength="4" placeholder="ABCD" autocapitalize="characters" autocomplete="off"><button class="phV-b" id="phVj">JOIN</button></div>`);
   const nameOk=()=>{const v=el('phVn').value.trim().slice(0,8);if(!v){el('phVn').classList.add('warn');el('phVn').focus();return false}cfg.setName(v);return true};
+  el('phVc').oninput=e=>{const v=e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,'');if(v!==e.target.value)e.target.value=v}; /* 코드: 대소문자 상관없이 자동 대문자 */
   el('phVh').onclick=()=>{if(nameOk())host()};
   el('phVj').onclick=()=>{if(!nameOk())return;const c=el('phVc').value.trim().toUpperCase();if(c.length!==4){el('phVc').focus();return}join(c)};
 }
