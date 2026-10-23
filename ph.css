@@ -9,7 +9,7 @@
 .phS-sp{min-height:0;flex-basis:0;flex-shrink:1}
 .phS>*:not(.phS-sp){flex-shrink:0}
 .phS-sp.a{flex:0 0 24%}.phS-sp.b{flex:0 0 8%}.phS-sp.c{flex:1 1 0}
-.phS-logo{height:72px;width:min(300px,82vw);display:flex;align-items:center;justify-content:center}
+.phS-logo{height:100px;width:min(300px,82vw);display:flex;align-items:center;justify-content:center}
 .phS-logo svg{display:block;width:100%;height:auto;max-height:100%;filter:drop-shadow(0 0 5px rgba(255,255,255,.12))}
 .phS-show{height:36px;margin-top:14px;display:flex;gap:3px;align-items:center;justify-content:center}
 .phS-show img,.phS-show svg{width:34px;height:34px;display:block}
