@@ -41,7 +41,7 @@ function join(c){cleanup();isHost=false;code=c;modal('CONNECTING',`<div class="p
 function fail(t){const msg=t==='nofound'?'그 코드의 방을 찾을 수 없어요.<br>코드를 다시 확인해 주세요.':t==='load'||t==='network'||t==='server-error'?'연결 서버에 접속하지 못했어요.<br>잠시 후 다시 해 주세요.':'연결에 실패했어요.<br>와이파이나 데이터를 바꿔서 다시 해 보세요.';
   cleanup();modal('WOOPS!',`<p class="phV-m">${msg}</p><button class="phV-b" id="phVr">RETRY</button>`);el('phVr').onclick=menu}
 function setup(c){conn=c;c.on('open',()=>{send({t:'hi',name:cfg.name()||'익명'});if(isHost)setTimeout(go,500)});c.on('data',onData);c.on('close',onClose);c.on('error',onClose)}
-function go(){const d={t:'go',seed:Math.floor(Math.random()*2**31)};send(d);begin(d)}
+function go(){const d=Object.assign({t:'go',seed:Math.floor(Math.random()*2**31)},cfg.extra?cfg.extra():{}); /* 방장 설정(모드·난이도)도 함께 */send(d);begin(d)}
 function begin(d){myEnd=null;oppEnd=null;done=false;meAgain=false;oppAgain=false;lastSc=0;let n=3;
   const tick=()=>{if(n>0){modal(oppName?'VS '+esc(oppName):'VS',`<div class="phV-count">${n}</div>`,false);n--;setTimeout(tick,800)}else{close();API.active=true;chip('READY');cfg.start(d)}};tick()}
 function onData(d){if(!d||typeof d!=='object')return;
