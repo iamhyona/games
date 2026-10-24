@@ -12,11 +12,9 @@ const F={Y:'10001100010101000100001000010000100',A:'0111010001100011111110001100
 window.phLogo=function(word){const cell=12,lines=word.split('|'),W=Math.max(...lines.map(l=>l.length))*6*cell-cell,LH=8*cell+cell/2;let o='',k=0; /* '|'로 줄바꿈 (가운데 정렬) */
   lines.forEach((ln,r)=>{const ox=(W-(ln.length*6*cell-cell))/2,oy=r*LH;[...ln].forEach((ch,i)=>{const g=F[ch],c=PAL[k++%7];for(let y=0;y<7;y++)for(let x=0;x<5;x++){const on=g[y*5+x]==='1';o+=`<circle cx="${ox+i*6*cell+x*cell+cell/2}" cy="${oy+y*cell+cell/2}" r="${cell*.38}" fill="${on?c:'rgba(255,255,255,.06)'}"/>`}})});
   return `<svg viewBox="0 0 ${W} ${(lines.length-1)*LH+7*cell}" xmlns="http://www.w3.org/2000/svg">${o}</svg>`};
-/* 게임 설명: 그 게임을 처음 시작할 때 딱 한 번만 자동으로 (업데이트·모드 바꿔도 다시 안 뜸). 다시 보고 싶으면 시작 화면 아래 '게임 설명' 버튼 */
+/* 게임 설명: 게임 시작할 때 자동으로 뜨지 않음. 보고 싶은 사람만 시작 화면 아래 '게임 설명' 버튼으로 */
 window.phTut=function(key,cfg,go){try{localStorage.setItem('phTutCfg:'+location.pathname,JSON.stringify(cfg))}catch(e){}howBtn();
-  let seen=false;try{seen=localStorage.getItem(key)==='1'}catch(e){}
-  if(seen||window.phTutDone){go();return}
-  try{localStorage.setItem(key,'1')}catch(e){}window.phTutDone=true;phTutShow(cfg,go)};
+  go()}; // 자동으로 띄우지 않음 (설명은 시작 화면 '게임 설명' 버튼으로만)
 function phTutShow(cfg,go){const touch=matchMedia('(pointer:coarse)').matches,rows=(touch?cfg.touch:cfg.pc)||cfg.touch||[];
   const d=document.createElement('div');d.className='phT';
   d.innerHTML=`<div class="phT-c"><div class="phT-h">HOW TO PLAY</div><div class="phT-g">${cfg.goal}</div><div class="phT-r">${rows.map(r=>`<kbd>${r[0]}</kbd><span>${r[1]}</span>`).join('')}</div>${go?'<label class="phT-k"><input type="checkbox" id="phTchk">다시 보지 않기</label>':''}<button class="phS-b" id="phTgo">${go?'START':'CLOSE'}</button></div>`;
