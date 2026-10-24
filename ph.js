@@ -1,5 +1,18 @@
 /* ===== 공통 UI: 상단 크레딧 픽셀 줄 · 도트 로고 · 튜토리얼 ===== */
 (function(){
+/* 듣던 음악(유튜브·유튜브 뮤직·스포티파이 등)이 끊기지 않게: 다른 앱 소리와 섞어 재생 + 무음 반복 재생 막기 */
+try{const as=navigator.audioSession;if(as){as.type='ambient';Object.defineProperty(as,'type',{configurable:true,get:()=>'ambient',set:()=>{}})}}catch(e){}
+try{const SIL=new Set(),cou=URL.createObjectURL.bind(URL);URL.createObjectURL=function(o){const u=cou(o);try{if(o instanceof Blob&&o.size<=9000&&/wav|^$/.test(o.type||''))SIL.add(u)}catch(e){}return u};
+ const pl=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){if(this.loop&&(SIL.has(this.src)||SIL.has(this.currentSrc)))return Promise.resolve();return pl.apply(this,arguments)}}catch(e){}
+/* 이름 기억: 한 번 입력하면 같은 기기의 모든 게임 랭킹 이름 칸에 자동으로 */
+const NK=['petris-name','pang-name','fruit-name','bricks-name','mcb-name','mines-name'],NSEL='input[placeholder^="이름"],#rank-name,#vs-name';
+function nmGet(){try{let n=localStorage.getItem('ph-name');if(!n)for(const k of NK){n=localStorage.getItem(k);if(n)break}return n||''}catch(e){return ''}}
+function nmSet(n){n=(n||'').trim();if(!n)return;try{localStorage.setItem('ph-name',n);for(const k of NK)localStorage.setItem(k,n)}catch(e){}}
+(function(){const n=nmGet();if(n)nmSet(n)})();
+function nmFill(){const n=nmGet();if(!n)return;document.querySelectorAll(NSEL).forEach(i=>{if(!i.value)i.value=n.slice(0,+i.maxLength>0?+i.maxLength:20)})}
+document.addEventListener('input',e=>{if(e.target.matches&&e.target.matches(NSEL))nmSet(e.target.value)},true);
+document.addEventListener('focusin',e=>{if(e.target.matches&&e.target.matches(NSEL)&&!e.target.value)nmFill()},true);
+setInterval(nmFill,700);
 const PAL=['#e8284f','#f26a0d','#f2b000','#10b870','#00a8e0','#2a5ef0','#8a3cf0'];
 function spectrum(){document.querySelectorAll('.lcd-label .ln').forEach(el=>{let cv=el.querySelector('canvas');if(!cv){cv=document.createElement('canvas');el.appendChild(cv)}cv.style.width='0px';const avail=el.clientWidth;if(!avail)return;
   const dpr=window.devicePixelRatio||1,P=3,G=1,rows=2,cols=Math.max(0,Math.floor((avail+G)/(P+G))),w=Math.max(1,cols*(P+G)-G);
@@ -28,7 +41,7 @@ function phTutShow(cfg,go){const touch=matchMedia('(pointer:coarse)').matches,ro
 function phFont(){if(document.getElementById('phFontCss'))return;
   if(!document.querySelector('link[href*="galmuri"]')){const l=document.createElement('link');l.rel='stylesheet';l.href='https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/galmuri.css';document.head.appendChild(l)}
   const st=document.createElement('style');st.id='phFontCss';
-  st.textContent='.phS-btns .phS-b.phS-how{width:150px!important;height:36px!important;font:400 12px Galmuri11,"NeoDunggeunmo",monospace!important;letter-spacing:.08em!important;flex-direction:row!important;margin-top:2px!important;border-color:#9a9fa6!important;color:#dfe2e6!important;background:transparent!important;box-shadow:none!important;opacity:1!important}.phT-g,.phT-r,.phT-r kbd,.phT-r span,.phT-k{font-family:Galmuri11,"NeoDunggeunmo",monospace!important}';
+  st.textContent='.phS-btns .phS-b.phS-how{width:150px!important;height:36px!important;font:400 12px Galmuri11,"NeoDunggeunmo",monospace!important;letter-spacing:.08em!important;flex-direction:row!important;margin-top:2px!important;border-color:#9a9fa6!important;color:#dfe2e6!important;background:transparent!important;box-shadow:none!important;opacity:1!important}.phT-g,.phT-r,.phT-r kbd,.phT-r span,.phT-k{font-family:Galmuri11,"NeoDunggeunmo",monospace!important}input[placeholder^="이름"],#rank-name,#vs-name,input[placeholder^="이름"]::placeholder{font-family:Galmuri11,"NeoDunggeunmo",monospace!important}';
   document.head.appendChild(st)}
 /* 게임 설명 내용 찾기: 저장된 것 → 페이지의 TUT → 소스 속 phTut( )·TUT= 설명 */
 function findCfg(){let c=null;try{c=JSON.parse(localStorage.getItem('phTutCfg:'+location.pathname)||'null')}catch(e){}if(c)return c;
@@ -47,6 +60,6 @@ function back(){let sa=false;try{sa=navigator.standalone||matchMedia('(display-m
   else if(!document.getElementById('phBack')){const b=document.createElement('a');b.id='phBack';b.href='/games/';b.textContent=lab;b.style.cssText='position:fixed;left:calc(env(safe-area-inset-left,0px) + 8px);top:calc(env(safe-area-inset-top,0px) + 6px);z-index:9999;font:700 10px Silkscreen,monospace;letter-spacing:1px;color:#fff;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 8px;text-decoration:none';b.addEventListener('click',go);document.body.appendChild(b)}}
 /* 버튼 글꼴 통일: 시작·모드·결과 화면의 영문 픽셀 버튼은 모두 Silkscreen 보통 굵기 (한글 버튼·게임 설명 버튼은 그대로) */
 function btnFont(){document.querySelectorAll('button').forEach(b=>{if(b._pf||b.classList.contains('phS-how')||/[가-힣]/.test([...b.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('')))return;const f=getComputedStyle(b).fontFamily;if(/Silkscreen|Press Start/i.test(f)){b._pf=1;b.style.setProperty('font-family','"Silkscreen",monospace','important');b.style.setProperty('font-weight','400','important')}})}
-function fill2(){fill();back();howBtn();btnFont();let t=0;try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(btnFont,30)}).observe(document.body,{childList:true,subtree:true})}catch(e){}}
+function fill2(){fill();back();phFont();howBtn();btnFont();nmFill();let t=0;try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(btnFont,30)}).observe(document.body,{childList:true,subtree:true})}catch(e){}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill2);else fill2();
 })();
