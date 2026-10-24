@@ -43,6 +43,9 @@ function phTutShow(cfg,go){const touch=matchMedia('(pointer:coarse)').matches,ro
   const blk=e=>{e.stopPropagation();if(e.key==='Enter'||e.key===' '||e.key==='Escape'){e.preventDefault();close()}};addEventListener('keydown',blk,true);
   d.querySelector('#phTgo').onclick=close;const ck=d.querySelector('#phTchk');if(ck)ck.onchange=()=>{if(ck.checked)close()}; // 체크하면 바로 닫고 시작
   ['pointerdown','touchstart','keydown'].forEach(t=>d.addEventListener(t,e=>e.stopPropagation()))}
+/* 랭킹 난이도 뱃지 — 모든 게임 같은 색: EASY 초록 · NORMAL 노랑 · HARD 빨강 · MASTER 보라 · 그 밖(TIME·ITEM·VS 등) 회색 */
+window.phLv=function(label){label=String(label||'').trim();if(!label)return'';if(!document.getElementById('phLvCss')){const s=document.createElement('style');s.id='phLvCss';s.textContent='.lvb{display:inline-block;font:700 7px Silkscreen,monospace!important;font-style:normal!important;letter-spacing:.06em!important;padding:2px 4px 1px;border-radius:3px;vertical-align:2px;margin-left:4px;color:#0a0c1d!important;background:#9aa3c7;line-height:1.25;white-space:nowrap;text-transform:uppercase}.lvb.easy{background:#5fe08a}.lvb.normal{background:#ffd23f}.lvb.hard{background:#ff5a6e}.lvb.master{background:#b48cff}';document.head.appendChild(s)}
+ const C={EASY:'easy',NORMAL:'normal',HARD:'hard',MASTER:'master'};return label.split(/\s+/).map(w=>`<i class="lvb ${C[w.toUpperCase()]||''}">${w.replace(/[<>&"]/g,'')}</i>`).join('')};
 /* 시작 화면 맨 아래 작은 '게임 설명' 버튼 (모든 게임에 항상) */
 /* 게임 설명 버튼·설명 창: 회색 테두리 + 한글 8비트 글꼴(갈무리) */
 function phFont(){if(document.getElementById('phFontCss'))return;
