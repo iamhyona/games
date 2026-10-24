@@ -45,6 +45,8 @@ function back(){let sa=false;try{sa=navigator.standalone||matchMedia('(display-m
   const go=e=>{e.preventDefault();e.stopPropagation();location.href='/games/'};const els=document.querySelectorAll('.lcd-label .copy');
   if(els.length){els.forEach(el=>{if(el._bk)return;el._bk=1;el.textContent=lab;el.style.cssText+=';cursor:pointer;pointer-events:auto;position:relative;z-index:50';el.addEventListener('click',go)})}
   else if(!document.getElementById('phBack')){const b=document.createElement('a');b.id='phBack';b.href='/games/';b.textContent=lab;b.style.cssText='position:fixed;left:calc(env(safe-area-inset-left,0px) + 8px);top:calc(env(safe-area-inset-top,0px) + 6px);z-index:9999;font:700 10px Silkscreen,monospace;letter-spacing:1px;color:#fff;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 8px;text-decoration:none';b.addEventListener('click',go);document.body.appendChild(b)}}
-function fill2(){fill();back();howBtn()}
+/* 버튼 글꼴 통일: 시작·모드·결과 화면의 영문 픽셀 버튼은 모두 Silkscreen 보통 굵기 (한글 버튼·게임 설명 버튼은 그대로) */
+function btnFont(){document.querySelectorAll('button').forEach(b=>{if(b._pf||b.classList.contains('phS-how')||/[가-힣]/.test([...b.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('')))return;const f=getComputedStyle(b).fontFamily;if(/Silkscreen|Press Start/i.test(f)){b._pf=1;b.style.setProperty('font-family','"Silkscreen",monospace','important');b.style.setProperty('font-weight','400','important')}})}
+function fill2(){fill();back();howBtn();btnFont();let t=0;try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(btnFont,30)}).observe(document.body,{childList:true,subtree:true})}catch(e){}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill2);else fill2();
 })();
