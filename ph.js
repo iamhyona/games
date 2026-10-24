@@ -1,7 +1,14 @@
 /* ===== 공통 UI: 상단 크레딧 픽셀 줄 · 도트 로고 · 튜토리얼 ===== */
 (function(){
 /* 듣던 음악(유튜브·유튜브 뮤직·스포티파이 등)이 끊기지 않게: 다른 앱 소리와 섞어 재생 + 무음 반복 재생 막기 */
-try{const as=navigator.audioSession;if(as){as.type='ambient';Object.defineProperty(as,'type',{configurable:true,get:()=>'ambient',set:()=>{}})}}catch(e){}
+function phAmb(){try{const as=navigator.audioSession;if(as&&as.type!=='ambient')as.type='ambient'}catch(e){}}
+try{const as=navigator.audioSession;if(as){const pr=Object.getPrototypeOf(as),d=Object.getOwnPropertyDescriptor(pr,'type');
+  if(d&&d.set&&d.get){Object.defineProperty(pr,'type',{configurable:true,enumerable:d.enumerable,get(){return d.get.call(this)},set(){d.set.call(this,'ambient')}})} /* 게임이 'playback'으로 바꿔도 항상 ambient */
+  else{as.type='ambient';Object.defineProperty(as,'type',{configurable:true,get:()=>'ambient',set:()=>{}})}
+  as.type='ambient'}}catch(e){}
+try{for(const n of ['AudioContext','webkitAudioContext']){const C=window[n];if(!C||C._ph)continue;const W=function(...a){phAmb();return new C(...a)};W.prototype=C.prototype;W._ph=1;window[n]=W;
+  const rs=C.prototype.resume;if(rs)C.prototype.resume=function(){phAmb();return rs.apply(this,arguments)}}}catch(e){} /* 소리 엔진 켤 때마다 섞어 재생 다시 확인 */
+try{if(window.speechSynthesis){const sp=speechSynthesis.speak.bind(speechSynthesis);speechSynthesis.speak=function(u){if(u&&(u.volume===0||!String(u.text||'').trim()))return;phAmb();return sp(u)}}}catch(e){} /* 소리 없는 음성 깨우기는 막음 (듣던 음악이 멈춤) */
 try{const SIL=new Set(),cou=URL.createObjectURL.bind(URL);URL.createObjectURL=function(o){const u=cou(o);try{if(o instanceof Blob&&o.size<=9000&&/wav|^$/.test(o.type||''))SIL.add(u)}catch(e){}return u};
  const pl=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){if(this.loop&&(SIL.has(this.src)||SIL.has(this.currentSrc)))return Promise.resolve();return pl.apply(this,arguments)}}catch(e){}
 /* 이름 기억: 한 번 입력하면 같은 기기의 모든 게임 랭킹 이름 칸에 자동으로 */
