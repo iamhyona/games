@@ -12,22 +12,31 @@ const F={Y:'10001100010101000100001000010000100',A:'0111010001100011111110001100
 window.phLogo=function(word){const cell=12,lines=word.split('|'),W=Math.max(...lines.map(l=>l.length))*6*cell-cell,LH=8*cell+cell/2;let o='',k=0; /* '|'로 줄바꿈 (가운데 정렬) */
   lines.forEach((ln,r)=>{const ox=(W-(ln.length*6*cell-cell))/2,oy=r*LH;[...ln].forEach((ch,i)=>{const g=F[ch],c=PAL[k++%7];for(let y=0;y<7;y++)for(let x=0;x<5;x++){const on=g[y*5+x]==='1';o+=`<circle cx="${ox+i*6*cell+x*cell+cell/2}" cy="${oy+y*cell+cell/2}" r="${cell*.38}" fill="${on?c:'rgba(255,255,255,.06)'}"/>`}})});
   return `<svg viewBox="0 0 ${W} ${(lines.length-1)*LH+7*cell}" xmlns="http://www.w3.org/2000/svg">${o}</svg>`};
-window.phTut=function(key,cfg,go){let seen=false;try{seen=localStorage.getItem(key)==='1'}catch(e){}
+/* 게임 설명: 그 게임을 처음 시작할 때 딱 한 번만 자동으로 (업데이트·모드 바꿔도 다시 안 뜸). 다시 보고 싶으면 시작 화면 아래 '게임 설명' 버튼 */
+window.phTut=function(key,cfg,go){try{localStorage.setItem('phTutCfg:'+location.pathname,JSON.stringify(cfg))}catch(e){}howBtn();
+  let seen=false;try{seen=localStorage.getItem(key)==='1'}catch(e){}
   if(seen||window.phTutDone){go();return}
-  const touch=matchMedia('(pointer:coarse)').matches,rows=(touch?cfg.touch:cfg.pc)||cfg.touch;
+  try{localStorage.setItem(key,'1')}catch(e){}window.phTutDone=true;phTutShow(cfg,go)};
+function phTutShow(cfg,go){const touch=matchMedia('(pointer:coarse)').matches,rows=(touch?cfg.touch:cfg.pc)||cfg.touch||[];
   const d=document.createElement('div');d.className='phT';
-  d.innerHTML=`<div class="phT-c"><div class="phT-h">HOW TO PLAY</div><div class="phT-g">${cfg.goal}</div><div class="phT-r">${rows.map(r=>`<kbd>${r[0]}</kbd><span>${r[1]}</span>`).join('')}</div><label class="phT-k"><input type="checkbox" id="phTchk">다시 보지 않기</label><button class="phS-b" id="phTgo">START</button></div>`;
+  d.innerHTML=`<div class="phT-c"><div class="phT-h">HOW TO PLAY</div><div class="phT-g">${cfg.goal}</div><div class="phT-r">${rows.map(r=>`<kbd>${r[0]}</kbd><span>${r[1]}</span>`).join('')}</div>${go?'<label class="phT-k"><input type="checkbox" id="phTchk">다시 보지 않기</label>':''}<button class="phS-b" id="phTgo">${go?'START':'CLOSE'}</button></div>`;
   document.body.appendChild(d);
-  const blk=e=>{e.stopPropagation();if(e.key==='Enter'||e.key===' '){e.preventDefault();d.querySelector('#phTgo').click()}};addEventListener('keydown',blk,true);
-  d.querySelector('#phTgo').onclick=e=>{e.stopPropagation();removeEventListener('keydown',blk,true);if(d.querySelector('#phTchk').checked){try{localStorage.setItem(key,'1')}catch(_){}}window.phTutDone=true;d.remove();go()};
-  ['pointerdown','touchstart','keydown'].forEach(t=>d.addEventListener(t,e=>e.stopPropagation()))};
+  const close=e=>{if(e)e.stopPropagation();removeEventListener('keydown',blk,true);d.remove();if(go)go()};
+  const blk=e=>{e.stopPropagation();if(e.key==='Enter'||e.key===' '||e.key==='Escape'){e.preventDefault();close()}};addEventListener('keydown',blk,true);
+  d.querySelector('#phTgo').onclick=close;const ck=d.querySelector('#phTchk');if(ck)ck.onchange=()=>{if(ck.checked)close()}; // 체크하면 바로 닫고 시작
+  ['pointerdown','touchstart','keydown'].forEach(t=>d.addEventListener(t,e=>e.stopPropagation()))}
+/* 시작 화면 맨 아래 '게임 설명' 버튼 (한 번이라도 설명을 받은 게임만) */
+function howBtn(){let cfg=null;try{cfg=JSON.parse(localStorage.getItem('phTutCfg:'+location.pathname)||'null')}catch(e){}if(!cfg)return;
+  document.querySelectorAll('.phS-btns').forEach(w=>{if(w.querySelector('.phS-how'))return;const b=document.createElement('button');b.className='phS-b phS-how';b.textContent='게임 설명';
+    b.style.cssText='font-family:inherit;opacity:.75;border-color:#4a4d63;color:#c9cbe0;background:transparent';
+    b.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();phTutShow(cfg,null)});w.appendChild(b)})}
 function fill(){document.querySelectorAll('.phS-logo[data-word]').forEach(el=>{el.innerHTML=window.phLogo(el.dataset.word)});document.querySelectorAll('.phS [data-click]').forEach(b=>{if(b._ph)return;b._ph=1;b.addEventListener('click',e=>{e.stopPropagation();const t=document.getElementById(b.dataset.click);if(t)t.click()})})}
 /* 홈 화면 앱(게임 모음)에서 열었을 때: 위쪽 크레딧 줄을 '◀ GAMES' 버튼으로 (게임 목록으로 돌아가기) */
 function back(){let sa=false;try{sa=navigator.standalone||matchMedia('(display-mode: standalone)').matches}catch(e){}if(!sa||/^\/games\/?$/.test(location.pathname))return;
-  const GN={petris:'PETRIS',switchpang:'SWITCH PANG',fruitpang:'MARBLE PANG',mines:'MINESWEEPER',pang:'PANGYA PANGYA',bricks:'BRICKS',hangulbi:'HANGULBI',twinstar:'TWIN STAR',peekaboo:'PEEKABOO'},gid=location.pathname.split('/')[1]||'',lab='◀ PARK HYONA\'S '+(GN[gid]||gid.toUpperCase()); // 게임 이름까지 표시
+  const GN={petris:'PETRIS',switchpang:'SWITCH PANG',fruitpang:'MARBLE PANG',mines:'MINESWEEPER',pang:'PANGYA PANGYA',bricks:'BRICKS',hangulbi:'HANGULBI',twinstar:'TWIN STAR',peekaboo:'PEEKABOO'},gid=location.pathname.split('/')[1]||'',nm=GN[gid]||gid.toUpperCase(),lab=(nm.length>8?'◀ HYONA\'S ':'◀ PARK HYONA\'S ')+nm; // 이름이 길면 HYONA'S 로 짧게 // 게임 이름까지 표시
   const go=e=>{e.preventDefault();e.stopPropagation();location.href='/games/'};const els=document.querySelectorAll('.lcd-label .copy');
   if(els.length){els.forEach(el=>{if(el._bk)return;el._bk=1;el.textContent=lab;el.style.cssText+=';cursor:pointer;pointer-events:auto;position:relative;z-index:50';el.addEventListener('click',go)})}
   else if(!document.getElementById('phBack')){const b=document.createElement('a');b.id='phBack';b.href='/games/';b.textContent=lab;b.style.cssText='position:fixed;left:calc(env(safe-area-inset-left,0px) + 8px);top:calc(env(safe-area-inset-top,0px) + 6px);z-index:9999;font:700 10px Silkscreen,monospace;letter-spacing:1px;color:#fff;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:5px 8px;text-decoration:none';b.addEventListener('click',go);document.body.appendChild(b)}}
-function fill2(){fill();back()}
+function fill2(){fill();back();howBtn()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill2);else fill2();
 })();
