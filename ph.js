@@ -25,16 +25,20 @@ function phTutShow(cfg,go){const touch=matchMedia('(pointer:coarse)').matches,ro
   const blk=e=>{e.stopPropagation();if(e.key==='Enter'||e.key===' '||e.key==='Escape'){e.preventDefault();close()}};addEventListener('keydown',blk,true);
   d.querySelector('#phTgo').onclick=close;const ck=d.querySelector('#phTchk');if(ck)ck.onchange=()=>{if(ck.checked)close()}; // 체크하면 바로 닫고 시작
   ['pointerdown','touchstart','keydown'].forEach(t=>d.addEventListener(t,e=>e.stopPropagation()))}
-/* 시작 화면 맨 아래 '게임 설명' 버튼 (한 번이라도 설명을 받은 게임만) */
+/* 시작 화면 맨 아래 작은 '게임 설명' 버튼 (모든 게임에 항상) */
 /* 게임 설명 버튼·설명 창: 회색 테두리 + 한글 8비트 글꼴(갈무리) */
 function phFont(){if(document.getElementById('phFontCss'))return;
   if(!document.querySelector('link[href*="galmuri"]')){const l=document.createElement('link');l.rel='stylesheet';l.href='https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/galmuri.css';document.head.appendChild(l)}
   const st=document.createElement('style');st.id='phFontCss';
-  st.textContent='.phS-b.phS-how{font:400 14px Galmuri11,"NeoDunggeunmo",monospace!important;letter-spacing:.08em!important;border-color:#9a9fa6!important;color:#dfe2e6!important;background:transparent!important;box-shadow:none!important;opacity:1!important}.phT-g,.phT-r,.phT-r kbd,.phT-r span,.phT-k{font-family:Galmuri11,"NeoDunggeunmo",monospace!important}';
+  st.textContent='.phS-btns .phS-b.phS-how{width:150px!important;height:36px!important;font:400 12px Galmuri11,"NeoDunggeunmo",monospace!important;letter-spacing:.08em!important;flex-direction:row!important;margin-top:2px!important;border-color:#9a9fa6!important;color:#dfe2e6!important;background:transparent!important;box-shadow:none!important;opacity:1!important}.phT-g,.phT-r,.phT-r kbd,.phT-r span,.phT-k{font-family:Galmuri11,"NeoDunggeunmo",monospace!important}';
   document.head.appendChild(st)}
-function howBtn(){phFont();let cfg=null;try{cfg=JSON.parse(localStorage.getItem('phTutCfg:'+location.pathname)||'null')}catch(e){}if(!cfg)return;
+/* 게임 설명 내용 찾기: 저장된 것 → 페이지의 TUT → 소스 속 phTut( )·TUT= 설명 */
+function findCfg(){let c=null;try{c=JSON.parse(localStorage.getItem('phTutCfg:'+location.pathname)||'null')}catch(e){}if(c)return c;
+  try{if(typeof TUT!=='undefined'&&TUT&&TUT.goal)return TUT}catch(e){}
+  for(const sc of document.querySelectorAll('script:not([src])')){const t=sc.textContent;for(const key of ['phTut(','TUT=']){let i=t.indexOf(key);while(i>-1){const j=t.indexOf('{',i);if(j>-1&&j-i<60){let d=0,q=null;for(let k=j;k<t.length;k++){const ch=t[k];if(q){if(ch==='\\'){k++;continue}if(ch===q)q=null;continue}if(ch==='"'||ch==="'")q=ch;else if(ch==='{')d++;else if(ch==='}'&&--d===0){try{const o=JSON.parse(t.slice(j,k+1));if(o&&o.goal)return o}catch(e){}break}}}i=t.indexOf(key,i+key.length)}}}
+  return null}
+function howBtn(){phFont();const cfg=findCfg();if(!cfg)return;
   document.querySelectorAll('.phS-btns').forEach(w=>{if(w.querySelector('.phS-how'))return;const b=document.createElement('button');b.className='phS-b phS-how';b.textContent='게임 설명';
-    
     b.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();phTutShow(cfg,null)});w.appendChild(b)})}
 function fill(){document.querySelectorAll('.phS-logo[data-word]').forEach(el=>{el.innerHTML=window.phLogo(el.dataset.word)});document.querySelectorAll('.phS [data-click]').forEach(b=>{if(b._ph)return;b._ph=1;b.addEventListener('click',e=>{e.stopPropagation();const t=document.getElementById(b.dataset.click);if(t)t.click()})})}
 /* 홈 화면 앱(게임 모음)에서 열었을 때: 위쪽 크레딧 줄을 'PARK HYONA\'S 게임이름' 버튼으로 (게임 목록으로 돌아가기) */
