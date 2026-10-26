@@ -46,6 +46,38 @@ function phTutShow(cfg,go){const touch=matchMedia('(pointer:coarse)').matches,ro
 /* 랭킹 난이도 뱃지 — 모든 게임 같은 색: EASY 초록 · NORMAL 노랑 · HARD 빨강 · MASTER 보라 · 그 밖(TIME·ITEM·VS 등) 회색 */
 window.phLv=function(label){label=String(label||'').trim();if(!label)return'';if(!document.getElementById('phLvCss')){const s=document.createElement('style');s.id='phLvCss';s.textContent='.lvb{display:inline-block;font:700 7px Silkscreen,monospace!important;font-style:normal!important;letter-spacing:.06em!important;padding:2px 4px 1px;border-radius:3px;vertical-align:2px;margin-left:4px;color:#0a0c1d!important;background:#9aa3c7;line-height:1.25;white-space:nowrap;text-transform:uppercase}.lvb.easy{background:#5fe08a}.lvb.normal{background:#ffd23f}.lvb.hard{background:#ff5a6e}.lvb.master{background:#b48cff}';document.head.appendChild(s)}
  const C={EASY:'easy',NORMAL:'normal',HARD:'hard',MASTER:'master'};return label.split(/\s+/).map(w=>`<i class="lvb ${C[w.toUpperCase()]||''}">${w.replace(/[<>&"]/g,'')}</i>`).join('')};
+/* ===== 랭킹 나누기: 게임 + 모드 + 난이도 + 버전 =====
+   버전은 기록 날짜로 정함. CUT 이전 기록 = 이전 버전 (지우지 않고 그대로 보관). 새 버전을 낼 땐 VER 맨 앞에 한 줄 추가 */
+const RK_CUT=Date.parse('2026-10-26T17:30:00+09:00');
+const RK_VER={_:[{id:'v2',label:'현재 버전',from:RK_CUT},{id:'v1',label:'이전 버전',from:0}],
+  petris:[{id:'v2',label:'현재 버전',from:RK_CUT},{id:'v1',label:'이전 버전 (시즌 2)',from:0},{id:'s1',label:'시즌 1',from:-1}]};
+function rkTs(d){if(d==null||d==='')return NaN;if(typeof d==='number')return d;const s=String(d).trim();if(/^\d{12,}$/.test(s))return +s;
+  let m=s.match(/^(\d{4})-(\d\d)-(\d\d)(?:[ T](\d\d):(\d\d))?/);if(m&&!/(Z|[+-]\d\d:?\d\d)$/.test(s))return Date.parse(`${m[1]}-${m[2]}-${m[3]}T${m[4]||'00'}:${m[5]||'00'}:00+09:00`); /* 시간대 없는 날짜 = 한국 시간 */
+  m=s.match(/([A-Z][a-z]{2}) (\d{1,2}) (\d{4}) (\d\d):(\d\d)(?::(\d\d))? GMT([+-]\d{4})/); /* 시트가 돌려주는 'Sat Oct 24 2026 15:04:00 GMT+0900' */
+  if(m){const mo=('JanFebMarAprMayJunJulAugSepOctNovDec'.indexOf(m[1])/3+1);if(mo>0)return Date.parse(`${m[3]}-${String(mo).padStart(2,'0')}-${m[2].padStart(2,'0')}T${m[4]}:${m[5]}:${m[6]||'00'}${m[7].slice(0,3)}:${m[7].slice(3)}`)}
+  return Date.parse(s)}
+function rkVers(g){return RK_VER[g]||RK_VER._}
+function rkVer(g,r){if(r&&r._v)return r._v;const L=rkVers(g).filter(v=>v.from>=0),t=rkTs(r&&(r.ts!=null?r.ts:r.d));
+  if(!isFinite(t))return L[L.length-1].id;for(const v of L)if(t>=v.from)return v.id;return L[L.length-1].id}
+function rkLoadSel(g){try{return JSON.parse(localStorage.getItem('phRk:'+g)||'{}')||{}}catch(e){return{}}}
+function rkSaveSel(g,s){try{localStorage.setItem('phRk:'+g,JSON.stringify(s))}catch(e){}}
+function rkCss(){if(document.getElementById('phRkCss'))return;const s=document.createElement('style');s.id='phRkCss';
+  s.textContent='.phRk{display:flex;flex-direction:column;gap:6px;width:min(300px,100%);margin:0 auto 10px;box-sizing:border-box}.phRk-t{display:flex;gap:5px;width:100%}.phRk-t button{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:400 10px "Silkscreen",Galmuri11,monospace!important;letter-spacing:.06em;padding:7px 2px!important;min-height:0!important;height:auto!important;border-radius:7px;border:2px solid rgba(200,205,225,.28)!important;background:rgba(12,13,22,.6)!important;color:#aeb3c8!important;cursor:pointer;box-shadow:none!important;line-height:1.2}.phRk-t button.on{background:#f2b000!important;border-color:#f2b000!important;color:#111!important}.phRk-t button.on.easy{background:#5fe08a!important;border-color:#5fe08a!important}.phRk-t button.on.normal{background:#ffd23f!important;border-color:#ffd23f!important}.phRk-t button.on.hard{background:#ff5a6e!important;border-color:#ff5a6e!important}.phRk-t button.on.master{background:#b48cff!important;border-color:#b48cff!important}.phRk-v{display:flex;justify-content:flex-end}.phRk-v select{appearance:none;-webkit-appearance:none;font:400 12px Galmuri11,"NeoDunggeunmo",monospace;color:#dfe2ea;background:rgba(10,12,22,.6) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 8 5%27%3E%3Cpath fill=%27%23aeb3c8%27 d=%27M0 0h8L4 5z%27/%3E%3C/svg%3E") no-repeat right 9px center/8px 5px;border:2px solid rgba(200,205,225,.28);border-radius:7px;padding:6px 26px 5px 10px;cursor:pointer;max-width:100%}.phRk-v select:focus{outline:none;border-color:#f2b000}';
+  document.head.appendChild(s)}
+/* phRk.bar(el,{game,modes:[[id,라벨]],diffs:[[id,라벨]],sel:{mode,diff,ver},onChange}) → 탭(모드·난이도) + 드롭다운(버전) */
+function rkBar(el,o){if(!el)return{};rkCss();phFont();const g=o.game,V=rkVers(g),S=Object.assign({ver:V[0].id},rkLoadSel(g)),pick=(L,v)=>L&&L.length?(L.some(x=>x[0]===v)?v:L[0][0]):undefined;
+  if(o.sel)for(const k in o.sel)if(o.sel[k]!=null)S[k]=o.sel[k];
+  if(o.modes&&o.modes.length)S.mode=pick(o.modes,S.mode);if(o.diffs&&o.diffs.length)S.diff=pick(o.diffs,S.diff);if(!V.some(v=>v.id===S.ver))S.ver=V[0].id;rkSaveSel(g,S);
+  const LVC={EASY:'easy',NORMAL:'normal',HARD:'hard',MASTER:'master'};
+  const row=(L,k)=>L&&L.length>1?`<div class="phRk-t" data-k="${k}">${L.map(([id,lb])=>`<button type="button" data-v="${id}" class="${S[k]===id?'on ':''}${k==='diff'?(LVC[String(lb).toUpperCase()]||''):''}">${lb}</button>`).join('')}</div>`:'';
+  el.classList.add('phRk');el.innerHTML=row(o.modes,'mode')+row(o.diffs,'diff')+`<div class="phRk-v"><select aria-label="버전">${V.map(v=>`<option value="${v.id}"${v.id===S.ver?' selected':''}>${v.label}</option>`).join('')}</select></div>`;
+  const fire=()=>{rkSaveSel(g,S);if(o.onChange)o.onChange(Object.assign({},S))};
+  el.querySelectorAll('.phRk-t button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const k=b.parentNode.dataset.k;S[k]=b.dataset.v;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));fire()}));
+  const sl=el.querySelector('select');sl.addEventListener('change',()=>{S.ver=sl.value;fire()});['click','pointerdown','touchstart','keydown'].forEach(t=>sl.addEventListener(t,e=>e.stopPropagation()));
+  return Object.assign({},S)}
+window.phRk={CUT:RK_CUT,ts:rkTs,vers:rkVers,ver:rkVer,bar:rkBar,sel:g=>Object.assign({ver:rkVers(g)[0].id},rkLoadSel(g)),
+  key:(g,m,d,v)=>[g,m||'-',d||'-',v||rkVers(g)[0].id].join(':'), /* 랭킹 키 = 게임:모드:난이도:버전 */
+  now:()=>{const k=new Date(Date.now()+9*36e5).toISOString();return k.slice(0,10)+' '+k.slice(11,16)}}; /* 한국 시간 'YYYY-MM-DD HH:mm' */
 /* 시작 화면 맨 아래 작은 '게임 설명' 버튼 (모든 게임에 항상) */
 /* 게임 설명 버튼·설명 창: 회색 테두리 + 한글 8비트 글꼴(갈무리) */
 function phFont(){if(document.getElementById('phFontCss'))return;
