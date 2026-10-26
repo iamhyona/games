@@ -50,7 +50,7 @@ window.phLv=function(label){label=String(label||'').trim();if(!label)return'';if
    버전은 기록 날짜로 정함. CUT 이전 기록 = 이전 버전 (지우지 않고 그대로 보관). 새 버전을 낼 땐 VER 맨 앞에 한 줄 추가 */
 const RK_CUT=Date.parse('2026-10-26T17:30:00+09:00');
 const RK_VER={_:[{id:'v2',label:'현재 버전',from:RK_CUT},{id:'v1',label:'이전 버전',from:0}],
-  petris:[{id:'v2',label:'현재 버전',from:RK_CUT},{id:'v1',label:'이전 버전 (시즌 2)',from:0},{id:'s1',label:'시즌 1',from:-1}]};
+  petris:[{id:'v2',label:'시즌 2 (현재)',from:0},{id:'s1',label:'시즌 1',from:-1}]}; /* PETRIS는 시즌으로 구분: 시즌 2 = 현재 */
 function rkTs(d){if(d==null||d==='')return NaN;if(typeof d==='number')return d;const s=String(d).trim();if(/^\d{12,}$/.test(s))return +s;
   let m=s.match(/^(\d{4})-(\d\d)-(\d\d)(?:[ T](\d\d):(\d\d))?/);if(m&&!/(Z|[+-]\d\d:?\d\d)$/.test(s))return Date.parse(`${m[1]}-${m[2]}-${m[3]}T${m[4]||'00'}:${m[5]||'00'}:00+09:00`); /* 시간대 없는 날짜 = 한국 시간 */
   m=s.match(/([A-Z][a-z]{2}) (\d{1,2}) (\d{4}) (\d\d):(\d\d)(?::(\d\d))? GMT([+-]\d{4})/); /* 시트가 돌려주는 'Sat Oct 24 2026 15:04:00 GMT+0900' */
