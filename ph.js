@@ -49,7 +49,7 @@ window.phLv=function(label){label=String(label||'').trim();if(!label)return'';if
 /* ===== 랭킹 나누기: 게임 + 모드 + 난이도 + 버전 =====
    버전은 기록 날짜로 정함. CUT 이전 기록 = 이전 버전 (지우지 않고 그대로 보관). 새 버전을 낼 땐 VER 맨 앞에 한 줄 추가 */
 const RK_CUT=Date.parse('2026-10-26T17:30:00+09:00');
-const RK_VER={_:[{id:'v2',label:'현재 버전',from:RK_CUT},{id:'v1',label:'이전 버전',from:0}],
+const RK_VER={_:[{id:'v1',label:'',from:0}], /* 버전 나누기는 PETRIS만 (다른 게임은 한 가지) */
   petris:[{id:'v2',label:'시즌 2 (현재)',from:0},{id:'s1',label:'시즌 1',from:-1}]}; /* PETRIS는 시즌으로 구분: 시즌 2 = 현재 */
 function rkTs(d){if(d==null||d==='')return NaN;if(typeof d==='number')return d;const s=String(d).trim();if(/^\d{12,}$/.test(s))return +s;
   let m=s.match(/^(\d{4})-(\d\d)-(\d\d)(?:[ T](\d\d):(\d\d))?/);if(m&&!/(Z|[+-]\d\d:?\d\d)$/.test(s))return Date.parse(`${m[1]}-${m[2]}-${m[3]}T${m[4]||'00'}:${m[5]||'00'}:00+09:00`); /* 시간대 없는 날짜 = 한국 시간 */
@@ -70,10 +70,10 @@ function rkBar(el,o){if(!el)return{};rkCss();phFont();const g=o.game,V=rkVers(g)
   if(o.modes&&o.modes.length)S.mode=pick(o.modes,S.mode);if(o.diffs&&o.diffs.length)S.diff=pick(o.diffs,S.diff);if(!V.some(v=>v.id===S.ver))S.ver=V[0].id;rkSaveSel(g,S);
   const LVC={EASY:'easy',NORMAL:'normal',HARD:'hard',MASTER:'master'};
   const row=(L,k)=>L&&L.length>1?`<div class="phRk-t" data-k="${k}">${L.map(([id,lb])=>`<button type="button" data-v="${id}" class="${S[k]===id?'on ':''}${k==='diff'?(LVC[String(lb).toUpperCase()]||''):''}">${lb}</button>`).join('')}</div>`:'';
-  el.classList.add('phRk');el.innerHTML=row(o.modes,'mode')+row(o.diffs,'diff')+`<div class="phRk-v"><select aria-label="버전">${V.map(v=>`<option value="${v.id}"${v.id===S.ver?' selected':''}>${v.label}</option>`).join('')}</select></div>`;
+  el.classList.add('phRk');el.innerHTML=row(o.modes,'mode')+row(o.diffs,'diff')+(V.length>1?`<div class="phRk-v"><select aria-label="버전">${V.map(v=>`<option value="${v.id}"${v.id===S.ver?' selected':''}>${v.label}</option>`).join('')}</select></div>`:'');
   const fire=()=>{rkSaveSel(g,S);if(o.onChange)o.onChange(Object.assign({},S))};
   el.querySelectorAll('.phRk-t button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const k=b.parentNode.dataset.k;S[k]=b.dataset.v;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));fire()}));
-  const sl=el.querySelector('select');sl.addEventListener('change',()=>{S.ver=sl.value;fire()});['click','pointerdown','touchstart','keydown'].forEach(t=>sl.addEventListener(t,e=>e.stopPropagation()));
+  const sl=el.querySelector('select');if(sl)sl.addEventListener('change',()=>{S.ver=sl.value;fire()});if(sl)['click','pointerdown','touchstart','keydown'].forEach(t=>sl.addEventListener(t,e=>e.stopPropagation()));
   return Object.assign({},S)}
 window.phRk={CUT:RK_CUT,ts:rkTs,vers:rkVers,ver:rkVer,bar:rkBar,sel:g=>Object.assign({ver:rkVers(g)[0].id},rkLoadSel(g)),
   key:(g,m,d,v)=>[g,m||'-',d||'-',v||rkVers(g)[0].id].join(':'), /* 랭킹 키 = 게임:모드:난이도:버전 */
