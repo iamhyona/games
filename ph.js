@@ -49,8 +49,8 @@ window.phLv=function(label){label=String(label||'').trim();if(!label)return'';if
 /* ===== 랭킹 나누기: 게임 + 모드 + 난이도 + 버전 =====
    버전은 기록 날짜로 정함. CUT 이전 기록 = 이전 버전 (지우지 않고 그대로 보관). 새 버전을 낼 땐 VER 맨 앞에 한 줄 추가 */
 const RK_CUT=Date.parse('2026-10-26T17:30:00+09:00');
-const RK_VER={_:[{id:'v1',label:'',from:0}], /* 버전 나누기는 PETRIS만 (다른 게임은 한 가지) */
-  petris:[{id:'v2',label:'시즌 2 (현재)',from:0},{id:'s1',label:'시즌 1',from:-1}]}; /* PETRIS는 시즌으로 구분: 시즌 2 = 현재 */
+const RK_VER={_:[{id:'v1',label:'',from:0}], /* 버전 나누기 없음 (모든 게임 한 가지) */
+  }; /* PETRIS도 시즌 1·2 통합 (2026-10-27) — 버전 나누기 없음 */
 function rkTs(d){if(d==null||d==='')return NaN;if(typeof d==='number')return d;const s=String(d).trim();if(/^\d{12,}$/.test(s))return +s;
   let m=s.match(/^(\d{4})-(\d\d)-(\d\d)(?:[ T](\d\d):(\d\d))?/);if(m&&!/(Z|[+-]\d\d:?\d\d)$/.test(s))return Date.parse(`${m[1]}-${m[2]}-${m[3]}T${m[4]||'00'}:${m[5]||'00'}:00+09:00`); /* 시간대 없는 날짜 = 한국 시간 */
   m=s.match(/([A-Z][a-z]{2}) (\d{1,2}) (\d{4}) (\d\d):(\d\d)(?::(\d\d))? GMT([+-]\d{4})/); /* 시트가 돌려주는 'Sat Oct 24 2026 15:04:00 GMT+0900' */
