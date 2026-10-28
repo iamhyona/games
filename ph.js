@@ -16,8 +16,8 @@ const NK=['petris-name','pang-name','fruit-name','bricks-name','mcb-name','mines
 function nmGet(){try{let n=localStorage.getItem('ph-name');if(!n)for(const k of NK){n=localStorage.getItem(k);if(n)break}return n||''}catch(e){return ''}}
 function nmSet(n){n=(n||'').trim();if(!n)return;try{localStorage.setItem('ph-name',n);for(const k of NK)localStorage.setItem(k,n)}catch(e){}}
 (function(){const n=nmGet();if(n)nmSet(n)})();
-/* 랭킹 보기 제한: 이 기기의 랭킹 이름이 soooooo면, 정한 시각 이후 등록된 뚠캣 기록은 랭킹에서 뺌 (시트 기록은 그대로 · 다른 사람 화면은 그대로) */
-const RK_HIDE=[{viewer:/^so{3,}$/i,who:'뚠캣',after:'2026-10-29 03:10'}];
+/* 랭킹 보기 제한: 이 기기의 랭킹 이름이 soooooo면, 정한 시각 이후 등록된 뚠캣·밍지 기록은 랭킹에서 뺌 (시트 기록은 그대로 · 다른 사람 화면은 그대로) */
+const RK_HIDE=[{viewer:/^so{3,}$/i,who:'뚠캣',after:'2026-10-29 03:10'},{viewer:/^so{3,}$/i,who:'밍지',after:'2026-10-29 03:18'}];
 function rkViewerNames(){const a=[];try{for(const k of ['ph-name','twinstar-name',...NK]){const v=localStorage.getItem(k);if(v)a.push(v.trim())}}catch(e){}return a}
 (function(){const of=window.fetch;if(!of||of._phHide)return;
   const W=function(input){const p=of.apply(this,arguments);try{const u=String(input&&input.url||input);
