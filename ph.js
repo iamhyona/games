@@ -53,9 +53,53 @@ function phTutShow(cfg,go){const touch=matchMedia('(pointer:coarse)').matches,ro
   const blk=e=>{e.stopPropagation();if(e.key==='Enter'||e.key===' '||e.key==='Escape'){e.preventDefault();close()}};addEventListener('keydown',blk,true);
   d.querySelector('#phTgo').onclick=close;const ck=d.querySelector('#phTchk');if(ck)ck.onchange=()=>{if(ck.checked)close()}; // 체크하면 바로 닫고 시작
   ['pointerdown','touchstart','keydown'].forEach(t=>d.addEventListener(t,e=>e.stopPropagation()))}
-/* 랭킹 난이도 뱃지 — 모든 게임 같은 색: EASY 초록 · NORMAL 노랑 · HARD 빨강 · MASTER 보라 · 그 밖(TIME·ITEM·VS 등) 회색 */
-window.phLv=function(label){label=String(label||'').trim();if(!label)return'';if(!document.getElementById('phLvCss')){const s=document.createElement('style');s.id='phLvCss';s.textContent='.lvb{display:inline-block;font:700 7px Silkscreen,monospace!important;font-style:normal!important;letter-spacing:.06em!important;padding:2px 4px 1px;border-radius:3px;vertical-align:2px;margin-left:4px;color:#0a0c1d!important;background:#9aa3c7;line-height:1.25;white-space:nowrap;text-transform:uppercase}.lvb.easy{background:#5fe08a}.lvb.normal{background:#ffd23f}.lvb.hard{background:#ff5a6e}.lvb.master{background:#b48cff}';document.head.appendChild(s)}
- const C={EASY:'easy',NORMAL:'normal',HARD:'hard',MASTER:'master'};return label.split(/\s+/).map(w=>`<i class="lvb ${C[w.toUpperCase()]||''}">${w.replace(/[<>&"]/g,'')}</i>`).join('')};
+/* ===== 난이도 공통 (2026-10-29 개편): 색 EASY 노랑 · NORMAL 하늘 · HARD 빨강 · MASTER 보라 (벽돌깨기 버튼 색) ===== */
+const LVK={e:'e',easy:'e','이지':'e',n:'n',normal:'n','노멀':'n',solo:'n',h:'h',hard:'h','하드':'h',m:'m',master:'m','마스터':'m',god:'m'};
+const LVC={e:{b:'#f2b000',t:'#ffd84d',L:'E'},n:{b:'#00a8e0',t:'#7fd9ff',L:'N'},h:{b:'#e8284f',t:'#ff8aa0',L:'H'},m:{b:'#8a3cf0',t:'#c9a6ff',L:'M'}};
+const lvKey=v=>LVK[String(v==null?'':v).trim().toLowerCase()]||null;
+function phUiCss(){if(document.getElementById('phUiCss'))return;
+  if(!document.getElementById('phNeoF')){const f=document.createElement('style');f.id='phNeoF';f.textContent='@font-face{font-family:"NeoDunggeunmo";src:url(https://cdn.jsdelivr.net/npm/@kfonts/neodgm@0.5.0/neodgm.woff2) format("woff2");font-display:swap}';document.head.appendChild(f)}
+  const s=document.createElement('style');s.id='phUiCss';
+  s.textContent=
+  /* 슬라이드 토글 (모드 고르기) */
+  '.phSeg{position:relative!important;display:flex!important;gap:0!important;width:min(300px,100%)!important;height:44px!important;box-sizing:border-box!important;border-radius:22px!important;background:#151729!important;border:2px solid #34375a!important;padding:3px!important;margin-left:auto!important;margin-right:auto!important;flex-shrink:0}'+
+  '.phSeg>.phSegK{position:absolute;top:3px;bottom:3px;left:3px;width:0;border-radius:18px;background:#f2b000;transition:left .22s cubic-bezier(.3,.7,.2,1),width .22s;pointer-events:none;z-index:0}'+
+  '.phSeg.phSeg>button{position:relative;z-index:1;flex:1 1 0!important;min-width:0!important;width:auto!important;height:auto!important;min-height:0!important;margin:0!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:18px!important;padding:0 2px!important;font:400 10px "Silkscreen",monospace!important;letter-spacing:.06em!important;white-space:nowrap;color:#9aa0c4!important;cursor:pointer;display:flex!important;align-items:center;justify-content:center;transform:none!important;opacity:1!important}'+
+  '.phSeg.phSeg>button.on{color:#111!important}.phSeg.phSeg>button small{display:none!important}'+
+  /* 난이도 버튼 (세로) */
+  '.phDiff.phDiff.phDiff{width:232px!important;max-width:100%!important;height:52px!important;min-height:0!important;box-sizing:border-box!important;border:3px solid var(--lvb)!important;box-shadow:inset 0 0 0 3px #08090f,inset 0 0 0 5px var(--lvs)!important;background:#08090f!important;color:var(--lvt)!important;font:400 15px "Silkscreen",monospace!important;letter-spacing:.2em!important;border-radius:0!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;padding:0!important;cursor:pointer}'+
+  '.phDiff.phDiff.phDiff:active{transform:translateY(2px)}.phDiff.phDiff small,.phDiff.phDiff .mul{display:none!important}.phDiff.phDiff::before,.phDiff.phDiff::after{content:none!important;display:none!important}'+
+  '.phDiff.lv-e{--lvb:#f2b000;--lvt:#ffd84d;--lvs:rgba(242,176,0,.33)}.phDiff.lv-n{--lvb:#00a8e0;--lvt:#7fd9ff;--lvs:rgba(0,168,224,.33)}.phDiff.lv-h{--lvb:#e8284f;--lvt:#ff8aa0;--lvs:rgba(232,40,79,.33)}.phDiff.lv-m{--lvb:#8a3cf0;--lvt:#c9a6ff;--lvs:rgba(138,60,240,.33)}'+
+  /* 랭킹 난이도 작은 탭 (E N H) */
+  '.phLvTabs{display:flex!important;gap:8px!important;justify-content:center;width:auto!important;margin:0 auto 8px!important}'+
+  '.phLvTabs>button{width:44px!important;height:32px!important;flex:0 0 auto!important;box-sizing:border-box;border-radius:8px!important;padding:0!important;font:700 13px "Silkscreen",monospace!important;letter-spacing:0!important;background:transparent!important;border:2px solid var(--lvb)!important;color:var(--lvt)!important;cursor:pointer}'+
+  '.phLvTabs>button.on{background:var(--lvb)!important;color:#111!important}'+
+  '.phLvTabs>.lv-e{--lvb:#f2b000;--lvt:#ffd84d}.phLvTabs>.lv-n{--lvb:#00a8e0;--lvt:#7fd9ff}.phLvTabs>.lv-h{--lvb:#e8284f;--lvt:#ff8aa0}.phLvTabs>.lv-m{--lvb:#8a3cf0;--lvt:#c9a6ff}'+
+  /* 게임 중 난이도 표시: 게임판 테두리·빛 + 왼쪽 위 글자 */
+  '.phLvChip{position:absolute;top:4px;left:4px;z-index:5;min-width:18px;height:18px;box-sizing:border-box;border-radius:5px;border:2px solid var(--lvb);background:rgba(8,9,15,.8);color:var(--lvt);font:700 10px "Silkscreen",monospace;opacity:.92;display:flex;align-items:center;justify-content:center;pointer-events:none}'+
+  /* 랭킹 숫자: 읽기 쉬운 둥근모 픽셀 글꼴 · 이름 한 줄 */
+  '.list .s,.list .t,.rk li b,.rank li em,#rList .s{font-family:"NeoDunggeunmo",monospace!important;font-weight:400!important;font-size:16px!important;letter-spacing:.02em!important}'+
+  '.list>div>span:nth-child(2){display:flex!important;align-items:center;min-width:0;white-space:nowrap}.list .nm,.rank .nm,.rk .nm{display:inline-block;flex:0 1 auto;font-style:normal!important;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lvb{flex:0 0 auto}.rank li span{display:flex;align-items:center;min-width:0;white-space:nowrap}.rk li{white-space:nowrap}';
+  document.head.appendChild(s)}
+/* 슬라이드 토글: .phSeg 안에서 class "on" 붙은 버튼으로 노란 손잡이가 미끄러짐 (게임 원래 클릭 동작은 그대로) */
+function segPos(seg){let k=seg.querySelector(':scope>.phSegK');if(!k){k=document.createElement('i');k.className='phSegK';seg.insertBefore(k,seg.firstChild)}
+  const on=seg.querySelector(':scope>button.on');if(!on||!on.offsetWidth){k.style.opacity=on?'1':'0';if(!on)return}k.style.opacity='1';k.style.left=on.offsetLeft+'px';k.style.width=on.offsetWidth+'px'}
+window.phSeg=function(root){phUiCss();(root||document).querySelectorAll('.phSeg').forEach(seg=>{segPos(seg);if(seg._phSeg)return;seg._phSeg=1;
+  try{new MutationObserver(()=>segPos(seg)).observe(seg,{subtree:true,attributes:true,attributeFilter:['class']})}catch(e){}
+  try{new ResizeObserver(()=>segPos(seg)).observe(seg)}catch(e){}})};
+/* 게임 중 난이도 색: phLvTheme(난이도, 게임판 요소) — 테두리·빛을 난이도 색으로, 왼쪽 위에 E/N/H/M */
+window.phLvTheme=function(lv,el){phUiCss();if(!el)return;const k=lvKey(lv),c=k&&LVC[k],cv=el.tagName==='CANVAS',host=cv?el.parentNode:el;let ch=el._phChip||(cv?null:el.querySelector(':scope>.phLvChip'));
+  if(!c){el.style.removeProperty('border-color');el.style.removeProperty('box-shadow');if(ch){ch.remove();el._phChip=null}return}
+  if(cv)el.style.setProperty('box-shadow','0 0 0 2px '+c.b+', 0 0 16px '+c.b+'66','important'); /* 캔버스: 크기 안 바뀌게 테두리 대신 고리 */
+  else{el.style.setProperty('border-color',c.b,'important');el.style.setProperty('box-shadow','0 0 16px '+c.b+'55, inset 0 0 22px '+c.b+'1f','important')}
+  if(getComputedStyle(host).position==='static')host.style.position='relative';
+  if(!ch){ch=document.createElement('i');ch.className='phLvChip';host.appendChild(ch);el._phChip=ch}
+  const place=()=>{if(cv){ch.style.left=(el.offsetLeft+4)+'px';ch.style.top=(el.offsetTop+4)+'px'}};place();if(cv&&!el._phPl){el._phPl=1;addEventListener('resize',()=>setTimeout(place,60));setTimeout(place,300)}
+  ch.style.setProperty('--lvb',c.b);ch.style.setProperty('--lvt',c.t);ch.textContent=c.L};
+window.phLvKey=lvKey;
+/* 랭킹 난이도 뱃지: 한 글자 (E N H M) · 그 밖(TIME·ITEM·VS·CO-OP·환산 등)은 회색 글자 */
+window.phLv=function(label){label=String(label||'').trim();if(!label)return'';phUiCss();if(!document.getElementById('phLvCss')){const s=document.createElement('style');s.id='phLvCss';s.textContent='.lvb{display:inline-flex;align-items:center;justify-content:center;font:700 8px Silkscreen,monospace!important;font-style:normal!important;letter-spacing:.04em!important;padding:2px 4px 1px;min-width:16px;height:15px;box-sizing:border-box;border-radius:3px;vertical-align:1px;margin-left:5px;color:#0a0c1d!important;background:#9aa3c7;line-height:1;white-space:nowrap;text-transform:uppercase}.lvb.e{background:#f2b000}.lvb.n{background:#00a8e0}.lvb.h{background:#e8284f}.lvb.m{background:#8a3cf0;color:#fff!important}';document.head.appendChild(s)}
+ const W={EASY:'e',NORMAL:'n',HARD:'h',MASTER:'m'};return label.split(/\s+/).map(w=>{const k=W[w.toUpperCase()];return k?`<i class="lvb ${k}">${LVC[k].L}</i>`:`<i class="lvb">${w.replace(/[<>&"]/g,'')}</i>`}).join('')};
 /* ===== 랭킹 나누기: 게임 + 모드 + 난이도 + 버전 =====
    버전은 기록 날짜로 정함. CUT 이전 기록 = 이전 버전 (지우지 않고 그대로 보관). 새 버전을 낼 땐 VER 맨 앞에 한 줄 추가 */
 const RK_CUT=Date.parse('2026-10-26T17:30:00+09:00');
@@ -79,8 +123,9 @@ function rkBar(el,o){if(!el)return{};rkCss();phFont();const g=o.game,V=rkVers(g)
   if(o.sel)for(const k in o.sel)if(o.sel[k]!=null)S[k]=o.sel[k];
   if(o.modes&&o.modes.length)S.mode=pick(o.modes,S.mode);if(o.diffs&&o.diffs.length)S.diff=pick(o.diffs,S.diff);if(!V.some(v=>v.id===S.ver))S.ver=V[0].id;rkSaveSel(g,S);
   const LVC={EASY:'easy',NORMAL:'normal',HARD:'hard',MASTER:'master'};
-  const row=(L,k)=>L&&L.length>1?`<div class="phRk-t" data-k="${k}">${L.map(([id,lb])=>`<button type="button" data-v="${id}" class="${S[k]===id?'on ':''}${k==='diff'?(LVC[String(lb).toUpperCase()]||''):''}">${lb}</button>`).join('')}</div>`:'';
+  const row=(L,k)=>L&&L.length>1?`<div class="${k==='mode'?'phRk-t phSeg':'phRk-t'}" data-k="${k}">${L.map(([id,lb])=>`<button type="button" data-v="${id}" class="${S[k]===id?'on ':''}${k==='diff'?(LVC[String(lb).toUpperCase()]||''):''}">${lb}</button>`).join('')}</div>`:'';
   el.classList.add('phRk');el.innerHTML=row(o.modes,'mode')+row(o.diffs,'diff')+(V.length>1?`<div class="phRk-v"><select aria-label="버전">${V.map(v=>`<option value="${v.id}"${v.id===S.ver?' selected':''}>${v.label}</option>`).join('')}</select></div>`:'');
+  window.phSeg&&window.phSeg(el);
   const fire=()=>{rkSaveSel(g,S);if(o.onChange)o.onChange(Object.assign({},S))};
   el.querySelectorAll('.phRk-t button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const k=b.parentNode.dataset.k;S[k]=b.dataset.v;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));fire()}));
   const sl=el.querySelector('select');if(sl)sl.addEventListener('change',()=>{S.ver=sl.value;fire()});if(sl)['click','pointerdown','touchstart','keydown'].forEach(t=>sl.addEventListener(t,e=>e.stopPropagation()));
@@ -116,6 +161,6 @@ function btnFont(){document.querySelectorAll('button').forEach(b=>{if(b._pf||b.c
 function silentTip(){try{if(!matchMedia('(pointer:coarse)').matches||/^\/games\/?$/.test(location.pathname))return}catch(e){return}
   const d=document.createElement('div');d.className='phTip';d.innerHTML='<svg viewBox="0 0 16 16" shape-rendering="crispEdges"><path fill="#e9e9f0" d="M2 6h3l4-3h1v10H9L5 10H2z"/><path fill="#e9e9f0" d="M12 6h1v4h-1z"/><line x1="2" y1="14" x2="14" y2="2" stroke="#ff5a6e" stroke-width="2" stroke-linecap="round"/></svg><span>무음을 해제해야 소리가 들립니다</span>';
   document.body.appendChild(d);setTimeout(()=>d.remove(),3800)}
-function fill2(){fill();back();phFont();howBtn();btnFont();nmFill();setTimeout(silentTip,700);let t=0;try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(btnFont,30)}).observe(document.body,{childList:true,subtree:true})}catch(e){}}
+function fill2(){fill();back();phFont();howBtn();btnFont();nmFill();phUiCss();window.phSeg();document.querySelectorAll(NSEL).forEach(i=>{if(!(i.maxLength>0)||i.maxLength>8)i.maxLength=8});setTimeout(silentTip,700);let t=0;try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(()=>{btnFont();window.phSeg()},30)}).observe(document.body,{childList:true,subtree:true})}catch(e){}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill2);else fill2();
 })();
