@@ -16,6 +16,16 @@ const NK=['petris-name','pang-name','fruit-name','bricks-name','mcb-name','mines
 function nmGet(){try{let n=localStorage.getItem('ph-name');if(!n)for(const k of NK){n=localStorage.getItem(k);if(n)break}return n||''}catch(e){return ''}}
 function nmSet(n){n=(n||'').trim();if(!n)return;try{localStorage.setItem('ph-name',n);for(const k of NK)localStorage.setItem(k,n)}catch(e){}}
 (function(){const n=nmGet();if(n)nmSet(n)})();
+/* 랭킹 보기 제한: 이 기기의 랭킹 이름이 soooooo면, 정한 시각 이후 등록된 뚠캣 기록은 랭킹에서 뺌 (시트 기록은 그대로 · 다른 사람 화면은 그대로) */
+const RK_HIDE=[{viewer:/^so{3,}$/i,who:'뚠캣',after:'2026-10-29 03:10'}];
+function rkViewerNames(){const a=[];try{for(const k of ['ph-name','twinstar-name',...NK]){const v=localStorage.getItem(k);if(v)a.push(v.trim())}}catch(e){}return a}
+(function(){const of=window.fetch;if(!of||of._phHide)return;
+  const W=function(input){const p=of.apply(this,arguments);try{const u=String(input&&input.url||input);
+    if(!/script\.google\.com\/macros\//.test(u)||/[?&]a=add\b/.test(u))return p;
+    const names=rkViewerNames(),rules=RK_HIDE.filter(r=>names.some(n=>r.viewer.test(n)));if(!rules.length)return p;
+    return p.then(res=>res.clone().json().then(j=>{if(j&&Array.isArray(j.top))j.top=j.top.filter(r=>!rules.some(x=>String(r.n).trim()===x.who&&String(r.d)>x.after));
+      return new Response(JSON.stringify(j),{status:res.status,statusText:res.statusText,headers:{'Content-Type':'application/json'}})}).catch(()=>res))}catch(e){return p}};
+  W._phHide=1;window.fetch=W})();
 function nmFill(){const n=nmGet();if(!n)return;document.querySelectorAll(NSEL).forEach(i=>{if(!i.value)i.value=n.slice(0,+i.maxLength>0?+i.maxLength:20)})}
 document.addEventListener('input',e=>{if(e.target.matches&&e.target.matches(NSEL))nmSet(e.target.value)},true);
 document.addEventListener('focusin',e=>{if(e.target.matches&&e.target.matches(NSEL)&&!e.target.value)nmFill()},true);
