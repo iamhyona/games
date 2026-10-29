@@ -79,7 +79,7 @@ function phUiCss(){if(document.getElementById('phUiCss'))return;
   /* 게임 중 난이도 표시: 게임판 테두리·빛 + 왼쪽 위 글자 */
   '.phLvChip{position:absolute;top:4px;left:4px;z-index:5;min-width:18px;height:18px;box-sizing:border-box;border-radius:5px;border:2px solid var(--lvb);background:rgba(8,9,15,.8);color:var(--lvt);font:700 10px "Silkscreen",monospace;opacity:.92;display:flex;align-items:center;justify-content:center;pointer-events:none}'+
   /* 랭킹 숫자: 읽기 쉬운 둥근모 픽셀 글꼴 · 이름 한 줄 */
-  '.list .s,.list .t,.rk li b,.rank li em,#rList .s{font-family:"Jersey 15",sans-serif!important;font-weight:400!important;font-size:19px!important;letter-spacing:.02em!important}'+
+  '.list .s,.list .t,.rk li b,.rank li em,#rList .s{font-family:"Jersey 15",sans-serif!important;font-weight:400!important;font-size:16px!important;letter-spacing:.02em!important}'+
   '.list>div>span:nth-child(2){display:flex!important;align-items:center;min-width:0;white-space:nowrap}.list .nm,.rank .nm,.rk .nm{display:inline-block;flex:0 1 auto;font-style:normal!important;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lvb{flex:0 0 auto}.rank li span{display:flex;align-items:center;min-width:0;white-space:nowrap}.rk li{white-space:nowrap}';
   document.head.appendChild(s)}
 /* 슬라이드 토글: .phSeg 안에서 class "on" 붙은 버튼으로 노란 손잡이가 미끄러짐 (게임 원래 클릭 동작은 그대로) */

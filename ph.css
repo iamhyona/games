@@ -192,3 +192,6 @@ html body :is(#ovMode,#modeOv,.vs,#modeOv2,body) .phDiff.phDiff.phDiff{--b:var(-
 @media (hover:hover){html body :is(#ovMode,#modeOv,.vs,#modeOv2,body) .phDiff.phDiff.phDiff:hover{background:color-mix(in srgb,var(--b) 16%,#12142a)!important;box-shadow:0 0 14px color-mix(in srgb,var(--b) 40%,transparent)!important}}
 html body :is(#ovMode,#modeOv,.vs,#modeOv2,body) .phDiff.phDiff.phDiff:focus-visible,html body :is(#ovMode,#modeOv,.vs,#modeOv2,body) .phDiff.phDiff.phDiff.sel{background:color-mix(in srgb,var(--b) 16%,#12142a)!important;box-shadow:0 0 14px color-mix(in srgb,var(--b) 40%,transparent)!important;outline:none}
 html body :is(#ovMode,#modeOv,.vs,#modeOv2,body) .phDiff.phDiff.phDiff:active{background:color-mix(in srgb,var(--b) 26%,#12142a)!important;transform:translateY(1px)!important}
+/* 11) 시작 화면 안내 문구: 작고 가벼운 한글 글꼴 · 랭킹 닉네임은 숫자보다 작게 */
+html body .phS-credit{font:400 10px/1.7 Galmuri11,"NeoDunggeunmo",sans-serif!important;letter-spacing:0!important;color:rgba(200,204,220,.45)!important}
+html body .rank li span,html body .list .nm,html body .rk .nm,html body .rank .nm,html body #rList .nm{font-size:12px!important}
