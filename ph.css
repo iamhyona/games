@@ -339,3 +339,8 @@ html body .phSet-w .phSet-row{display:flex;gap:12px}
 html body .phSet-w .phSet-row .phBtn{flex:1 1 0;width:auto!important;min-width:0;font-size:11px!important}
 html body .phSet-w .phSetRst{width:100%!important;font-size:13px!important}
 html body .phSet-w .phSetX{margin-top:2px!important}
+/* 27) 시작 화면: RANKING | ALL GAMES 반반, HOW TO PLAY 밑줄 글자 링크 (버튼들과 간격 넓게) */
+html body .phS .phS-row2 .phS-b.phS-all{width:auto!important;flex:1 1 0!important;min-width:0!important;font-size:11px!important}
+html body .phS .phS-howL{all:unset;box-sizing:border-box;display:block;margin:28px auto 0;padding:6px 12px;font:400 10px/1 "Silkscreen",monospace;letter-spacing:.16em;color:#8b8fa8;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;cursor:pointer;flex-shrink:0;text-align:center}
+html body .phS .phS-howL:hover{color:#dfe2ea}
+html body .phS .phS-howL:focus-visible{outline:2px solid #3a3e66;outline-offset:2px;border-radius:4px}

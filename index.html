@@ -23,7 +23,7 @@
 <meta name="apple-mobile-web-app-title" content="GAMES">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="ph.css?v=14">
+<link rel="stylesheet" href="ph.css?v=15">
 <style>
 @font-face{font-family:"NeoDunggeunmo";src:url(https://cdn.jsdelivr.net/npm/@kfonts/neodgm@0.5.0/neodgm.woff2) format("woff2");font-display:swap}
 :root{--bg:#0b0b0f;--line:#2c2d36;--line2:#363743;--txt:#f2f2f7;--sub:#8f90a0;--gold:#f2b000;--f:"NeoDunggeunmo",ui-monospace,monospace;--en:"Silkscreen",var(--f)}
@@ -57,10 +57,15 @@ html,body{margin:0;min-height:100%;background:#1c1d22;color:var(--txt);font-fami
 .ft{text-align:center;color:#6c6d7c;font-size:11px;line-height:1.8;margin-top:28px}
 .inst{margin:18px auto 0;font-size:11px;color:#8f90a0;line-height:1.7;text-align:center}
 </style>
+<style id="phHead">/* 상단 헤더 통일 (2026-10-30): 무지개 줄 없이 가운데 'PARK HYONA'S 게임이름' */
+html .lcd-label .ln{display:none!important}
+html .lcd-label{justify-content:center!important;padding:12px 10px 10px!important}
+html .lcd-label .copy{font:400 9px "Silkscreen",monospace!important;letter-spacing:2px!important;color:#8b8fa8!important;-webkit-text-stroke:0!important;text-shadow:none!important;text-transform:uppercase}
+</style>
 </head>
 <body>
 <div class="ph">
-  <div class="lcd-label"><i class="ln"></i><span class="copy">© 2026 PARK HYONA</span><i class="ln"></i></div>
+  <div class="lcd-label"><i class="ln"></i><span class="copy">PARK HYONA'S GAMES</span><i class="ln"></i></div>
   <div class="top">
     <div class="logo">PARK HYONA<b>GAMES</b></div>
     <div class="lead">박현아가 심심해서 만든 비상업적 게임 모음<br>골라서 플레이하세요!</div>

@@ -289,10 +289,10 @@ function phOv(){try{
 /* 시작 화면 버튼 줄 (2026-10-29 검수안): RANKING 한 줄 → HOW TO PLAY | SETTINGS 반반 */
 function phStartRow(){document.querySelectorAll('.phS-btns').forEach(w=>{if(w._phRow)return;const row=w.querySelector('.phS-row2'),how=w.querySelector('.phS-how');if(!row||!how)return;
   const rk=[...row.children].find(b=>/RANKING/i.test(b.textContent));if(!rk)return;w._phRow=1;
-  /* 시작 화면: HOW TO PLAY | RANKING 반반, SETTINGS는 시작 화면에서 뺌(게임 중 톱니바퀴로) */
+  /* 시작 화면 (2026-10-30): RANKING | ALL GAMES 나란히, HOW TO PLAY는 아래 밑줄 글자 링크, SETTINGS는 게임 중 톱니바퀴로 */
   [...row.children].forEach(b=>{if(/SETTINGS/i.test(b.textContent))b.classList.add('phS-noSet')});
-  row.insertBefore(how,row.firstChild);how.textContent='HOW TO PLAY';how.classList.add('phS-howE');
-  const al=document.createElement('button');al.type='button';al.className='phS-b gold phS-all';al.textContent='ALL GAMES';al.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();location.href='../games/'});w.appendChild(al)})}
+  const al=document.createElement('button');al.type='button';al.className='phS-b gold phS-all';al.textContent='ALL GAMES';al.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();location.href='../games/'});
+  rk.after(al);how.textContent='HOW TO PLAY';how.className='phS-howL';w.after(how)})}
 /* 잠시 멈춤 화면 (2026-10-29 검수안): PAUSE → RESTART → RANKING → MAIN MENU → ALL GAMES → ✕(계속하기) */
 function phPause(){[['pauseOv','resumeB'],['ovPause','bResume'],['overlay','overlay-btn']].forEach(([oid,rid])=>{const ov=document.getElementById(oid),rs=document.getElementById(rid);if(!ov||!rs||ov._phP)return;
   const bs=[...ov.children].filter(b=>b.tagName==='BUTTON'&&/^(RESTART|MAIN MENU)$/i.test(b.textContent.trim()));if(bs.length<2)return;ov._phP=1;
