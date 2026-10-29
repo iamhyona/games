@@ -297,7 +297,7 @@ function phStartRow(){document.querySelectorAll('.phS-btns').forEach(w=>{if(w._p
   rk.after(al);how.textContent='HOW TO PLAY';how.className='phS-howL';w.after(how)})}
 /* 잠시 멈춤 화면 (2026-10-29 검수안): PAUSE → RESTART → RANKING → MAIN MENU → ALL GAMES → ✕(계속하기) */
 function phPause(){[['pauseOv','resumeB'],['ovPause','bResume'],['overlay','overlay-btn']].forEach(([oid,rid])=>{const ov=document.getElementById(oid),rs=document.getElementById(rid);if(!ov||!rs||ov._phP)return;
-  const bs=[...ov.children].filter(b=>b.tagName==='BUTTON'&&/^(RESTART|MAIN MENU)$/i.test(b.textContent.trim()));if(bs.length<2)return;ov._phP=1;
+  const bs=[...ov.children].filter(b=>b.tagName==='BUTTON'&&/^(RESTART|MAIN MENU)$/i.test(b.textContent.trim()));bs.forEach(b=>b.classList.add(/RESTART/i.test(b.textContent)?'phPRst':'phPMenu'));if(bs.length<2)return;ov._phP=1;
   const row=document.createElement('div');row.className='phPRow';bs[0].parentNode.insertBefore(row,bs[0]);bs.forEach(b=>row.appendChild(b));
   const rkS=[...document.querySelectorAll('.phS-btns button')].find(x=>/RANKING/i.test(x.textContent));
   if(rkS){const rb=document.createElement('button');rb.type='button';rb.className='phBtn sub phPRank';rb.textContent='RANKING';rb.addEventListener('click',e=>{e.stopPropagation();document.body.classList.add('phRkTop');rkS.click()});bs[0].after(rb)}
@@ -386,10 +386,11 @@ function phGoOne(ov){if(!ov._phGo){ov._phGo=1;ov.classList.add('phGoOv');
     const a=document.createElement('button');a.type='button';a.className='phBtn sub phGoAll';a.textContent='ALL GAMES';a.addEventListener('click',e=>{e.stopPropagation();location.href='../games/'});ov.appendChild(a);
     ov.querySelectorAll('.phGoMenu,.phGoRank,.phGoRetry').forEach(b=>{let p=b.parentElement;while(p&&p!==ov){if(!p.querySelector('input'))p.classList.add('phGoC');p=p.parentElement}});
     const inp=ov.querySelector('input');if(inp){let f=inp.closest('form')||inp.parentElement;f.classList.add('phGoF');f.querySelectorAll('button').forEach(x=>{if(/랭킹|등록/.test(x.textContent))x.textContent='OK'})}}
+  ov.querySelectorAll('input').forEach(inp=>{const f=inp.closest('form')||inp.parentElement;if(!f.classList.contains('phGoF')){f.classList.add('phGoF');f.querySelectorAll('button').forEach(x=>{if(/랭킹|등록/.test(x.textContent))x.textContent='OK'})}}); /* 이름 칸은 게임이 새로 만들어도 매번 맞춤 (0점이어도 숨기지 않음) */
   const d=phGoData(ov),k=JSON.stringify(d),top=ov.querySelector('.phGo');
   if(top._k!==k){top._k=k;const m=d[0]||['SCORE','0'],rest=d.slice(1);top.querySelector('.phGoN i').textContent=m[0]||'SCORE';top.querySelector('.phGoN b').textContent=m[1];
     const box=top.querySelector('.phGoSt');box.innerHTML=rest.map(([l,v])=>`<div><i>${l}</i><b>${v}</b></div>`).join('');box.hidden=rest.length<2}
-  const m=d[0]||['SCORE','0'];ov.classList.toggle('phGoNoF',!goNum(m[1],/TIME/i.test(m[0])));
+  const m=d[0]||['SCORE','0'];
   if(!ov._phSeen){ov._phTick=(ov._phTick||0)+1;if(ov._phTick>=2){ov._phSeen=1;top.querySelector('.phGoQ').textContent=phGoLine(ov,m);
     const time=/TIME/i.test(m[0]),v=goNum(m[1],time);ov.classList.remove('phGo1');
     const t0=top.querySelector('.phGoT');if(window.__phWinTest||(!time&&v>0&&window.__phTopN!=null&&v>window.__phTopMax)){ov.classList.add('phGo1');t0.outerHTML=phDots('LEGEND','#ffd84d','phGoT');top.querySelector('.phGoQ').textContent='전설이 탄생했어요! 지금 랭킹 1위예요';phWin(ov,m)}else if(t0.getAttribute('aria-label')!=='GAME OVER')t0.outerHTML=phDots('GAME OVER','#f4fff0','phGoT')}}}

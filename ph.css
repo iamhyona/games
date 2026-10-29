@@ -349,3 +349,11 @@ html body .phSndOld{display:none!important}
 html body .phSndB{position:relative}
 html body .phSndB.off::after{content:"";position:absolute;left:50%;top:50%;width:64%;max-width:26px;height:3px;background:#ff5a6e;border-radius:2px;transform:translate(-50%,-50%) rotate(-45deg);box-shadow:0 0 0 1.5px rgba(10,10,20,.85);pointer-events:none}
 html body .phSndB svg{width:22px;height:20px;display:block;margin:auto}
+/* 29) 잠시 멈춤 버튼 순서: RANKING → MAIN MENU | ALL GAMES → RESTART → ✕ */
+html body #pauseOv .phPRow,html body #ovPause .phPRow,html body #overlay.paused .phPRow{display:grid!important;grid-template-columns:1fr 1fr!important;gap:12px!important}
+html body .phPRow .phPRank{order:1;grid-column:1/-1}
+html body .phPRow .phPMenu{order:2;font-size:11px!important}
+html body .phPRow .phPAll{order:3;font-size:11px!important;width:auto!important;margin:0!important}
+html body .phPRow .phPRst{order:4;grid-column:1/-1}
+html body .phPRow>.phBtn.phBtn.phBtn{width:auto!important;min-width:0!important;max-width:none!important;margin:0!important}
+html body #overlay .phPRow>button.phBtn,html body #pauseOv .phPRow>button.phBtn,html body #ovPause .phPRow>button.phBtn{width:auto!important;max-width:none!important}
