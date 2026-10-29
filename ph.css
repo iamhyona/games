@@ -88,3 +88,107 @@ html .vs .vs-x::after{content:"\2715"}
 html .vs .mt-btn[data-t=time]{flex:1.7 1 0!important}
 html #modeBack{font-size:0!important;color:#bfc3c9!important;background:none!important;border:0!important;box-shadow:none!important;width:auto!important;min-height:0!important;height:auto!important;padding:6px 14px!important;margin-top:4px!important}
 html #modeBack::after{content:"\2715";font:400 22px "Silkscreen",monospace;line-height:1}
+/* ===== v2 디자인 통일 (2026-10-29) — 이 블록이 위 규칙보다 우선 ===== */
+/* 1) 상단 헤더: 픽셀 줄 없이 작은 회색 글자만 */
+html .lcd-label .ln{display:none!important}
+html .lcd-label{justify-content:center!important;padding:12px 10px 10px!important}
+html .lcd-label .copy{font:400 9px "Silkscreen",monospace!important;letter-spacing:2px!important;color:#8b8fa8!important}
+/* 2) 버튼: 300×52 · 모서리 12 · 테두리 2 · 배경 하나 · Silkscreen 13px 자간 .2em */
+html body .phS .phS-b,html body .phT .phS-b,html body .phDiff.phDiff.phDiff,html body .phBtn,html body .phV-b{--b:#10b870;--t:#9ff0c6;width:300px!important;max-width:100%!important;height:52px!important;min-height:0!important;box-sizing:border-box!important;border:2px solid var(--b)!important;border-radius:12px!important;background:#12142a!important;box-shadow:none!important;color:var(--t)!important;font:400 13px "Silkscreen",monospace!important;letter-spacing:.2em!important;padding:0 0 0 .2em!important;text-shadow:none!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;cursor:pointer!important;opacity:1;transition:background .15s,box-shadow .15s,transform .05s!important;-webkit-tap-highlight-color:transparent}
+html body .phS .phS-b.gold,html body .phS .phS-b.phS-how,html body .phBtn.sub,html body .phV-b.sub{--b:#3a3e66;--t:#dfe2ea}
+html body .phS-btns .phS-b.phS-how,html body .phBtn.ko{font:400 14px Galmuri11,"NeoDunggeunmo",monospace!important;letter-spacing:.06em!important;padding:0!important;width:300px!important;height:52px!important;margin-top:0!important}
+html body .phDiff.phDiff.phDiff{--b:var(--lvb);--t:var(--lvt)}
+html body .phBtn.half,html body .phS .phS-row2 .phS-b{width:auto!important;flex:1 1 0!important;min-width:0!important}
+html body .phS .phS-row2{display:flex!important;width:300px!important;max-width:100%!important;gap:12px!important}
+html body .phS-btns{gap:12px!important}
+html body .phS .phS-b::before,html body .phS .phS-b::after{content:none!important}
+@media (hover:hover){html body .phS .phS-b:hover,html body .phT .phS-b:hover,html body .phDiff.phDiff.phDiff:hover,html body .phBtn:hover,html body .phV-b:hover{background:color-mix(in srgb,var(--b) 16%,#12142a)!important;box-shadow:0 0 14px color-mix(in srgb,var(--b) 40%,transparent)!important}}
+html body .phS .phS-b:focus-visible,html body .phDiff.phDiff.phDiff:focus-visible,html body .phBtn:focus-visible{outline:none;background:color-mix(in srgb,var(--b) 16%,#12142a)!important;box-shadow:0 0 14px color-mix(in srgb,var(--b) 40%,transparent)!important}
+html body .phS .phS-b:active,html body .phT .phS-b:active,html body .phDiff.phDiff.phDiff:active,html body .phBtn:active,html body .phV-b:active{background:color-mix(in srgb,var(--b) 26%,#12142a)!important;transform:translateY(1px)!important}
+html body .phBtn:disabled,html body .phBtn.dis{opacity:.4!important;pointer-events:none}
+/* 3) 상단 토글: 칸 너비 균등 */
+html body .phSeg.phSeg.phSeg>button,html body .vs .phSeg .mt-btn[data-t]{flex:1 1 0!important;min-width:0!important;width:auto!important}
+html body .phSeg.phSeg.phSeg>button{font:400 10px "Silkscreen",monospace!important;letter-spacing:.06em!important}
+/* 4) 타이틀: 모든 게임 같은 점 크기 (ph.js가 svg 크기를 정함) */
+html body .phS-logo{width:100%!important;height:auto!important;min-height:104px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+html body .phS-logo svg{width:var(--lw,300px)!important;max-width:min(100%,86vw)!important;height:auto!important;max-height:none!important}
+/* 5) HUD: 라벨 위 · 숫자 아래 */
+.phBx{box-sizing:border-box;border:2px solid var(--phBd,#2c2f4a)!important;border-radius:12px!important;background:#0d0f1f!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:space-between!important;gap:0!important;padding:9px 6px!important;min-width:0}
+.phBx .phL{font:400 8px "Silkscreen",monospace!important;font-style:normal!important;letter-spacing:.08em!important;color:#8b8fa8!important;line-height:1!important;white-space:nowrap}
+.phBx .phN{font:400 22px "Jersey 15",sans-serif!important;color:#fff!important;line-height:1!important;letter-spacing:.02em!important;white-space:nowrap}
+.phIb{position:relative;box-sizing:border-box;border:2px solid var(--phBd,#2c2f4a)!important;border-radius:12px!important;background:#0d0f1f!important;color:#dfe2ea!important;display:flex!important;align-items:center!important;justify-content:center!important;cursor:pointer;transition:background .15s,box-shadow .15s,opacity .15s}
+@media (hover:hover){.phIb:hover{background:#1b1e3a!important;box-shadow:0 0 12px rgba(154,163,232,.3)!important}}
+.phIb:active{transform:translateY(1px)}
+html body .phIb.off>*{opacity:.45}
+html body .phIb.off::after,html body #bgmB.off::after,html body #sfxB.off::after{content:""!important;position:absolute!important;left:50%!important;top:50%!important;width:62%!important;max-width:26px!important;height:3px!important;background:#ff8aa0!important;border-radius:2px!important;transform:translate(-50%,-50%) rotate(-45deg)!important;box-shadow:0 0 0 1.5px rgba(10,10,20,.85)!important;pointer-events:none!important;opacity:1!important}
+/* 6) 게임 중 팝업 문구: Silkscreen 대문자 · 어두운 외곽선 + 같은 색 글로우 · 의미별 색 */
+.phPop{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);z-index:30;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:6px;white-space:nowrap;text-align:center}
+.phPop b{--c:#ffd84d;font:700 20px "Silkscreen",monospace;letter-spacing:.1em;color:var(--c);text-transform:uppercase;text-shadow:2px 0 #08090f,-2px 0 #08090f,0 2px #08090f,0 -2px #08090f,2px 2px #08090f,-2px -2px #08090f,2px -2px #08090f,-2px 2px #08090f,0 0 14px color-mix(in srgb,var(--c) 55%,transparent)}
+.phPop span{--c:#ffd84d;font:700 11px "Silkscreen",monospace;letter-spacing:.25em;color:var(--c);text-shadow:1px 1px #08090f,-1px -1px #08090f,1px -1px #08090f,-1px 1px #08090f}
+.phPop span.n{font:400 20px "Jersey 15",sans-serif;letter-spacing:.02em}
+.phPop span.ko{font:400 12px Galmuri11,"NeoDunggeunmo",monospace;letter-spacing:.04em}
+.phPop.d1 b{font-size:28px}.phPop.d3 b{font-size:14px}
+.phPop.gold b,.phPop.gold span{--c:#ffd84d}.phPop.item b,.phPop.item span{--c:#ff6ec7}.phPop.stage b,.phPop.stage span{--c:#7fd9ff}.phPop.atk b,.phPop.atk span{--c:#c9a6ff}.phPop.warn b,.phPop.warn span{--c:#ff8aa0}.phPop.white b,.phPop.white span{--c:#ffffff}
+.phPop.go{animation:phPopA 1.25s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes phPopA{0%{transform:translate(-50%,-50%) scale(.6);opacity:0}10%{transform:translate(-50%,-50%) scale(1.08);opacity:1}18%{transform:translate(-50%,-50%) scale(1)}72%{transform:translate(-50%,-50%);opacity:1}100%{transform:translate(-50%,calc(-50% - 16px));opacity:0}}
+/* 7) 소리 설정 (볼륨) */
+.phVol{display:flex;flex-direction:column;gap:12px;width:300px;max-width:100%;box-sizing:border-box;margin:4px auto 0;padding:14px 16px;border:2px solid #23253a;border-radius:12px;background:#0b0c1a}
+.phVol label{display:grid;grid-template-columns:44px 1fr 32px;gap:12px;align-items:center;cursor:pointer}
+.phVol label>i{font:400 10px "Silkscreen",monospace;font-style:normal;letter-spacing:.15em;color:#dfe2ea}
+.phVol label>b{font:400 18px "Jersey 15",sans-serif;color:#fff;text-align:right}
+.phVol input[type=range]{width:100%;accent-color:#f2b000;margin:0;height:20px;cursor:pointer}
+.phVol.off-bgm label.bgm,.phVol.off-sfx label.sfx{opacity:.55}
+/* 8) 게임 시작 화면 상징 모션 */
+@keyframes phBob{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
+@keyframes phBreathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.07,.93)}}
+@keyframes phFloat{0%,100%{transform:translateY(-4px) rotate(-4deg)}50%{transform:translateY(4px) rotate(4deg)}}
+@keyframes phSway{0%,100%{transform:translateX(-2px)}50%{transform:translateX(2px)}}
+.phS-show.mv-bob>*{animation:phBob 2.2s steps(6) infinite}
+.phS-show.mv-bob>*:nth-child(even){animation-delay:-1.1s}
+.phS-show.mv-marble>*{width:30px!important;height:30px!important;object-fit:contain;margin:0 1px!important;animation:phBreathe 2.4s steps(6) infinite;transform-origin:50% 100%}
+.phS-show.mv-marble>*:nth-child(2){animation-delay:-.4s}.phS-show.mv-marble>*:nth-child(3){animation-delay:-.8s}.phS-show.mv-marble>*:nth-child(4){animation-delay:-1.2s}.phS-show.mv-marble>*:nth-child(5){animation-delay:-1.6s}.phS-show.mv-marble>*:nth-child(6){animation-delay:-2s}
+.phS-show.mv-twin>canvas{animation:phSway 2s steps(4) infinite}
+.phS-show.mv-twin>canvas.ship{animation:phFloat 2.6s steps(8) infinite;margin:0 4px}
+.phS-show.mv-twin>canvas.ship+canvas.ship{animation-delay:-1.3s}
+.phS-show.mv-swap>img{transition:transform .5s cubic-bezier(.5,0,.3,1)}
+.phS-show.mv-ring{position:relative;display:block!important;width:84px!important;height:84px!important}
+.phS-show.mv-ring>img{position:absolute;left:0;top:0;width:26px!important;height:26px!important;transition:transform .45s cubic-bezier(.5,0,.3,1)}
+.phS-show.mv-bricks{position:relative}
+.phS-show.mv-bricks>i.ball{position:absolute;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 6px #fff9;left:0;top:0;pointer-events:none}
+.phS-show.mv-bricks>svg.hit{animation:phHit .3s steps(2)}
+@keyframes phHit{50%{transform:translateY(3px);filter:brightness(1.6)}}
+/* 9) 보정 (2026-10-29 2차) */
+html body .phS-show{height:auto!important;min-height:84px!important;margin-top:10px!important}
+.phS-show.mv-swap>img{width:34px!important;height:34px!important}
+.phS-show.mv-bob>svg,.phS-show.mv-bob>img{width:26px!important;height:26px!important}
+.phS-show.hg i{font-size:14px!important}
+/* 게임 중 난이도: 상단 칸·아이콘 테두리도 난이도 색(연하게) · 아래에 난이도 이름 */
+html body[data-phlv] .phBx,html body[data-phlv] .phIb{--phBd:color-mix(in srgb,var(--phlvb) 30%,#1b1d30)}
+.phLvName{font:400 10px "Silkscreen",monospace;letter-spacing:.3em;color:var(--phlvt,#8b8fa8);text-align:center;opacity:.8;padding:6px 0 0 .3em;pointer-events:none}
+.phLvName:empty{display:none}
+/* 설정 창 (모든 게임 공통) */
+.phSet{position:fixed;inset:0;z-index:99997;display:flex;align-items:center;justify-content:center;background:rgba(8,9,12,.88);padding:16px;box-sizing:border-box}
+.phSet-c{width:min(340px,100%);max-height:100%;overflow:auto;background:#0b0c1a;border:2px solid #23253a;border-radius:18px;padding:20px 18px 18px;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;color:#e9eaf5;font-family:Galmuri11,"NeoDunggeunmo",sans-serif}
+.phSet-h{text-align:center;font:400 20px "Silkscreen",monospace;letter-spacing:.15em;color:#fff;margin-bottom:6px}
+.phSet-sec{font:400 9px "Silkscreen",monospace;letter-spacing:.2em;color:#8b8fa8;margin-top:6px}
+.phSet-r{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:12px;background:#12142a;border:2px solid #23253a}
+.phSet-l{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px}
+.phSet-l small{font-size:11px;color:#8b8fa8}
+.phSet-o{display:flex;gap:4px;flex-shrink:0}
+.phSet-o button{min-width:46px;height:30px;padding:0 8px;border-radius:8px;border:2px solid #3a3e66;background:#0d0f1f;color:#8b8fa8;font:400 12px Galmuri11,"NeoDunggeunmo",sans-serif;cursor:pointer}
+.phSet-o button.on{border-color:#10b870;background:rgba(16,184,112,.16);color:#9ff0c6}
+.phSet-o button.tg{font:400 10px "Silkscreen",monospace;letter-spacing:.06em;min-width:54px}
+.phSet-v{display:grid;grid-template-columns:1fr 32px;gap:10px;align-items:center}
+.phSet-v input{width:100%;accent-color:#f2b000;margin:0;height:20px}
+.phSet-v b{font:400 18px "Jersey 15",sans-serif;text-align:right;color:#fff}
+.phSet-v.dim{opacity:.4}
+.phSet-btns{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.phSet-row{display:flex;gap:12px}
+.phSet-row .phBtn{width:auto!important;flex:1 1 0!important}
+.phSet .phBtn{width:100%!important}
+html body .phS-sp.a{flex:0 0 12%!important}html body .phS-sp.b{flex:0 0 5%!important}
+/* 10) 예전 ID 규칙(#ovMode/#modeOv/.vs [data-m])보다 v2 난이도 버튼이 우선 */
+html body :is(#ovMode,#modeOv,.vs,#modeOv2,body) .phDiff.phDiff.phDiff{--b:var(--lvb);--t:var(--lvt);width:300px!important;max-width:100%!important;height:52px!important;min-height:0!important;box-sizing:border-box!important;border:2px solid var(--b)!important;border-radius:12px!important;background:#12142a!important;box-shadow:none!important;color:var(--t)!important;font:400 13px "Silkscreen",monospace!important;letter-spacing:.2em!important;padding:0 0 0 .2em!important;margin-left:auto!important;margin-right:auto!important;text-shadow:none!important}
+@media (hover:hover){html body :is(#ovMode,#modeOv,.vs,#modeOv2,body) .phDiff.phDiff.phDiff:hover{background:color-mix(in srgb,var(--b) 16%,#12142a)!important;box-shadow:0 0 14px color-mix(in srgb,var(--b) 40%,transparent)!important}}
+html body :is(#ovMode,#modeOv,.vs,#modeOv2,body) .phDiff.phDiff.phDiff:focus-visible,html body :is(#ovMode,#modeOv,.vs,#modeOv2,body) .phDiff.phDiff.phDiff.sel{background:color-mix(in srgb,var(--b) 16%,#12142a)!important;box-shadow:0 0 14px color-mix(in srgb,var(--b) 40%,transparent)!important;outline:none}
+html body :is(#ovMode,#modeOv,.vs,#modeOv2,body) .phDiff.phDiff.phDiff:active{background:color-mix(in srgb,var(--b) 26%,#12142a)!important;transform:translateY(1px)!important}
