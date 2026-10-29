@@ -344,3 +344,8 @@ html body .phS .phS-row2 .phS-b.phS-all{width:auto!important;flex:1 1 0!importan
 html body .phS .phS-howL{all:unset;box-sizing:border-box;display:block;margin:28px auto 0;padding:6px 12px;font:400 10px/1 "Silkscreen",monospace;letter-spacing:.16em;color:#8b8fa8;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;cursor:pointer;flex-shrink:0;text-align:center}
 html body .phS .phS-howL:hover{color:#dfe2ea}
 html body .phS .phS-howL:focus-visible{outline:2px solid #3a3e66;outline-offset:2px;border-radius:4px}
+/* 28) 사운드 아이콘 하나: 예전 배경음·효과음 버튼 숨김, 둘 다 꺼지면 사선 */
+html body .phSndOld{display:none!important}
+html body .phSndB{position:relative}
+html body .phSndB.off::after{content:"";position:absolute;left:50%;top:50%;width:64%;max-width:26px;height:3px;background:#ff5a6e;border-radius:2px;transform:translate(-50%,-50%) rotate(-45deg);box-shadow:0 0 0 1.5px rgba(10,10,20,.85);pointer-events:none}
+html body .phSndB svg{width:22px;height:20px;display:block;margin:auto}

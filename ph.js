@@ -231,25 +231,27 @@ window.phMotion=phMotion;
    게임에서: phSettings.config({ guide:{label:'고스트 블록',get,set}, speed:{get,set}, fx:{get,set}, hap:{get,set}, vox:{get,set}, rot:{get,set}, onSound:fn })
    열기: phSettings.open({ inGame:true, restart:fn, home:fn, onClose:fn }) — 시작 화면 SETTINGS 버튼은 자동으로 붙음 */
 const SC={};
-function setOpen(o){o=o||{};phUiCss();const c=SC,touch=(()=>{try{return matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
+function setOpen(o){o=o||{};if(window.__phSnd){window.__phSnd=0;o._snd=1}phUiCss();const c=SC,touch=(()=>{try{return matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
   const old=document.querySelector('.phSet');if(old){if(old._kb)removeEventListener('keydown',old._kb,true);old.remove()}
   const d=document.createElement('div');d.className='phSet';
   const tg=(k,on)=>`<div class="phSet-o"><button class="tg${on?'':' on'}" data-k="${k}" data-v="0">끄기</button><button class="tg${on?' on':''}" data-k="${k}" data-v="1">켜기</button></div>`;
   const opt=(k,cur,L)=>`<div class="phSet-o">${L.map((t,i)=>`<button class="${cur===i?'on':''}" data-k="${k}" data-v="${i}">${t}</button>`).join('')}</div>`;
-  const vol=(k,v,on)=>`<label class="phSet-v${on?'':' dim'}"><input type="range" min="0" max="100" step="5" value="${v}" data-vol="${k}" aria-label="${k==='bgm'?'배경음악':'효과음'} 볼륨"><b>${v}</b></label>`;
+  const vol=(k,v,on)=>`<label class="phSet-v${on?'':' dim'}"><input type="range" min="0" max="100" step="5" value="${v}" data-vol="${k}" aria-label="${({bgm:'배경음',sfx:'효과음',vox:'안내음'})[k]} 볼륨"><b>${v}</b></label>`;
   const A=phAudio.state();let h='';
   h+=`<div class="phSet-r phSet-one"><span class="phSet-n">배경음</span>${vol('bgm',A.bgmV,phAudio.bgmOn())}${tg('bgm',phAudio.bgmOn())}</div>`;
   h+=`<div class="phSet-r phSet-one"><span class="phSet-n">효과음</span>${vol('sfx',A.sfxV,phAudio.sfxOn())}${tg('sfx',phAudio.sfxOn())}</div>`;
-  if(c.vox)h+=`<div class="phSet-r"><div class="phSet-l"><span>안내음</span>${tg('vox',!!c.vox.get())}</div></div>`;
+  if(c.vox){const vo=!!c.vox.get();h+=c.vox.vol?`<div class="phSet-r phSet-one"><span class="phSet-n">안내음</span>${vol('vox',c.vox.vol.get(),vo)}${tg('vox',vo)}</div>`:`<div class="phSet-r"><div class="phSet-l"><span>안내음</span>${tg('vox',vo)}</div></div>`}
+  /* 2026-10-30: 소리는 사운드 아이콘 창으로, 설정 창에는 플레이 설정만 */
+  const snd=!!o._snd;if(!snd)h='';
   const play=[];
   if(c.guide)play.push(`<div class="phSet-r"><div class="phSet-l"><span>가이드 표시</span>${opt('guide',c.guide.get()?1:0,['끄기','켜기'])}</div></div>`);
   if(c.speed)play.push(`<div class="phSet-r"><div class="phSet-l"><span>게임 속도</span>${opt('speed',+c.speed.get(),['느리게','보통','빠르게'])}</div></div>`);
   if(c.fx)play.push(`<div class="phSet-r"><div class="phSet-l"><span>화면 효과</span>${opt('fx',c.fx.get()?1:0,['끄기','켜기'])}</div></div>`);
   if(c.hap&&touch)play.push(`<div class="phSet-r"><div class="phSet-l"><span>진동</span>${opt('hap',c.hap.get()?1:0,['끄기','켜기'])}</div></div>`);
   if(c.rot)play.push(`<div class="phSet-r"><div class="phSet-l"><span>회전 방향</span>${opt('rot',c.rot.get()==='ccw'?1:0,['시계','반시계'])}</div></div>`);
-  if(play.length)h+='<div class="phSet-gap"></div>'+play.join('');
-  const hb='<div class="phSet-btns">'+(o.inGame&&(o.restart||o.home)?`<div class="phSet-row">${o.home?'<button class="phBtn sub" data-a="home">MAIN MENU</button>':''}<button class="phBtn sub phSetAll" data-a="all">ALL GAMES</button></div>${o.restart?'<button class="phBtn sub phSetRst" data-a="restart">RESTART</button>':''}`:'')+'<button type="button" class="phSetX" data-a="close" aria-label="닫기">✕</button></div>';
-  d.innerHTML=`<div class="phSet-w" role="dialog" aria-label="설정"><div class="phSet-c">${h}</div>${hb}</div>`;document.body.appendChild(d);
+  if(!snd)h+=play.join('');
+  const hb='<div class="phSet-btns"><button type="button" class="phSetX" data-a="close" aria-label="닫기">✕</button></div>';
+  d.innerHTML=`<div class="phSet-w" role="dialog" aria-label="${snd?'소리':'설정'}"><div class="phSet-c">${h}</div>${hb}</div>`;document.body.appendChild(d);
   const close=a=>{removeEventListener('keydown',kb,true);d.remove();if(a==='all'){location.href='../games/';return}if(a==='restart'&&o.restart)o.restart();else if(a==='home'&&o.home)o.home();else if(o.onClose)o.onClose()};
   const kb=e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();close()}};addEventListener('keydown',kb,true);d._kb=kb;
   d.addEventListener('click',e=>{e.stopPropagation();if(e.target===d){close();return}const b=e.target.closest('button');if(!b)return;
@@ -257,7 +259,7 @@ function setOpen(o){o=o||{};phUiCss();const c=SC,touch=(()=>{try{return matchMed
     if(k==='bgm')phAudio.toggleBgm(!!v);else if(k==='sfx')phAudio.toggleSfx(!!v);else if(k==='rot')c.rot.set(v?'ccw':'cw');else if(c[k])c[k].set(k==='speed'?v:!!v);
     if(c.onSound&&(k==='bgm'||k==='sfx'))c.onSound();if(k==='hap'&&v&&navigator.vibrate)try{navigator.vibrate(20)}catch(_){}
     setOpen(o)});
-  d.querySelectorAll('[data-vol]').forEach(i=>i.addEventListener('input',()=>{const v=+i.value;i.nextElementSibling.textContent=v;if(i.dataset.vol==='bgm')phAudio.setBgm(v);else phAudio.setSfx(v);
+  d.querySelectorAll('[data-vol]').forEach(i=>i.addEventListener('input',()=>{const v=+i.value;i.nextElementSibling.textContent=v;if(i.dataset.vol==='bgm')phAudio.setBgm(v);else if(i.dataset.vol==='vox'){if(c.vox&&c.vox.vol)c.vox.vol.set(v);if(c.vox&&!!c.vox.get()!==(v>0))c.vox.set(v>0)}else phAudio.setSfx(v);
     i.parentNode.classList.toggle('dim',v===0);if(c.onSound)c.onSound();
     const r=i.closest('.phSet-r');r.querySelectorAll('.tg').forEach(t=>t.classList.toggle('on',(t.dataset.v==='1')===(v>0)))}));
   ['pointerdown','touchstart','keydown','keyup'].forEach(t=>d.addEventListener(t,e=>e.stopPropagation()));return d}
@@ -394,6 +396,18 @@ function phGoOne(ov){if(!ov._phGo){ov._phGo=1;ov.classList.add('phGoOv');
 function phGo(){['overOv','ovOver','overlay'].forEach(id=>{const ov=document.getElementById(id);if(!ov)return;const on=id==='overOv'?!ov.hidden:id==='ovOver'?ov.classList.contains('show'):ov.classList.contains('over');
   if(on)phGoOne(ov);else if(ov._phSeen||ov._phTick){ov._phSeen=0;ov._phTick=0;const w=ov.querySelector('.phWin');if(w)w.remove()}})}
 setInterval(()=>{try{phGo()}catch(e){}},250);
-function fill2(){fill();back();try{phMotion();setBtn();syncIb();document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ph=bgm],[data-ph=sfx]');if(!b||b._phOwn)return;e.preventDefault();e.stopPropagation();b.dataset.ph==='bgm'?phAudio.toggleBgm():phAudio.toggleSfx()},true)}catch(e){}phFont();howBtn();btnFont();nmFill();phUiCss();window.phSeg();phStartRow();phOv();phPause();document.querySelectorAll(NSEL).forEach(i=>{if(!(i.maxLength>0)||i.maxLength>8)i.maxLength=8});setTimeout(silentTip,700);let t=0;try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(()=>{btnFont();window.phSeg();setBtn();phStartRow();phOv();phPause()},30)}).observe(document.body,{childList:true,subtree:true})}catch(e){}}
+/* 사운드 아이콘 하나로 (2026-10-30): 배경음·효과음 버튼 대신 스피커 하나 → 소리 창. 순서: 사운드 · 잠시 멈춤 · 설정 */
+const SPK='<svg viewBox="0 0 22 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" aria-hidden="true"><path d="M2 7 H6 L11 3 V17 L6 13 H2 Z M14 7 Q16 10 14 13 M17 4 Q21 10 17 16"/></svg>';
+function phSnd(){const gear=[...document.querySelectorAll('button[aria-label="설정"]')].find(b=>b.classList.contains('phIb'));if(!gear||gear._phSnd)return;
+  const pause=[...document.querySelectorAll('button.phIb')].find(b=>/일시정지|잠시 멈춤/.test(b.getAttribute('aria-label')||''));gear._phSnd=1;
+  document.querySelectorAll('button[data-ph="bgm"],button[data-ph="sfx"]').forEach(b=>b.classList.add('phSndOld'));
+  const sb=document.createElement('button');sb.type='button';sb.className=(pause?pause.className:gear.className).replace(/\bis-play\b/,'')+' phSndB';sb.setAttribute('aria-label','소리');sb.innerHTML=SPK;
+  sb.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();window.__phSnd=1;gear.click();setTimeout(()=>{if(window.__phSnd){window.__phSnd=0;setOpen({_snd:1})}},60)});
+  const sock=b=>b.parentElement&&b.parentElement.classList.contains('sock')?b.parentElement:b;
+  const G=sock(gear);if(pause){const P=sock(pause);G.parentNode.insertBefore(P,G)}
+  let S=sb;if(G!==gear){S=document.createElement('span');S.className=G.className;S.appendChild(sb)}
+  const P=pause?sock(pause):G;P.parentNode.insertBefore(S,P);
+  const upd=()=>{const off=!(phAudio.bgmOn()||phAudio.sfxOn());sb.classList.toggle('off',off)};upd();phAudio.on(upd)}
+function fill2(){fill();back();try{phMotion();setBtn();syncIb();document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ph=bgm],[data-ph=sfx]');if(!b||b._phOwn)return;e.preventDefault();e.stopPropagation();b.dataset.ph==='bgm'?phAudio.toggleBgm():phAudio.toggleSfx()},true)}catch(e){}phFont();howBtn();btnFont();nmFill();phUiCss();window.phSeg();phStartRow();phOv();phPause();phSnd();document.querySelectorAll(NSEL).forEach(i=>{if(!(i.maxLength>0)||i.maxLength>8)i.maxLength=8});setTimeout(silentTip,700);let t=0;try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(()=>{btnFont();window.phSeg();setBtn();phStartRow();phOv();phPause()},30)}).observe(document.body,{childList:true,subtree:true})}catch(e){}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill2);else fill2();
 })();
