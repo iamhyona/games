@@ -248,8 +248,8 @@ function setOpen(o){o=o||{};phUiCss();const c=SC,touch=(()=>{try{return matchMed
   if(c.hap&&touch)play.push(`<div class="phSet-r"><div class="phSet-l"><span>진동</span>${opt('hap',c.hap.get()?1:0,['끄기','켜기'])}</div></div>`);
   if(c.rot)play.push(`<div class="phSet-r"><div class="phSet-l"><span>회전 방향</span>${opt('rot',c.rot.get()==='ccw'?1:0,['시계','반시계'])}</div></div>`);
   if(play.length)h+='<div class="phSet-gap"></div>'+play.join('');
-  h+='<div class="phSet-btns">'+(o.inGame&&(o.restart||o.home)?`<div class="phSet-row">${o.restart?'<button class="phBtn sub" data-a="restart">RESTART</button>':''}${o.home?'<button class="phBtn sub" data-a="home">MAIN MENU</button>':''}</div><button class="phBtn sub phSetAll" data-a="all">ALL GAMES</button>`:'')+'<button type="button" class="phSetX" data-a="close" aria-label="닫기">✕</button></div>';
-  d.innerHTML=`<div class="phSet-c" role="dialog" aria-label="설정">${h}</div>`;document.body.appendChild(d);
+  const hb='<div class="phSet-btns">'+(o.inGame&&(o.restart||o.home)?`<div class="phSet-row">${o.home?'<button class="phBtn sub" data-a="home">MAIN MENU</button>':''}<button class="phBtn sub phSetAll" data-a="all">ALL GAMES</button></div>${o.restart?'<button class="phBtn sub phSetRst" data-a="restart">RESTART</button>':''}`:'')+'<button type="button" class="phSetX" data-a="close" aria-label="닫기">✕</button></div>';
+  d.innerHTML=`<div class="phSet-w" role="dialog" aria-label="설정"><div class="phSet-c">${h}</div>${hb}</div>`;document.body.appendChild(d);
   const close=a=>{removeEventListener('keydown',kb,true);d.remove();if(a==='all'){location.href='../games/';return}if(a==='restart'&&o.restart)o.restart();else if(a==='home'&&o.home)o.home();else if(o.onClose)o.onClose()};
   const kb=e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();close()}};addEventListener('keydown',kb,true);d._kb=kb;
   d.addEventListener('click',e=>{e.stopPropagation();if(e.target===d){close();return}const b=e.target.closest('button');if(!b)return;

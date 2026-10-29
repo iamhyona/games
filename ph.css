@@ -331,3 +331,11 @@ html body .phSet-o{gap:4px!important}
 html body .phSet-o button{min-width:38px!important;height:26px!important;padding:0 6px!important;font:400 11px Galmuri11,"NeoDunggeunmo",sans-serif!important;border-radius:7px!important;letter-spacing:0!important}
 html body .phSet-row .phBtn{font-size:11px!important}
 html body .phSet-btns>.phBtn{font-size:13px!important}
+/* 26) 설정: 설정 항목은 상자 하나, 버튼은 상자 밖 아래 (MAIN MENU | ALL GAMES → RESTART → ✕) */
+html body .phSet-w{width:min(340px,100%);max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:12px}
+html body .phSet-w>.phSet-c{width:100%!important;max-height:none!important;overflow:visible!important}
+html body .phSet-w>.phSet-btns{margin:0!important;display:flex;flex-direction:column;gap:12px}
+html body .phSet-w .phSet-row{display:flex;gap:12px}
+html body .phSet-w .phSet-row .phBtn{flex:1 1 0;width:auto!important;min-width:0;font-size:11px!important}
+html body .phSet-w .phSetRst{width:100%!important;font-size:13px!important}
+html body .phSet-w .phSetX{margin-top:2px!important}
