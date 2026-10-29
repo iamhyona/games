@@ -234,23 +234,23 @@ const SC={};
 function setOpen(o){o=o||{};phUiCss();const c=SC,touch=(()=>{try{return matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
   const old=document.querySelector('.phSet');if(old){if(old._kb)removeEventListener('keydown',old._kb,true);old.remove()}
   const d=document.createElement('div');d.className='phSet';
-  const tg=(k,on)=>`<div class="phSet-o"><button class="tg${on?' on':''}" data-k="${k}" data-v="1">ON</button><button class="tg${on?'':' on'}" data-k="${k}" data-v="0">OFF</button></div>`;
+  const tg=(k,on)=>`<div class="phSet-o"><button class="tg${on?'':' on'}" data-k="${k}" data-v="0">끄기</button><button class="tg${on?' on':''}" data-k="${k}" data-v="1">켜기</button></div>`;
   const opt=(k,cur,L)=>`<div class="phSet-o">${L.map((t,i)=>`<button class="${cur===i?'on':''}" data-k="${k}" data-v="${i}">${t}</button>`).join('')}</div>`;
   const vol=(k,v,on)=>`<label class="phSet-v${on?'':' dim'}"><input type="range" min="0" max="100" step="5" value="${v}" data-vol="${k}" aria-label="${k==='bgm'?'배경음악':'효과음'} 볼륨"><b>${v}</b></label>`;
-  const A=phAudio.state();let h='<div class="phSet-sec">SOUND</div>';
-  h+=`<div class="phSet-r"><div class="phSet-l"><span>배경음악</span>${tg('bgm',phAudio.bgmOn())}</div>${vol('bgm',A.bgmV,phAudio.bgmOn())}</div>`;
-  h+=`<div class="phSet-r"><div class="phSet-l"><span>효과음</span>${tg('sfx',phAudio.sfxOn())}</div>${vol('sfx',A.sfxV,phAudio.sfxOn())}</div>`;
-  if(c.vox)h+=`<div class="phSet-r"><div class="phSet-l"><span>음성 안내</span>${tg('vox',!!c.vox.get())}</div></div>`;
+  const A=phAudio.state();let h='';
+  h+=`<div class="phSet-r phSet-one"><span class="phSet-n">배경음</span>${vol('bgm',A.bgmV,phAudio.bgmOn())}${tg('bgm',phAudio.bgmOn())}</div>`;
+  h+=`<div class="phSet-r phSet-one"><span class="phSet-n">효과음</span>${vol('sfx',A.sfxV,phAudio.sfxOn())}${tg('sfx',phAudio.sfxOn())}</div>`;
+  if(c.vox)h+=`<div class="phSet-r"><div class="phSet-l"><span>안내음</span>${tg('vox',!!c.vox.get())}</div></div>`;
   const play=[];
-  if(c.guide)play.push(`<div class="phSet-r"><div class="phSet-l"><span>가이드 표시${c.guide.label?` <small>${c.guide.label}</small>`:''}</span>${opt('guide',c.guide.get()?1:0,['끄기','켜기'])}</div></div>`);
+  if(c.guide)play.push(`<div class="phSet-r"><div class="phSet-l"><span>가이드 표시</span>${opt('guide',c.guide.get()?1:0,['끄기','켜기'])}</div></div>`);
   if(c.speed)play.push(`<div class="phSet-r"><div class="phSet-l"><span>게임 속도</span>${opt('speed',+c.speed.get(),['느리게','보통','빠르게'])}</div></div>`);
   if(c.fx)play.push(`<div class="phSet-r"><div class="phSet-l"><span>화면 효과</span>${opt('fx',c.fx.get()?1:0,['끄기','켜기'])}</div></div>`);
   if(c.hap&&touch)play.push(`<div class="phSet-r"><div class="phSet-l"><span>진동</span>${opt('hap',c.hap.get()?1:0,['끄기','켜기'])}</div></div>`);
   if(c.rot)play.push(`<div class="phSet-r"><div class="phSet-l"><span>회전 방향</span>${opt('rot',c.rot.get()==='ccw'?1:0,['시계','반시계'])}</div></div>`);
-  if(play.length)h+='<div class="phSet-sec">PLAY</div>'+play.join('');
-  h+='<div class="phSet-btns">'+(o.inGame&&(o.restart||o.home)?`<div class="phSet-row">${o.restart?'<button class="phBtn sub" data-a="restart">RESTART</button>':''}${o.home?'<button class="phBtn sub" data-a="home">MAIN MENU</button>':''}</div>`:'')+'<button class="phBtn" data-a="close">CLOSE</button></div>';
+  if(play.length)h+='<div class="phSet-gap"></div>'+play.join('');
+  h+='<div class="phSet-btns">'+(o.inGame&&(o.restart||o.home)?`<div class="phSet-row">${o.restart?'<button class="phBtn sub" data-a="restart">RESTART</button>':''}${o.home?'<button class="phBtn sub" data-a="home">MAIN MENU</button>':''}</div><button class="phBtn sub phSetAll" data-a="all">ALL GAMES</button>`:'')+'<button type="button" class="phSetX" data-a="close" aria-label="닫기">✕</button></div>';
   d.innerHTML=`<div class="phSet-c" role="dialog" aria-label="설정">${h}</div>`;document.body.appendChild(d);
-  const close=a=>{removeEventListener('keydown',kb,true);d.remove();if(a==='restart'&&o.restart)o.restart();else if(a==='home'&&o.home)o.home();else if(o.onClose)o.onClose()};
+  const close=a=>{removeEventListener('keydown',kb,true);d.remove();if(a==='all'){location.href='../games/';return}if(a==='restart'&&o.restart)o.restart();else if(a==='home'&&o.home)o.home();else if(o.onClose)o.onClose()};
   const kb=e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();close()}};addEventListener('keydown',kb,true);d._kb=kb;
   d.addEventListener('click',e=>{e.stopPropagation();if(e.target===d){close();return}const b=e.target.closest('button');if(!b)return;
     if(b.dataset.a){close(b.dataset.a);return}const k=b.dataset.k,v=+b.dataset.v;if(!k)return;
@@ -268,6 +268,132 @@ function setBtn(){document.querySelectorAll('.phS-btns').forEach(w=>{if(w.queryS
   const row=document.createElement('div');row.className='phS-row2';rk.parentNode.insertBefore(row,rk);row.appendChild(rk);
   const b=document.createElement('button');b.type='button';b.className='phS-b gold phS-set';b.textContent='SETTINGS';
   b.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();setOpen({inGame:false})});row.appendChild(b)})}
-function fill2(){fill();back();try{phMotion();setBtn();syncIb();document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ph=bgm],[data-ph=sfx]');if(!b||b._phOwn)return;e.preventDefault();e.stopPropagation();b.dataset.ph==='bgm'?phAudio.toggleBgm():phAudio.toggleSfx()},true)}catch(e){}phFont();howBtn();btnFont();nmFill();phUiCss();window.phSeg();document.querySelectorAll(NSEL).forEach(i=>{if(!(i.maxLength>0)||i.maxLength>8)i.maxLength=8});setTimeout(silentTip,700);let t=0;try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(()=>{btnFont();window.phSeg();setBtn()},30)}).observe(document.body,{childList:true,subtree:true})}catch(e){}}
+/* 모드 선택 · 랭킹 화면 위계 통일 (2026-10-29): 게임 이름/RANKING 제목 → (간격) → 박스 묶음 → (간격) → ✕ */
+function phOv(){try{
+  const nm=((document.querySelector('.lcd-label .copy')||{}).textContent||'').replace(/^PARK HYONA'?S\s*/i,'').trim();
+  const head=(P,txt,rk)=>{let h=[...P.children].find(e=>e.classList.contains('phOvH'));if(!h){h=document.createElement('div');h.className='phOvH';P.insertBefore(h,P.firstChild)}if(h.textContent!==txt)h.textContent=txt;if(h.classList.contains('phOvRk')!==!!rk)h.classList.toggle('phOvRk',!!rk);if(!P.classList.contains('phOvP'))P.classList.add('phOvP')};
+  const xbtn=P=>{const x=[...P.children].reverse().find(b=>b.tagName==='BUTTON'&&(/^(CLOSE|BACK|✕|×)$/i.test(b.textContent.trim())||b.classList.contains('vs-x')));if(!x)return;if(!x.classList.contains('phOvX'))x.classList.add('phOvX');
+    if(/^(CLOSE|BACK)$/i.test(x.textContent.trim())){x.textContent='✕';x.setAttribute('aria-label','닫기');x.classList.remove('phBtn','sub')}};
+  const hide=e=>{if(!e.classList.contains('phOvHid'))e.classList.add('phOvHid')};
+  const M=new Set(),R=new Set();
+  document.querySelectorAll('#modeOv,#ovMode').forEach(e=>M.add(e));
+  document.querySelectorAll('.mBtns').forEach(e=>{const P=e.closest('.phS');if(P)M.add(P)});
+  document.querySelectorAll('.mode-pick').forEach(e=>{const P=e.closest('.vs-card');if(P)M.add(P)});
+  document.querySelectorAll('#rankOv,#ovRank').forEach(e=>R.add(e));
+  document.querySelectorAll('#rk-list').forEach(e=>{const P=e.closest('.vs-card');if(P)R.add(P)});
+  document.querySelectorAll('.vs-card .vs-title.phOvHid').forEach(e=>{if(!R.has(e.closest('.vs-card')))e.classList.remove('phOvHid')});
+  M.forEach(P=>{if(!nm)return;head(P,nm);xbtn(P);[...P.children].forEach(e=>{if(e.classList.contains('paused')&&/^MODE$/i.test(e.textContent.trim()))hide(e)})});
+  R.forEach(P=>{head(P,'RANKING',1);xbtn(P);P.querySelectorAll('.sub,.vs-title,.rk>h4').forEach(e=>{if(/^RANKING$/i.test(e.textContent.trim()))hide(e)})});
+  document.querySelectorAll('.phOvP').forEach(P=>{if(M.has(P)||R.has(P))return;P.classList.remove('phOvP');[...P.children].forEach(e=>{if(e.classList.contains('phOvH'))e.remove()})});
+}catch(e){}}
+/* 시작 화면 버튼 줄 (2026-10-29 검수안): RANKING 한 줄 → HOW TO PLAY | SETTINGS 반반 */
+function phStartRow(){document.querySelectorAll('.phS-btns').forEach(w=>{if(w._phRow)return;const row=w.querySelector('.phS-row2'),how=w.querySelector('.phS-how');if(!row||!how)return;
+  const rk=[...row.children].find(b=>/RANKING/i.test(b.textContent));if(!rk)return;w._phRow=1;
+  /* 시작 화면: HOW TO PLAY | RANKING 반반, SETTINGS는 시작 화면에서 뺌(게임 중 톱니바퀴로) */
+  [...row.children].forEach(b=>{if(/SETTINGS/i.test(b.textContent))b.classList.add('phS-noSet')});
+  row.insertBefore(how,row.firstChild);how.textContent='HOW TO PLAY';how.classList.add('phS-howE');
+  const al=document.createElement('button');al.type='button';al.className='phS-b gold phS-all';al.textContent='ALL GAMES';al.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();location.href='../games/'});w.appendChild(al)})}
+/* 잠시 멈춤 화면 (2026-10-29 검수안): PAUSE → RESTART → RANKING → MAIN MENU → ALL GAMES → ✕(계속하기) */
+function phPause(){[['pauseOv','resumeB'],['ovPause','bResume'],['overlay','overlay-btn']].forEach(([oid,rid])=>{const ov=document.getElementById(oid),rs=document.getElementById(rid);if(!ov||!rs||ov._phP)return;
+  const bs=[...ov.children].filter(b=>b.tagName==='BUTTON'&&/^(RESTART|MAIN MENU)$/i.test(b.textContent.trim()));if(bs.length<2)return;ov._phP=1;
+  const row=document.createElement('div');row.className='phPRow';bs[0].parentNode.insertBefore(row,bs[0]);bs.forEach(b=>row.appendChild(b));
+  const rkS=[...document.querySelectorAll('.phS-btns button')].find(x=>/RANKING/i.test(x.textContent));
+  if(rkS){const rb=document.createElement('button');rb.type='button';rb.className='phBtn sub phPRank';rb.textContent='RANKING';rb.addEventListener('click',e=>{e.stopPropagation();document.body.classList.add('phRkTop');rkS.click()});bs[0].after(rb)}
+  const al=document.createElement('button');al.type='button';al.className='phBtn sub phPAll';al.textContent='ALL GAMES';al.addEventListener('click',e=>{e.stopPropagation();location.href='../games/'});row.appendChild(al);const x=document.createElement('button');x.type='button';x.className='phPX phOvX';x.textContent='✕';x.setAttribute('aria-label','계속하기');x.addEventListener('click',e=>{e.stopPropagation();rs.click()});ov.appendChild(x)})}
+/* 게임 오버 화면 통일 (2026-10-29 검수안): GAME OVER 한 줄 → 큰 점수 → 한줄 평 → (정보 2개 이상이면 상자) → 이름 → RANKING → RETRY → MAIN MENU | ALL GAMES · 랭킹 1위면 축하 화면 */
+const GOF={
+    A: ['01110','10001','10001','11111','10001','10001','10001'],
+    B: ['11110','10001','10001','11110','10001','10001','11110'],
+    C: ['01111','10000','10000','10000','10000','10000','01111'],
+    D: ['11110','10001','10001','10001','10001','10001','11110'],
+    E: ['11111','10000','10000','11110','10000','10000','11111'],
+    G: ['01110','10001','10000','10111','10001','10001','01111'],
+    I: ['111','010','010','010','010','010','111'],
+    L: ['10000','10000','10000','10000','10000','10000','11111'],
+    M: ['10001','11011','10101','10101','10001','10001','10001'],
+    N: ['10001','11001','10101','10011','10001','10001','10001'],
+    O: ['01110','10001','10001','10001','10001','10001','01110'],
+    P: ['11110','10001','10001','11110','10000','10000','10000'],
+    R: ['11110','10001','10001','11110','10100','10010','10001'],
+    S: ['01111','10000','10000','01110','00001','00001','11110'],
+    T: ['11111','00100','00100','00100','00100','00100','00100'],
+    U: ['10001','10001','10001','10001','10001','10001','01110'],
+    V: ['10001','10001','10001','10001','10001','01010','00100'],
+    W: ['10001','10001','10001','10101','10101','10101','01010'],
+    Y: ['10001','10001','01010','00100','00100','00100','00100'],
+    '!': ['1','1','1','1','1','0','1'],
+    ' ': ['00','00','00','00','00','00','00'],
+  '1':['00100','01100','10100','00100','00100','00100','11111'],' ':['00','00','00','00','00','00','00']};
+function phDots(text,color,cls){const C=10,D=8.4,R=2.2;let x=0,on='',off='';[...text].forEach(ch=>{const g=GOF[ch]||GOF[' '];g.forEach((row,y)=>[...row].forEach((b,cx)=>{const r=`<rect x="${(x+cx)*C}" y="${y*C}" width="${D}" height="${D}" rx="${R}"`;if(b==='1')on+=r+'/>';else off+=r+'/>'}));x+=g[0].length+1});
+  return `<svg class="${cls||''}" viewBox="0 0 ${(x-1)*C-(C-D)} ${7*C-(C-D)}" aria-label="${text}"><g fill="rgba(255,255,255,.07)">${off}</g><g fill="${color||'#f4fff0'}">${on}</g></svg>`}
+/* 랭킹 목록을 받아 올 때 1위 점수를 기억 (축하 화면 판단용) */
+(function(){if(window.__phFetchWrap||!window.fetch)return;window.__phFetchWrap=1;const f0=window.fetch.bind(window);
+  window.fetch=function(u,o){const p=f0(u,o);try{const s=String(u&&u.url||u);if(/script\.google/.test(s)&&!/[?&]a=add/.test(s)){window.__phRankUrl=s;p.then(r=>r.clone().json()).then(d=>{const L=Array.isArray(d)?d:(d&&(d.top||d.rows||d.list))||[];const v=L.map(e=>+(e&&(e.s!=null?e.s:e.score))).filter(n=>isFinite(n));window.__phTopMax=v.length?Math.max(...v):0;window.__phTopN=v.length}).catch(()=>{})}}catch(e){}return p}})();
+function phGoData(ov){const T=e=>e?e.textContent.trim():'';const P=[];
+  const st=ov.querySelector(':scope>.st');
+  if(st){[...st.children].forEach(d=>{const b=d.querySelector('b');if(!b)return;const v=T(b);P.push([T(d).replace(v,'').trim(),v])});return P}
+  const hs=ov.querySelector('#oStats');if(hs){P.push(['SCORE',T(ov.querySelector('#oBig'))]);[...hs.children].forEach(d=>P.push([T(d.querySelector('small')),T(d.querySelector('b'))]));return P}
+  const bs=ov.querySelector('#overScore');if(bs){P.push(['SCORE',T(bs)]);const m=/STAGE\s*(\d+)/i.exec(T(ov.querySelector('#overInfo')));if(m)P.push(['STAGE',m[1]]);return P}
+  const gs=ov.querySelector('.go-score b');if(gs){P.push(['SCORE',T(gs)]);const lv=document.getElementById('level'),ln=document.getElementById('lines');if(lv)P.push(['LEVEL',T(lv)]);if(ln)P.push(['LINES',T(ln)]);return P}
+  return P}
+const goNum=(v,time)=>{v=String(v).replace(/,/g,'');if(time||/:/.test(v)){const p=v.split(':').map(Number);return p.length>1?p[0]*60+p[1]:+p[0]}return parseFloat(v)||0};
+/* 게임 끝 한줄 평: 기록에 따라 재치 있는 문구를 무작위로 */
+const GOQ={zero:['손가락이 미끄러지셨습니까?','혹시 화면 꺼진 채로 하셨어요?','0점도 기록은 기록이죠… 아마도','이렇게 못해서 어쩔~~','튜토리얼부터 다시 갈까요?'],
+  first:['첫 판 치곤 좀 치네?','오, 신입 치고 손이 빠른데?','간 보기 끝! 이제 진짜 시작이죠?','첫 기록 등록 완료! 이제 이걸 깨 보세요'],
+  best:['좀 치네? 최고 기록 갈아치움!','왕년에 손가락 좀 굴렸나 봐?','한때 한게임 좀 했었나?','오늘 손가락에 기름칠했어요?','이 실력 실화? 최고 기록 경신!'],
+  near:['절헌~ 절헌~ 절헌~ 아까비~','최고 기록 코앞에서 미끄러짐!','아깝다! 딱 한 끗!','거의 다 왔는데… 한 판만 더?'],
+  mid:['오락실에서 동전 많이 잃었겠군','나쁘지 않아요, 손 좀 풀렸네?','무난무난~ 근데 더 할 수 있잖아요','평타는 쳤다!'],
+  low:['이렇게 못해서 어쩔~~','손가락이 미끄러지셨습니까?','오늘은 손가락이 출근을 안 했나 봐요','컨디션 탓으로 해 둘게요','오락실 주인이 좋아하겠어요']};
+/* 게임별 상황 멘트 (없으면 위 공통 문구) */
+const GOQG={
+ pang:{zero:['팡팡이들이 그냥 쌓이기만 했어요…','팡! 소리 한 번 못 들어 봤네요','손가락이 미끄러지셨습니까?'],first:['첫 판 치곤 연쇄 맛 좀 봤네?','팡팡이들과 첫인사 완료!'],best:['연쇄 장인 등장! 최고 기록 경신','왕년에 뿌요뿌요 좀 굴렸나 봐?','팡팡이들이 박수 치는 중!'],near:['절헌~ 절헌~ 아까비~ 한 줄만 더 버텼으면!','최고 기록 코앞에서 팡팡이가 넘쳤어요'],mid:['연쇄 좀 하시네? 근데 더 할 수 있잖아요','팡팡이 탑 쌓기 장인… 아니 그게 아니라'],low:['팡팡이들 숨 막혀요! 좀 터뜨려 주세요','이렇게 쌓기만 해서 어쩔~~']},
+ switchpang:{zero:['자리만 바꾸다 끝났네요…','헛스왑 장인 인정'],first:['첫 판부터 자리 좀 바꿀 줄 아네?','스왑 입문 완료!'],best:['애니팡 좀 하셨나 봐요? 최고 기록!','손가락이 번개처럼 바꿨다!'],near:['절헌~ 아까비~ 한 번만 더 바꿨으면!','최고 기록까지 스왑 한 번 차이!'],mid:['한때 애니팡 하트 좀 보냈나?','나쁘지 않은 스왑 감각!'],low:['팡팡이들이 자리만 옮기다 지쳤대요','이렇게 못 바꿔서 어쩔~~']},
+ petris:{zero:['블록이 그냥 쌓이기만 했어요…','한 줄도 못 지우다니, 손가락이 미끄러지셨습니까?'],first:['첫 판 치곤 줄 좀 지우네?','블록 쌓기 입문 완료!'],best:['왕년에 오락실 테트리스 좀 했나 봐?','4줄 장인 등장! 최고 기록 경신','블록이 알아서 들어가는 줄!'],near:['절헌~ 절헌~ 긴 막대만 왔어도!','최고 기록 한 줄 차이! 아까비~'],mid:['오락실에서 동전 꽤 넣었겠군','줄 지우는 손맛은 아시네'],low:['긴 막대 기다리다 끝났죠?','이렇게 쌓아서 어쩔~~']},
+ fruitpang:{zero:['구슬이 합쳐지지도 않았어요…','손가락이 미끄러지셨습니까?'],first:['첫 판부터 구슬 좀 키우네?','구슬 키우기 입문 완료!'],best:['구슬 키우기 고수 등장! 최고 기록','구슬 굴리는 손맛 제대로네!'],near:['절헌~ 아까비~ 딱 한 알만 더!','최고 기록 코앞에서 구슬이 넘쳤어요'],mid:['구슬 좀 굴려 본 솜씨인데?','무난무난~ 오로라 볼까지 가 봐요'],low:['구슬들이 꽉 끼어 숨 막혀요','이렇게 쌓기만 해서 어쩔~~']},
+ bricks:{zero:['공이 그냥 지나갔어요…','패들이 퇴근했나 봐요'],first:['첫 판 치곤 벽돌 좀 깨네?','벽돌 깨기 입문 완료!'],best:['왕년에 오락실 벽돌 좀 깼나 봐?','패들 장인 등장! 최고 기록'],near:['절헌~ 아까비~ 벽돌 하나만 더!','최고 기록 코앞에서 공을 놓쳤어요'],mid:['오락실에서 동전 많이 잃었겠군','공 받는 감은 있으시네'],low:['공을 너무 사랑해서 보내 줬나요?','이렇게 놓쳐서 어쩔~~']},
+ twinstar:{zero:['우주 벌레한테 인사만 하고 왔네요','손가락이 미끄러지셨습니까?'],first:['첫 출격 치곤 좀 쏘네?','파일럿 입문 완료!'],best:['왕년에 갤러그 좀 했나 봐?','에이스 파일럿 등장! 최고 기록'],near:['절헌~ 아까비~ 한 마리만 더!','최고 기록 코앞에서 격추당했어요'],mid:['오락실에서 동전 많이 잃었겠군','전투기 좀 몰아 본 솜씨인데?'],low:['우주 벌레들이 신났대요','이렇게 쏴서 어쩔~~']},
+ hangulbi:{zero:['한 글자도 못 쳤어요… 자판 어디 갔죠?','손가락이 미끄러지셨습니까?'],first:['첫 판 치곤 타자 좀 치네?','한글비 입문 완료!'],best:['왕년에 한메타자 좀 쳤나 봐?','독수리 타법 졸업! 최고 기록'],near:['절헌~ 아까비~ 한 단어만 더!','최고 기록 코앞에서 오타!'],mid:['산성비 좀 맞아 본 솜씨인데?','타자 연습 좀 하셨네'],low:['독수리가 자판 위를 맴돌아요','이렇게 쳐서 어쩔~~']}};
+const goPick=k=>{const g=GOQG[location.pathname.split('/')[1]];const a=(g&&g[k])||GOQ[k];return a[Math.random()*a.length|0]};
+function phGoLine(ov,m){const own=ov.querySelector('#oMsg');if(own&&own.textContent.trim())return own.textContent.trim();
+  const time=/TIME/i.test(m[0]),v=goNum(m[1],time);if(!v)return goPick('zero');
+  const key='phGoBest:'+location.pathname+':'+(document.body.dataset.phlv||'')+':'+m[0];let b=null;try{b=JSON.parse(localStorage.getItem(key))}catch(e){}
+  const better=b==null||(time?v<b:v>b);try{if(better)localStorage.setItem(key,JSON.stringify(v))}catch(e){}
+  if(b==null)return goPick('first');if(better)return goPick('best');
+  const r=time?b/v:v/b;return goPick(r>=.9?'near':r>=.5?'mid':'low')}
+/* 1위 트로피 점 그림 */
+const TROPHY=['11111111111','10111111101','10111111101','01111111110','00111111100','00011111000','00001110000','00000100000','00001110000','00111111100','00111111100'];
+function phTrophy(color){const C=10,D=8.4,R=2.2;let on='',off='';TROPHY.forEach((row,y)=>[...row].forEach((b,x)=>{const r=`<rect x="${x*C}" y="${y*C}" width="${D}" height="${D}" rx="${R}"`;if(b==='1')on+=r+'/>';else off+=r+'/>'}));
+  return `<svg class="phWinT" viewBox="0 0 ${11*C-(C-D)} ${11*C-(C-D)}" aria-label="TROPHY"><g fill="rgba(255,255,255,.07)">${off}</g><g fill="${color}">${on}</g></svg>`}
+function phWin(ov,m){if(ov.querySelector('.phWin'))return;const w=document.createElement('div');w.className='phWin';
+  w.innerHTML=`<canvas></canvas><div class="phWin-c">${phTrophy('#ffd84d')}<div class="phWin-n"><i>NEW RECORD</i><b>${m[1]}</b></div><div class="phWin-s">이름을 남기면 랭킹 맨 위에 올라가요</div><button type="button" class="phBtn phWin-b">기록 남기기</button></div>`;
+  ov.appendChild(w);const cv=w.querySelector('canvas'),cx=cv.getContext('2d'),dpr=Math.min(2,devicePixelRatio||1);let P=[],t0=performance.now();
+  const rs=()=>{cv.width=w.clientWidth*dpr;cv.height=w.clientHeight*dpr};rs();const COL=['#ffd84d','#f2b000','#ff8aa0','#7fd9ff','#9ff0c6','#c9a6ff','#fff'];
+  for(let i=0;i<90;i++)P.push({x:Math.random(),y:-Math.random()*.6,v:.12+Math.random()*.22,s:3+Math.random()*4|0,c:COL[i%COL.length],r:Math.random()*6});
+  const fx=!(window.phSettings&&phSettings.cfg.fx&&!phSettings.cfg.fx.get());
+  const loop=t=>{if(!w.isConnected)return;const W=cv.width,H=cv.height,dt=1/60;cx.clearRect(0,0,W,H);if(fx){P.forEach(p=>{p.y+=p.v*dt;p.r+=dt*3;if(p.y>1.05){p.y=-.05;p.x=Math.random()}cx.fillStyle=p.c;const s=p.s*dpr;cx.fillRect(p.x*W+Math.sin(p.r)*8*dpr,p.y*H,s,s)})}requestAnimationFrame(loop)};requestAnimationFrame(loop);
+  w.querySelector('.phWin-b').addEventListener('click',e=>{e.stopPropagation();w.remove();const i=ov.querySelector('input');if(i)try{i.focus()}catch(_){}});
+  try{navigator.vibrate&&navigator.vibrate([30,40,30])}catch(e){}}
+function phGoOne(ov){if(!ov._phGo){ov._phGo=1;ov.classList.add('phGoOv');
+    const top=document.createElement('div');top.className='phGo';top.innerHTML=phDots('GAME OVER','#f4fff0','phGoT')+'<div class="phGoN"><i></i><b></b></div><div class="phGoQ"></div><div class="phGoSt"></div>';ov.insertBefore(top,ov.firstChild);
+    [...ov.querySelectorAll('button')].forEach(b=>{const t=b.textContent.trim();
+      if(/^(PLAY AGAIN|RETRY)$/i.test(t)){if(t!=='RETRY')b.textContent='RETRY';b.classList.add('phGoRetry')}
+      else if(/^MAIN MENU$/i.test(t))b.classList.add('phGoMenu');
+      else if(/RANKING$/i.test(t)){b.classList.add('phGoRank');b.classList.remove('gold');b.innerHTML='RANKING'}
+      else if(b.id==='bOverHome'){b.textContent='MAIN MENU';b.className='phBtn sub phGoMenu'}});
+    if(!ov.querySelector('.phGoRank')&&document.getElementById('rankB')){const r=document.createElement('button');r.type='button';r.className='phBtn sub phGoRank';r.textContent='RANKING';r.addEventListener('click',e=>{e.stopPropagation();ov.hidden=true;document.getElementById('rankB').click()});ov.appendChild(r)}
+    const a=document.createElement('button');a.type='button';a.className='phBtn sub phGoAll';a.textContent='ALL GAMES';a.addEventListener('click',e=>{e.stopPropagation();location.href='../games/'});ov.appendChild(a);
+    ov.querySelectorAll('.phGoMenu,.phGoRank,.phGoRetry').forEach(b=>{let p=b.parentElement;while(p&&p!==ov){if(!p.querySelector('input'))p.classList.add('phGoC');p=p.parentElement}});
+    const inp=ov.querySelector('input');if(inp){let f=inp.closest('form')||inp.parentElement;f.classList.add('phGoF');f.querySelectorAll('button').forEach(x=>{if(/랭킹|등록/.test(x.textContent))x.textContent='OK'})}}
+  const d=phGoData(ov),k=JSON.stringify(d),top=ov.querySelector('.phGo');
+  if(top._k!==k){top._k=k;const m=d[0]||['SCORE','0'],rest=d.slice(1);top.querySelector('.phGoN i').textContent=m[0]||'SCORE';top.querySelector('.phGoN b').textContent=m[1];
+    const box=top.querySelector('.phGoSt');box.innerHTML=rest.map(([l,v])=>`<div><i>${l}</i><b>${v}</b></div>`).join('');box.hidden=rest.length<2}
+  const m=d[0]||['SCORE','0'];ov.classList.toggle('phGoNoF',!goNum(m[1],/TIME/i.test(m[0])));
+  if(!ov._phSeen){ov._phTick=(ov._phTick||0)+1;if(ov._phTick>=2){ov._phSeen=1;top.querySelector('.phGoQ').textContent=phGoLine(ov,m);
+    const time=/TIME/i.test(m[0]),v=goNum(m[1],time);ov.classList.remove('phGo1');
+    const t0=top.querySelector('.phGoT');if(window.__phWinTest||(!time&&v>0&&window.__phTopN!=null&&v>window.__phTopMax)){ov.classList.add('phGo1');t0.outerHTML=phDots('LEGEND','#ffd84d','phGoT');top.querySelector('.phGoQ').textContent='전설이 탄생했어요! 지금 랭킹 1위예요';phWin(ov,m)}else if(t0.getAttribute('aria-label')!=='GAME OVER')t0.outerHTML=phDots('GAME OVER','#f4fff0','phGoT')}}}
+function phGo(){['overOv','ovOver','overlay'].forEach(id=>{const ov=document.getElementById(id);if(!ov)return;const on=id==='overOv'?!ov.hidden:id==='ovOver'?ov.classList.contains('show'):ov.classList.contains('over');
+  if(on)phGoOne(ov);else if(ov._phSeen||ov._phTick){ov._phSeen=0;ov._phTick=0;const w=ov.querySelector('.phWin');if(w)w.remove()}})}
+setInterval(()=>{try{phGo()}catch(e){}},250);
+function fill2(){fill();back();try{phMotion();setBtn();syncIb();document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ph=bgm],[data-ph=sfx]');if(!b||b._phOwn)return;e.preventDefault();e.stopPropagation();b.dataset.ph==='bgm'?phAudio.toggleBgm():phAudio.toggleSfx()},true)}catch(e){}phFont();howBtn();btnFont();nmFill();phUiCss();window.phSeg();phStartRow();phOv();phPause();document.querySelectorAll(NSEL).forEach(i=>{if(!(i.maxLength>0)||i.maxLength>8)i.maxLength=8});setTimeout(silentTip,700);let t=0;try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(()=>{btnFont();window.phSeg();setBtn();phStartRow();phOv();phPause()},30)}).observe(document.body,{childList:true,subtree:true})}catch(e){}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill2);else fill2();
 })();
