@@ -164,7 +164,7 @@ html body .phS-show{height:auto!important;min-height:84px!important;margin-top:1
 .phS-show.hg i{font-size:14px!important}
 /* 게임 중 난이도: 상단 칸·아이콘 테두리도 난이도 색(연하게) · 아래에 난이도 이름 */
 html body[data-phlv] .phBx,html body[data-phlv] .phIb{--phBd:color-mix(in srgb,var(--phlvb) 30%,#1b1d30)}
-.phLvName{font:400 10px "Silkscreen",monospace;letter-spacing:.3em;color:var(--phlvt,#8b8fa8);text-align:center;opacity:.8;padding:6px 0 0 .3em;pointer-events:none}
+.phLvName{font:400 9px "Silkscreen",monospace!important;letter-spacing:2px!important;color:var(--phlvt,#8b8fa8);text-align:center;opacity:.8;padding:6px 0 0 .3em;pointer-events:none}
 .phLvName:empty{display:none}
 /* 설정 창 (모든 게임 공통) */
 .phSet{position:fixed;inset:0;z-index:99997;display:flex;align-items:center;justify-content:center;background:rgba(8,9,12,.88);padding:16px;box-sizing:border-box}

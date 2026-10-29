@@ -237,7 +237,7 @@ function setOpen(o){o=o||{};phUiCss();const c=SC,touch=(()=>{try{return matchMed
   const tg=(k,on)=>`<div class="phSet-o"><button class="tg${on?' on':''}" data-k="${k}" data-v="1">ON</button><button class="tg${on?'':' on'}" data-k="${k}" data-v="0">OFF</button></div>`;
   const opt=(k,cur,L)=>`<div class="phSet-o">${L.map((t,i)=>`<button class="${cur===i?'on':''}" data-k="${k}" data-v="${i}">${t}</button>`).join('')}</div>`;
   const vol=(k,v,on)=>`<label class="phSet-v${on?'':' dim'}"><input type="range" min="0" max="100" step="5" value="${v}" data-vol="${k}" aria-label="${k==='bgm'?'배경음악':'효과음'} 볼륨"><b>${v}</b></label>`;
-  const A=phAudio.state();let h='<div class="phSet-h">SETTINGS</div><div class="phSet-sec">SOUND</div>';
+  const A=phAudio.state();let h='<div class="phSet-sec">SOUND</div>';
   h+=`<div class="phSet-r"><div class="phSet-l"><span>배경음악</span>${tg('bgm',phAudio.bgmOn())}</div>${vol('bgm',A.bgmV,phAudio.bgmOn())}</div>`;
   h+=`<div class="phSet-r"><div class="phSet-l"><span>효과음</span>${tg('sfx',phAudio.sfxOn())}</div>${vol('sfx',A.sfxV,phAudio.sfxOn())}</div>`;
   if(c.vox)h+=`<div class="phSet-r"><div class="phSet-l"><span>음성 안내</span>${tg('vox',!!c.vox.get())}</div></div>`;
