@@ -168,7 +168,10 @@ function btnFont(){document.querySelectorAll('button').forEach(b=>{if(b._pf||b.c
 /* 게임 들어오면 잠깐: 무음을 해제해야 소리가 들립니다 (휴대폰에서만, 게임 목록 화면 제외) */
 function silentTip(){try{if(!matchMedia('(pointer:coarse)').matches||/^\/games\/?$/.test(location.pathname))return}catch(e){return}
   const d=document.createElement('div');d.className='phTip';d.innerHTML='<svg viewBox="0 0 16 16" shape-rendering="crispEdges"><path fill="#e9e9f0" d="M2 6h3l4-3h1v10H9L5 10H2z"/><path fill="#e9e9f0" d="M12 6h1v4h-1z"/><line x1="2" y1="14" x2="14" y2="2" stroke="#ff5a6e" stroke-width="2" stroke-linecap="round"/></svg><span>무음을 해제해야 소리가 들립니다</span>';
-  document.body.appendChild(d);setTimeout(()=>d.remove(),3800)}
+  document.body.appendChild(d);setTimeout(()=>d.remove(),3800);
+  /* 2026-10-30: 시작 화면 하단 크레딧 글과 겹치지 않게 → 크레딧 바로 위에 띄움 */
+  try{const cr=[...document.querySelectorAll('.phS-credit,#msStart .msCr,.credit')].find(x=>{const r=x.getBoundingClientRect();return r.height>0&&r.top>innerHeight*.5&&r.bottom<=innerHeight+2});
+   if(cr){const t=cr.getBoundingClientRect().top;d.style.bottom=Math.max(0,innerHeight-t+14)+'px'}}catch(e){}}
 /* ===== v2 공통 기능 (2026-10-29) ===== */
 /* 설정 저장: phPref.get(키, 기본값) / phPref.set(키, 값) — 이 기기에 게임별로 저장 */
 const PFX='phPref:'+(location.pathname.split('/')[1]||'hub')+':';
