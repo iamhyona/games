@@ -357,3 +357,7 @@ html body .phPRow .phPAll{order:3;font-size:11px!important;width:auto!important;
 html body .phPRow .phPRst{order:4;grid-column:1/-1}
 html body .phPRow>.phBtn.phBtn.phBtn{width:auto!important;min-width:0!important;max-width:none!important;margin:0!important}
 html body #overlay .phPRow>button.phBtn,html body #pauseOv .phPRow>button.phBtn,html body #ovPause .phPRow>button.phBtn{width:auto!important;max-width:none!important}
+/* 30) 잠시 멈춤: RANKING → RESTART(초록 테두리) → MAIN MENU | ALL GAMES */
+html body .phPRow .phPRst{order:2!important}
+html body .phPRow .phPMenu,html body .phPRow .phPAll{order:3!important}
+html body .phPRow>.phPRst.phBtn{--b:#10b870!important;--t:#9ff0c6!important;border-color:#10b870!important;color:#9ff0c6!important}
