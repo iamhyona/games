@@ -6,7 +6,13 @@ try{const as=navigator.audioSession;if(as){const pr=Object.getPrototypeOf(as),d=
   if(d&&d.set&&d.get){Object.defineProperty(pr,'type',{configurable:true,enumerable:d.enumerable,get(){return d.get.call(this)},set(){d.set.call(this,'ambient')}})} /* 게임이 'playback'으로 바꿔도 항상 ambient */
   else{as.type='ambient';Object.defineProperty(as,'type',{configurable:true,get:()=>'ambient',set:()=>{}})}
   as.type='ambient'}}catch(e){}
-try{for(const n of ['AudioContext','webkitAudioContext']){const C=window[n];if(!C||C._ph)continue;const W=function(...a){phAmb();return new C(...a)};W.prototype=C.prototype;W._ph=1;window[n]=W;
+/* 소리 끊김 방지 (2026-10-30): 영상·음악·전화·백그라운드 뒤 iOS가 소리 엔진을 멈추면(suspended/interrupted) 다음 터치·화면 복귀 때 자동으로 다시 켬 */
+const PHAC=window.__phAC=[];
+function phWake(){try{if(document.hidden)return;for(const c of PHAC){if(c.state!=='running'&&c.state!=='closed'){phAmb();try{const r=c.resume();r&&r.catch&&r.catch(()=>{})}catch(e){}}}}catch(e){}}
+['pointerdown','touchstart','touchend','mousedown','keydown','click'].forEach(t=>addEventListener(t,phWake,{capture:true,passive:true}));
+['pageshow','focus'].forEach(t=>addEventListener(t,()=>setTimeout(phWake,60)));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(phWake,60)});
+try{for(const n of ['AudioContext','webkitAudioContext']){const C=window[n];if(!C||C._ph)continue;const W=function(...a){phAmb();const c=new C(...a);try{PHAC.push(c);c.addEventListener('statechange',()=>{if(c.state!=='running'&&c.state!=='closed'&&!document.hidden)setTimeout(phWake,300)})}catch(e){}return c};W.prototype=C.prototype;W._ph=1;window[n]=W;
   const rs=C.prototype.resume;if(rs)C.prototype.resume=function(){phAmb();return rs.apply(this,arguments)}}}catch(e){} /* 소리 엔진 켤 때마다 섞어 재생 다시 확인 */
 try{if(window.speechSynthesis){const sp=speechSynthesis.speak.bind(speechSynthesis);speechSynthesis.speak=function(u){if(u&&(u.volume===0||!String(u.text||'').trim()))return;phAmb();return sp(u)}}}catch(e){} /* 소리 없는 음성 깨우기는 막음 (듣던 음악이 멈춤) */
 try{const SIL=new Set(),cou=URL.createObjectURL.bind(URL);URL.createObjectURL=function(o){const u=cou(o);try{if(o instanceof Blob&&o.size<=9000&&/wav|^$/.test(o.type||''))SIL.add(u)}catch(e){}return u};
