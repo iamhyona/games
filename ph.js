@@ -432,3 +432,21 @@ function phSnd(){const gear=[...document.querySelectorAll('button[aria-label="�
 function fill2(){fill();back();try{phMotion();setBtn();syncIb();document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ph=bgm],[data-ph=sfx]');if(!b||b._phOwn)return;e.preventDefault();e.stopPropagation();b.dataset.ph==='bgm'?phAudio.toggleBgm():phAudio.toggleSfx()},true)}catch(e){}phFont();howBtn();btnFont();nmFill();phUiCss();window.phSeg();phStartRow();phOv();phPause();phSnd();document.querySelectorAll(NSEL).forEach(i=>{if(!(i.maxLength>0)||i.maxLength>8)i.maxLength=8});setTimeout(silentTip,700);let t=0;try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(()=>{btnFont();window.phSeg();setBtn();phStartRow();phOv();phPause()},30)}).observe(document.body,{childList:true,subtree:true})}catch(e){}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill2);else fill2();
 })();
+
+/* ===== 버튼 누를 때 작은 소리 + 진동 (2026-10-30, 모든 게임 공통) =====
+   소리: 각 게임 효과음 설정(끄기·볼륨)을 따름 · 진동: 게임 설정의 진동 끄기를 따름
+   안드로이드 = 진동 · 아이폰(iOS 18 이상) = 스위치 햅틱 */
+(function(){
+  let tc=null,hl=null;
+  function vol(){let v=1;try{if(window.phAudio&&phAudio.sfx)v=phAudio.sfx()}catch(e){}try{if(typeof sndOn!=='undefined'&&!sndOn)v=0}catch(e){}return v}
+  function tick(v){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!tc||tc.state==='closed')tc=new C();if(tc.state!=='running')tc.resume();
+    const t=tc.currentTime,o=tc.createOscillator(),g=tc.createGain();o.type='sine';o.frequency.setValueAtTime(1500,t);o.frequency.exponentialRampToValueAtTime(900,t+.035);
+    g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.05*v,t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+.05);o.connect(g).connect(tc.destination);o.start(t);o.stop(t+.06)}catch(e){}}
+  function hapOn(){try{return !window.phPref||phPref.get('hap',true)!==false}catch(e){return true}}
+  function haptic(){try{if(navigator.vibrate){navigator.vibrate(8);return}
+    if(!hl){hl=document.createElement('label');hl.setAttribute('aria-hidden','true');hl.style.cssText='position:fixed;left:-40px;top:0;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none';
+      const i=document.createElement('input');i.type='checkbox';i.setAttribute('switch','');i.tabIndex=-1;hl.appendChild(i);document.body.appendChild(hl)}
+    hl.click()}catch(e){}}
+  document.addEventListener('click',e=>{if(!e.isTrusted)return;const b=e.target.closest&&e.target.closest('button,[role="button"],a.it,.phS-howL,.msHow');if(!b||b.disabled||b===hl)return;
+    const v=vol();if(v>0)tick(v);if(hapOn())haptic()},true);
+})();
