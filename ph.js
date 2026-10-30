@@ -8,7 +8,15 @@ try{const as=navigator.audioSession;if(as){const pr=Object.getPrototypeOf(as),d=
   as.type='ambient'}}catch(e){}
 /* 소리 끊김 방지 (2026-10-30): 영상·음악·전화·백그라운드 뒤 iOS가 소리 엔진을 멈추면(suspended/interrupted) 다음 터치·화면 복귀 때 자동으로 다시 켬 */
 const PHAC=window.__phAC=[];
-function phWake(){try{if(document.hidden)return;for(const c of PHAC){if(c.state!=='running'&&c.state!=='closed'){phAmb();try{const r=c.resume();r&&r.catch&&r.catch(()=>{})}catch(e){}}}}catch(e){}}
+/* 2026-10-30 v2: 게임이 직접 만든 소리 엔진도 모두 찾아서 관리 (연결될 때 자동 등록) */
+try{const cn=AudioNode.prototype.connect;AudioNode.prototype.connect=function(){try{const c=this.context;if(c&&PHAC.indexOf(c)<0&&!(typeof OfflineAudioContext!=='undefined'&&c instanceof OfflineAudioContext))PHAC.push(c)}catch(e){}return cn.apply(this,arguments)}}catch(e){}
+/* 아이폰: 무음 스위치를 켰다 끄거나 다른 앱 소리가 끼어든 뒤 '켜져 있는데 소리만 안 나는' 상태 → 다음 터치 때 소리 엔진을 한 번 껐다 켜서 다시 연결 */
+let phKick=false,phKickT=0;
+try{const as=navigator.audioSession;if(as&&as.addEventListener)as.addEventListener('statechange',()=>{if(as.state!=='active')phKick=true})}catch(e){}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)phKick=true});
+addEventListener('pagehide',()=>{phKick=true});
+function phKickNow(){const now=Date.now();if(now-phKickT<1500)return;phKickT=now;phKick=false;for(const c of PHAC){if(c.state==='closed')continue;try{const p=c.suspend();(p&&p.then?p:Promise.resolve()).then(()=>{phAmb();return c.resume()}).catch(()=>{try{c.resume()}catch(e){}})}catch(e){}}}
+function phWake(e){try{if(document.hidden)return;if(e&&e.isTrusted&&phKick&&PHAC.length){phKickNow();return}for(const c of PHAC){if(c.state!=='running'&&c.state!=='closed'){phAmb();try{const r=c.resume();r&&r.catch&&r.catch(()=>{})}catch(e){}}}}catch(e){}}
 ['pointerdown','touchstart','touchend','mousedown','keydown','click'].forEach(t=>addEventListener(t,phWake,{capture:true,passive:true}));
 ['pageshow','focus'].forEach(t=>addEventListener(t,()=>setTimeout(phWake,60)));
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(phWake,60)});
