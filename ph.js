@@ -444,9 +444,12 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.05*v,t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+.05);o.connect(g).connect(tc.destination);o.start(t);o.stop(t+.06)}catch(e){}}
   function hapOn(){try{return !window.phPref||phPref.get('hap',true)!==false}catch(e){return true}}
   function haptic(){try{if(navigator.vibrate){navigator.vibrate(8);return}
+    const ae=document.activeElement;if(ae&&(ae.tagName==='TEXTAREA'||(ae.tagName==='INPUT'&&!/^(checkbox|radio|button|range)$/i.test(ae.type))))return; /* 아이폰: 글자 입력 중엔 키보드가 닫히지 않게 건너뜀 */
     if(!hl){hl=document.createElement('label');hl.setAttribute('aria-hidden','true');hl.style.cssText='position:fixed;left:-40px;top:0;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none';
       const i=document.createElement('input');i.type='checkbox';i.setAttribute('switch','');i.tabIndex=-1;hl.appendChild(i);document.body.appendChild(hl)}
     hl.click()}catch(e){}}
+  /* 게임 중 진동: phHaptic(ms 또는 [진동,쉼,진동…]) — 안드로이드 vibrate, 아이폰은 스위치 햅틱 · 진동 설정 따름 */
+  window.phHaptic=function(p){if(!hapOn())return;try{if(navigator.vibrate){navigator.vibrate(p);return}const a=Array.isArray(p)?p:[p];let t=0;for(let k=0;k<a.length;k+=2){if(t)setTimeout(haptic,t);else haptic();t+=(+a[k]||0)+(+a[k+1]||0)}}catch(e){}};
   document.addEventListener('click',e=>{if(!e.isTrusted)return;const b=e.target.closest&&e.target.closest('button,[role="button"],a.it,.phS-howL,.msHow');if(!b||b.disabled||b===hl)return;
     const v=vol();if(v>0)tick(v);if(hapOn())haptic()},true);
 })();
