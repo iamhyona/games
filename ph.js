@@ -171,7 +171,10 @@ function silentTip(){try{if(!matchMedia('(pointer:coarse)').matches||/^\/games\/
   document.body.appendChild(d);setTimeout(()=>d.remove(),3800);
   /* 2026-10-30: 시작 화면 하단 크레딧 글과 겹치지 않게 → 크레딧 바로 위에 띄움 */
   try{const cr=[...document.querySelectorAll('.phS-credit,#msStart .msCr,.credit')].find(x=>{const r=x.getBoundingClientRect();return r.height>0&&r.top>innerHeight*.5&&r.bottom<=innerHeight+2});
-   if(cr){const t=cr.getBoundingClientRect().top;d.style.bottom=Math.max(0,innerHeight-t+14)+'px'}}catch(e){}}
+   if(cr){const t=cr.getBoundingClientRect().top;d.style.bottom=Math.max(0,innerHeight-t+14)+'px';
+    /* 2026-10-30: HOW TO PLAY(위 버튼)과 하단 글 사이 한가운데에 */
+    const up=[...document.querySelectorAll('.phS-howL,.phS-how,#msStart .msHow')].filter(x=>{const r=x.getBoundingClientRect();return r.height>0&&r.bottom<t}).map(x=>x.getBoundingClientRect().bottom).sort((p,q)=>q-p)[0];
+    if(up){const h=d.getBoundingClientRect().height||36,m=(up+t)/2;d.style.bottom='auto';d.style.top=Math.max(up+4,m-h/2)+'px'}}}catch(e){}}
 /* ===== v2 공통 기능 (2026-10-29) ===== */
 /* 설정 저장: phPref.get(키, 기본값) / phPref.set(키, 값) — 이 기기에 게임별로 저장 */
 const PFX='phPref:'+(location.pathname.split('/')[1]||'hub')+':';
