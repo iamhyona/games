@@ -397,7 +397,7 @@ function phGoOne(ov){if(!ov._phGo){ov._phGo=1;ov.classList.add('phGoOv');
 function phGo(){['overOv','ovOver','overlay'].forEach(id=>{const ov=document.getElementById(id);if(!ov)return;const on=id==='overOv'?!ov.hidden:id==='ovOver'?ov.classList.contains('show'):ov.classList.contains('over');
   if(on)phGoOne(ov);else if(ov._phSeen||ov._phTick){ov._phSeen=0;ov._phTick=0;const w=ov.querySelector('.phWin');if(w)w.remove()}})}
 setInterval(()=>{try{phGo()}catch(e){}},250);
-/* 사운드 아이콘 하나로 (2026-10-30): 배경음·효과음 버튼 대신 스피커 하나 → 소리 창. 순서: 사운드 · 잠시 멈춤 · 설정 */
+/* 사운드 아이콘 하나로 (2026-10-30): 배경음·효과음 버튼 대신 스피커 하나 → 소리 창. 순서: 설정 · 사운드 · 잠시 멈춤 */
 const SPK='<svg viewBox="0 0 22 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" aria-hidden="true"><path d="M2 7 H6 L11 3 V17 L6 13 H2 Z M14 7 Q16 10 14 13 M17 4 Q21 10 17 16"/></svg>';
 function phSnd(){const gear=[...document.querySelectorAll('button[aria-label="설정"]')].find(b=>b.classList.contains('phIb'));if(!gear||gear._phSnd)return;
   const pause=[...document.querySelectorAll('button.phIb')].find(b=>/일시정지|잠시 멈춤/.test(b.getAttribute('aria-label')||''));gear._phSnd=1;
@@ -407,7 +407,7 @@ function phSnd(){const gear=[...document.querySelectorAll('button[aria-label="�
   const sock=b=>b.parentElement&&b.parentElement.classList.contains('sock')?b.parentElement:b;
   const G=sock(gear);if(pause){const P=sock(pause);G.parentNode.insertBefore(P,G)}
   let S=sb;if(G!==gear){S=document.createElement('span');S.className=G.className;S.appendChild(sb)}
-  const P=pause?sock(pause):G;P.parentNode.insertBefore(S,P);
+  const P=pause?sock(pause):G;P.parentNode.insertBefore(S,P);S.parentNode.insertBefore(G,S); /* 2026-10-30: 설정 · 소리 · 잠시 멈춤(맨 끝) */
   const upd=()=>{const off=!(phAudio.bgmOn()||phAudio.sfxOn());sb.classList.toggle('off',off)};upd();phAudio.on(upd)}
 function fill2(){fill();back();try{phMotion();setBtn();syncIb();document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ph=bgm],[data-ph=sfx]');if(!b||b._phOwn)return;e.preventDefault();e.stopPropagation();b.dataset.ph==='bgm'?phAudio.toggleBgm():phAudio.toggleSfx()},true)}catch(e){}phFont();howBtn();btnFont();nmFill();phUiCss();window.phSeg();phStartRow();phOv();phPause();phSnd();document.querySelectorAll(NSEL).forEach(i=>{if(!(i.maxLength>0)||i.maxLength>8)i.maxLength=8});setTimeout(silentTip,700);let t=0;try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(()=>{btnFont();window.phSeg();setBtn();phStartRow();phOv();phPause()},30)}).observe(document.body,{childList:true,subtree:true})}catch(e){}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill2);else fill2();
