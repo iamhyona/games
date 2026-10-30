@@ -361,3 +361,6 @@ html body #overlay .phPRow>button.phBtn,html body #pauseOv .phPRow>button.phBtn,
 html body .phPRow .phPRst{order:2!important}
 html body .phPRow .phPMenu,html body .phPRow .phPAll{order:3!important}
 html body .phPRow>.phPRst.phBtn{--b:#10b870!important;--t:#9ff0c6!important;border-color:#10b870!important;color:#9ff0c6!important}
+/* 31 (2026-10-30): 시작 화면 — 로고~HOW TO PLAY 덩어리를 하단 글 위 영역의 세로 가운데로 */
+html body .phS-sp.a{flex:1 1 0!important;min-height:12px}
+html body .phS-sp.c{flex:1 1 0!important;min-height:12px}
