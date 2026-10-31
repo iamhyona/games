@@ -172,7 +172,7 @@ html body[data-phlv] .phBx,html body[data-phlv] .phIb{--phBd:color-mix(in srgb,v
 .phSet-h{text-align:center;font:400 20px "Silkscreen",monospace;letter-spacing:.15em;color:#fff;margin-bottom:6px}
 .phSet-sec{font:400 9px "Silkscreen",monospace;letter-spacing:.2em;color:#8b8fa8;margin-top:6px}
 .phSet-r{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:12px;background:#12142a;border:2px solid #23253a}
-.phSet-l{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px}
+.phSet-l{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px}
 .phSet-l small{font-size:11px;color:#8b8fa8}
 .phSet-o{display:flex;gap:4px;flex-shrink:0}
 .phSet-o button{min-width:46px;height:30px;padding:0 8px;border-radius:8px;border:2px solid #3a3e66;background:#0d0f1f;color:#8b8fa8;font:400 12px Galmuri11,"NeoDunggeunmo",sans-serif;cursor:pointer}
@@ -323,7 +323,7 @@ html body #modeOv,html body #ovMode{gap:12px!important}
 html body #modeOv>.phDiff,html body #ovMode>.phDiff,html body .mode-pick>.phDiff,html body .mBtns>.phDiff{margin:0!important}
 /* 25) 설정 창: 배경음·효과음 한 줄(이름 · 볼륨 바 · 끄기/켜기), 버튼 작게, 버튼 글자 크기는 너비 기준(반쪽 11px · 한 줄 13px) */
 html body .phSet-one{display:flex!important;align-items:center!important;gap:10px!important;flex-direction:row!important}
-html body .phSet-one .phSet-n{flex:0 0 auto;min-width:44px}
+html body .phSet-one .phSet-n{flex:0 0 auto;min-width:40px;font-size:12px}
 html body .phSet-one .phSet-v{flex:1 1 auto!important;min-width:0!important;margin:0!important;display:flex!important;align-items:center!important;gap:6px!important}
 html body .phSet-one .phSet-v input{flex:1 1 auto!important;min-width:0!important;width:auto!important}
 html body .phSet-one .phSet-v b{flex:0 0 22px;font-size:13px!important;text-align:right}
@@ -364,3 +364,12 @@ html body .phPRow>.phPRst.phBtn{--b:#10b870!important;--t:#9ff0c6!important;bord
 /* 31 (2026-10-30): 시작 화면 — 로고~HOW TO PLAY 덩어리를 하단 글 위 영역의 세로 가운데로 */
 html body .phS-sp.a{flex:1 1 0!important;min-height:12px}
 html body .phS-sp.c{flex:1 1 0!important;min-height:12px}
+
+/* 32 (2026-10-31): 잠시 멈춤 순서 — RESUME(초록) → RESTART → RANKING → MAIN MENU | ALL GAMES */
+html body .phPRow .phPRes{order:1!important;grid-column:1/-1!important}
+html body .phPRow .phPRst{order:2!important;grid-column:1/-1!important}
+html body .phPRow .phPRank{order:3!important;grid-column:1/-1!important}
+html body .phPRow .phPMenu,html body .phPRow .phPAll{order:4!important}
+html body .phPRow>.phPRes.phBtn{--b:#10b870!important;--t:#9ff0c6!important;border-color:#10b870!important;color:#9ff0c6!important;height:52px!important;font-size:13px!important;letter-spacing:.2em!important}
+html body .phPRow>.phPRst.phBtn{--b:#3a3e66!important;--t:#dfe2ea!important;border-color:#3a3e66!important;color:#dfe2ea!important}
+html body #overlay:not(.paused) .phPRes{display:none!important}

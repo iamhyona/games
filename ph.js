@@ -243,7 +243,7 @@ function phMotion(){const sh=document.getElementById('show')||document.querySele
   else if(g==='bricks'){sh.classList.add('mv-bricks');const bs=kids().filter(e=>e.tagName==='svg'||e.tagName==='SVG'||e.tagName==='IMG');if(!bs.length)return;const ball=document.createElement('i');ball.className='ball';sh.appendChild(ball);
     let i=0,dir=1,t0=performance.now(),last=-1;const P=320;
     (function loop(t){if(sh.offsetParent){const n=bs.length,k=Math.floor((t-t0)/P),f=((t-t0)%P)/P;if(k!==last){last=k;i+=dir;if(i>=n-1){i=n-1;dir=-1}else if(i<=0){i=0;dir=1}const hb=bs[i];hb.classList.remove('hit');void hb.getBoundingClientRect();hb.classList.add('hit')}
-      const a=bs[i],b=bs[Math.max(0,Math.min(n-1,i+dir))],xa=a.offsetLeft+a.offsetWidth/2,xb=b.offsetLeft+b.offsetWidth/2,x=xa+(xb-xa)*f,y=a.offsetTop-8-Math.sin(Math.PI*f)*14;ball.style.transform=`translate(${x-3.5}px,${y}px)`}
+      const a=bs[i],b=bs[Math.max(0,Math.min(n-1,i+dir))],R=sh.getBoundingClientRect(),ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect(),xa=ra.left-R.left+ra.width/2,xb=rb.left-R.left+rb.width/2,x=xa+(xb-xa)*f,y=ra.top-R.top+ra.height*.28-8-Math.sin(Math.PI*f)*14,bw=ball.offsetWidth/2; /* svg는 offsetLeft가 없어 공이 멈춰 있던 문제 (2026-10-31) */ball.style.transform=`translate(${x-bw}px,${y}px)`}
       requestAnimationFrame(loop)})(t0)}
 }
 window.phMotion=phMotion;
@@ -269,6 +269,7 @@ function setOpen(o){o=o||{};if(window.__phSnd){window.__phSnd=0;o._snd=1}phUiCss
   if(c.fx)play.push(`<div class="phSet-r"><div class="phSet-l"><span>화면 효과</span>${opt('fx',c.fx.get()?1:0,['끄기','켜기'])}</div></div>`);
   if(c.hap&&touch)play.push(`<div class="phSet-r"><div class="phSet-l"><span>진동</span>${opt('hap',c.hap.get()?1:0,['끄기','켜기'])}</div></div>`);
   if(c.rot)play.push(`<div class="phSet-r"><div class="phSet-l"><span>회전 방향</span>${opt('rot',c.rot.get()==='ccw'?1:0,['시계','반시계'])}</div></div>`);
+  (c.extra||[]).forEach(x=>play.push(`<div class="phSet-r"><div class="phSet-l"><span>${x.label}</span>${opt('x_'+x.k,+x.get(),x.opts)}</div></div>`)); /* 게임별 추가 설정 (2026-10-31): extra:[{k,label,opts,get,set}] */
   if(!snd)h+=play.join('');
   const hb='<div class="phSet-btns"><button type="button" class="phSetX" data-a="close" aria-label="닫기">✕</button></div>';
   d.innerHTML=`<div class="phSet-w" role="dialog" aria-label="${snd?'소리':'설정'}"><div class="phSet-c">${h}</div>${hb}</div>`;document.body.appendChild(d);
@@ -276,7 +277,7 @@ function setOpen(o){o=o||{};if(window.__phSnd){window.__phSnd=0;o._snd=1}phUiCss
   const kb=e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();close()}};addEventListener('keydown',kb,true);d._kb=kb;
   d.addEventListener('click',e=>{e.stopPropagation();if(e.target===d){close();return}const b=e.target.closest('button');if(!b)return;
     if(b.dataset.a){close(b.dataset.a);return}const k=b.dataset.k,v=+b.dataset.v;if(!k)return;
-    if(k==='bgm')phAudio.toggleBgm(!!v);else if(k==='sfx')phAudio.toggleSfx(!!v);else if(k==='rot')c.rot.set(v?'ccw':'cw');else if(c[k])c[k].set(k==='speed'?v:!!v);
+    if(k.slice(0,2)==='x_'){const x=(c.extra||[]).find(e=>'x_'+e.k===k);if(x)x.set(v);setOpen(o);return}if(k==='bgm')phAudio.toggleBgm(!!v);else if(k==='sfx')phAudio.toggleSfx(!!v);else if(k==='rot')c.rot.set(v?'ccw':'cw');else if(c[k])c[k].set(k==='speed'?v:!!v);
     if(c.onSound&&(k==='bgm'||k==='sfx'))c.onSound();if(k==='hap'&&v&&navigator.vibrate)try{navigator.vibrate(20)}catch(_){}
     setOpen(o)});
   d.querySelectorAll('[data-vol]').forEach(i=>i.addEventListener('input',()=>{const v=+i.value;i.nextElementSibling.textContent=v;if(i.dataset.vol==='bgm')phAudio.setBgm(v);else if(i.dataset.vol==='vox'){if(c.vox&&c.vox.vol)c.vox.vol.set(v);if(c.vox&&!!c.vox.get()!==(v>0))c.vox.set(v>0)}else phAudio.setSfx(v);
@@ -321,6 +322,7 @@ function phPause(){[['pauseOv','resumeB'],['ovPause','bResume'],['overlay','over
   const row=document.createElement('div');row.className='phPRow';bs[0].parentNode.insertBefore(row,bs[0]);bs.forEach(b=>row.appendChild(b));
   const rkS=[...document.querySelectorAll('.phS-btns button')].find(x=>/RANKING/i.test(x.textContent));
   if(rkS){const rb=document.createElement('button');rb.type='button';rb.className='phBtn sub phPRank';rb.textContent='RANKING';rb.addEventListener('click',e=>{e.stopPropagation();document.body.classList.add('phRkTop');rkS.click()});bs[0].after(rb)}
+  const re=document.createElement('button');re.type='button';re.className='phBtn sub phPRes';re.textContent='RESUME';re.addEventListener('click',e=>{e.stopPropagation();rs.click()});row.insertBefore(re,row.firstChild); /* 2026-10-31: RESUME → RESTART → RANKING → MAIN MENU | ALL GAMES */
   const al=document.createElement('button');al.type='button';al.className='phBtn sub phPAll';al.textContent='ALL GAMES';al.addEventListener('click',e=>{e.stopPropagation();location.href='../games/'});row.appendChild(al);const x=document.createElement('button');x.type='button';x.className='phPX phOvX';x.textContent='✕';x.setAttribute('aria-label','계속하기');x.addEventListener('click',e=>{e.stopPropagation();rs.click()});ov.appendChild(x)})}
 /* 게임 오버 화면 통일 (2026-10-29 검수안): GAME OVER 한 줄 → 큰 점수 → 한줄 평 → (정보 2개 이상이면 상자) → 이름 → RANKING → RETRY → MAIN MENU | ALL GAMES · 랭킹 1위면 축하 화면 */
 const GOF={
@@ -453,3 +455,35 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   document.addEventListener('click',e=>{if(!e.isTrusted)return;const b=e.target.closest&&e.target.closest('button,[role="button"],a.it,.phS-howL,.msHow');if(!b||b.disabled||b===hl)return;
     const v=vol();if(v>0)tick(v);if(hapOn())haptic()},true);
 })();
+
+/* ===== 시작 화면 맨 아래 문구 통일 + 버전 표시 (2026-10-31) ===== */
+(function(){const D={pang:'같은 색 팡팡이 4개를 이어 붙여 연쇄로 터뜨리는 퍼즐',switchpang:'팡팡이 자리를 바꿔 3개 이상 맞춰 터뜨리는 퍼즐',petris:'블록을 쌓아 가로줄을 지우는 게임보이 감성 테트리스',fruitpang:'같은 구슬을 합쳐 더 큰 구슬을 만드는 물리 퍼즐',hangulbi:'헷갈리는 맞춤법 낱말을 빗물이 닿기 전에 바르게 쳐서 터뜨리는 타자 게임',bricks:'공을 튕겨 벽돌을 깨는 우주 벽돌깨기',twinstar:'친구와 함께 적을 물리치고 동료를 구하는 협동 우주 슈팅',mines:'숫자를 단서로 지뢰를 피해 모든 칸을 여는 퍼즐'};
+  const g=location.pathname.split('/')[1]||'';
+  window.phVer=function(){let v=0;try{v=+(window.V||0);if(!v)for(const sc of document.scripts){const m=/var V="(\d{9,})"/.exec(sc.textContent||'');if(m){v=+m[1];break}}}catch(e){}if(!v)return '';const d=new Date(v*1000+9*36e5);return d.getUTCFullYear()+'년 '+(d.getUTCMonth()+1)+'월 '+d.getUTCDate()+'일 업데이트'};
+  function css(){if(document.getElementById('phCrCss'))return;const s=document.createElement('style');s.id='phCrCss';s.textContent='html body .phS-credit.phCr,html body .msCr.phCr{font:400 9px/1.65 Galmuri11,"NeoDunggeunmo",sans-serif!important;color:rgba(200,204,220,.42)!important;text-align:center!important;word-break:keep-all;max-width:300px;margin-left:auto!important;margin-right:auto!important}html body .phS>.phS-credit.phCr{margin-bottom:22px!important}.phCr .phCrM{display:block;margin-top:5px;font:400 9px/1.4 Galmuri11,sans-serif;color:rgba(200,204,220,.5)}.phCr .phCrV,.phVerTag{display:block;margin-top:3px;font:400 9px/1.4 Galmuri11,"NeoDunggeunmo",sans-serif;letter-spacing:0;color:rgba(200,204,220,.38)}';document.head.appendChild(s)}
+  function run(){if(!D[g]){if(g==='games'||g===''){const m=document.querySelector('.ml');if(m&&!document.querySelector('.phVerTag')){css();const t=document.createElement('span');t.className='phVerTag';t.textContent=phVer();m.after(t)}}return}
+    css();document.querySelectorAll('.phS-credit,.msCr').forEach(e=>{if(e.classList.contains('phCr'))return;e.classList.add('phCr');const t=D[g],c=t.charCodeAt(t.length-1)-0xAC00,jo=(c>=0&&c%28)?'이에요':'예요';e.innerHTML='이 게임은 '+t+jo+'. 박현아의 재능흥청망청 게임프로젝트로, 비상업적 목적으로 제작되었으니 즐겁게 즐겨주세요.<span class="phCrM">iamhyona@gmail.com</span><span class="phCrV">'+phVer()+'</span>'})}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(run,50));else setTimeout(run,50)})();
+
+/* ===== 방문자 TODAY (2026-10-31): 한 기기에서 게임별 하루 한 번만 셈 · 시작 화면에 TODAY NNN ===== */
+(function(){if(!window.PH_TODAY)return; /* 2026-10-31: TODAY·통계는 나중에 배포 (켜려면 PH_TODAY=1) */const U='https://script.google.com/macros/s/AKfycbzkdjVleobj98oyxlC77cUf5txCRiSB6D1zgRWU56pX22ElXAx9R8xFRGnV0nKAUbwC/exec';
+  let g=location.pathname.split('/')[1]||'hub';if(g==='games')g='hub';if(g==='farm'||g==='kart')return;
+  const day=new Date(Date.now()+9*36e5).toISOString().slice(0,10);
+  function nm(){try{let n=localStorage.getItem('ph-name');if(n)return n;for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/-name$/.test(k)){n=localStorage.getItem(k);if(n)return n}}}catch(e){}return ''}
+  function css(){if(document.getElementById('phTodayCss'))return;const s=document.createElement('style');s.id='phTodayCss';s.textContent='.phToday{display:inline-flex;align-items:center;gap:6px;margin:0 auto;padding:4px 10px;border:1.5px solid rgba(200,205,225,.22);border-radius:999px;font:400 8px/1 "Silkscreen",monospace;letter-spacing:.16em;color:rgba(200,204,220,.6);white-space:nowrap}.phToday b{font:400 13px/1 "Jersey 15","Silkscreen",monospace;letter-spacing:.04em;color:#fff}.phTodayW{display:flex;justify-content:center;margin:0 0 10px}.phTodayW[hidden]{display:none}';document.head.appendChild(s)}
+  function put(n){css();window.__phToday=n;document.querySelectorAll('.phTodayW b').forEach(b=>b.textContent=n);
+    const host=[...document.querySelectorAll('.phS .phS-logo,#msStart .phS-logo,.top .lgw')].filter(e=>!e.parentNode.querySelector(':scope>.phTodayW'));
+    host.forEach(h=>{const w=document.createElement('div');w.className='phTodayW';w.innerHTML='<span class="phToday" aria-label="오늘 방문자">TODAY <b>'+n+'</b></span>';h.parentNode.insertBefore(w,h)})}
+  function go(){let a='today';try{if(localStorage.getItem('phV:'+g)!==day){a='hit';localStorage.setItem('phV:'+g,day)}}catch(e){}
+    fetch(U+'?g=visit&k='+g+'&a='+a+(a==='hit'?'&n='+encodeURIComponent(nm()):'')+'&_='+Date.now(),{cache:'no-store'}).then(r=>r.json()).then(j=>{const n=g==='hub'?j.all:j.today;if(n!=null)put(Number(n).toLocaleString())}).catch(()=>{})}
+  window.phTodayPut=put;
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(go,300));else setTimeout(go,300)})();
+
+/* ===== 2026-10-31: Galmuri11 글꼴을 게임 저장소에서도 받기 (외부 CDN이 막혀도 같은 글꼴) ===== */
+(function(){try{const sc=[...document.scripts].find(x=>/\/games\/ph\.js/.test(x.src));if(!sc)return;const base=sc.src.replace(/ph\.js.*$/,'');const s=document.createElement('style');s.id='phGalmuri';
+  s.textContent="@font-face{font-family:'Galmuri11';font-weight:400;font-display:swap;src:url('"+base+"fonts/Galmuri11.woff2') format('woff2')}@font-face{font-family:'Galmuri11';font-weight:700;font-display:swap;src:url('"+base+"fonts/Galmuri11-Bold.woff2') format('woff2')}";document.head.appendChild(s)}catch(e){}})();
+/* ===== 2026-10-31: 시작 화면이 낮은 폰에서 넘치면 내용 전체를 살짝 줄여 한 화면에 ===== */
+(function(){function fit(){document.querySelectorAll('.phS,#msStart .msSc').forEach(S=>{if(!S.offsetParent)return;const kids=[...S.children].filter(k=>!/phS-sp|msSp/.test(k.className));kids.forEach(k=>k.style.zoom='');
+    const over=S.scrollHeight-S.clientHeight;if(over<=1)return;let fixed=0;kids.forEach(k=>fixed+=k.getBoundingClientRect().height);const z=Math.max(.72,Math.min(1,(fixed-over-4)/fixed));kids.forEach(k=>k.style.zoom=z.toFixed(3))})}
+  window.phFitStart=fit;addEventListener('resize',()=>setTimeout(fit,60));[300,900,2000,3500].forEach(t=>setTimeout(fit,t));
+  try{new MutationObserver(()=>{clearTimeout(fit.t);fit.t=setTimeout(fit,120)}).observe(document.documentElement,{attributes:true,attributeFilter:['class']})}catch(e){}})();
