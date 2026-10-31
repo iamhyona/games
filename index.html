@@ -23,7 +23,7 @@
 <meta name="apple-mobile-web-app-title" content="GAMES">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="ph.css?v=18">
+<link rel="stylesheet" href="ph.css?v=23">
 <style>
 @font-face{font-family:"NeoDunggeunmo";src:url(https://cdn.jsdelivr.net/npm/@kfonts/neodgm@0.5.0/neodgm.woff2) format("woff2");font-display:swap}
 :root{--bg:#0b0b0f;--line:#2c2d36;--line2:#363743;--txt:#f2f2f7;--sub:#8f90a0;--gold:#f2b000;--f:"NeoDunggeunmo",ui-monospace,monospace;--en:"Silkscreen",var(--f)}
@@ -186,7 +186,7 @@ function top3(k,rows){rows=(rows||[]).filter(function(r){return r&&r.n});
  if(k==='mines'){rows=rows.filter(function(r){return +r.l===1}).sort(function(a,b){return ((b.p==null?100:+b.p)-(a.p==null?100:+a.p))||(a.t-b.t)})}
  else{if(k==='fruitpang')rows=rows.filter(function(r){return /^score/.test(r.m||'score')});if(k==='hangulbi')rows=rows.filter(function(r){return /^rain/.test(r.m||'')});rows=rows.filter(function(r){return +r.s>0}).sort(function(a,b){return b.s-a.s})}
  var seen={},o=[];rows.forEach(function(r){if(!seen[r.n]&&o.length<3){seen[r.n]=1;o.push(r.n)}});return o}
-function load(){q('hsG').innerHTML=GM.map(function(g){return '<div class="gr" style="--c:'+g[2]+'" data-k="'+g[0]+'"><div class="gn"><span>'+g[1]+'</span><small>'+(g[0]==='mines'?'이병 · 기록':g[0]==='hangulbi'?'RAIN':g[0]==='fruitpang'?'SCORE':'SCORE')+'</small></div><div class="em">불러오는 중…</div></div>'}).join('');
+function load(){q('hsG').innerHTML=GM.map(function(g){return '<div class="gr" style="--c:'+g[2]+'" data-k="'+g[0]+'"><div class="gn"><span>'+g[1]+'</span><small>'+(g[0]==='mines'?'이병 · 기록':g[0]==='hangulbi'?'RAIN':g[0]==='fruitpang'?'SCORE':'SCORE')+'</small></div><div class="em"><span class="phLoad">LOADING</span></div></div>'}).join('');
  GM.forEach(function(g){fetch(U+(g[3]?'?g='+g[3]+'&':'?')+'_='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){var t=top3(g[0],j.top||j.rows||[]);var el=q('hsG').querySelector('[data-k="'+g[0]+'"]');el.querySelector('.em,ol')&&el.removeChild(el.querySelector('.em,ol'));var d=document.createElement(t.length?'ol':'div');if(t.length)d.innerHTML=t.map(function(n,i){return '<li><i>'+(i+1)+'</i><span>'+esc(n)+'</span></li>'}).join('');else{d.className='em';d.textContent='아직 기록이 없어요'}el.appendChild(d)}).catch(function(){})});
  fetch(U+'?g=visit&a=stats&_='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(s){q('hsT').textContent=(s.today||0).toLocaleString();q('hsA').textContent=(s.total||0).toLocaleString();
   var gs=GM.map(function(g){return [g,(s.games||{})[g[0]]||0]}).sort(function(a,b){return b[1]-a[1]}),mx=Math.max(1,gs[0][1]);
@@ -198,6 +198,6 @@ q('hubRk').onclick=function(){q('hubStat').hidden=false;document.body.style.over
 q('hsX').onclick=function(){q('hubStat').hidden=true;document.body.style.overflow=''};
 addEventListener('keydown',function(e){if(e.key==='Escape'&&!q('hubStat').hidden)q('hsX').click()});
 })();</script>
-<script src="ph.js?v=39"></script>
+<script src="ph.js?v=40"></script>
 </body>
 </html>

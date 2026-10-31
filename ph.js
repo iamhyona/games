@@ -160,7 +160,7 @@ function findCfg(){let c=null;try{c=JSON.parse(localStorage.getItem('phTutCfg:'+
   for(const sc of document.querySelectorAll('script:not([src])')){const t=sc.textContent;for(const key of ['phTut(','TUT=']){let i=t.indexOf(key);while(i>-1){const j=t.indexOf('{',i);if(j>-1&&j-i<60){let d=0,q=null;for(let k=j;k<t.length;k++){const ch=t[k];if(q){if(ch==='\\'){k++;continue}if(ch===q)q=null;continue}if(ch==='"'||ch==="'")q=ch;else if(ch==='{')d++;else if(ch==='}'&&--d===0){try{const o=JSON.parse(t.slice(j,k+1));if(o&&o.goal)return o}catch(e){}break}}}i=t.indexOf(key,i+key.length)}}}
   return null}
 function howBtn(){phFont();const cfg=findCfg();if(!cfg)return;
-  document.querySelectorAll('.phS-btns').forEach(w=>{if(w.querySelector('.phS-how'))return;const b=document.createElement('button');b.className='phS-b phS-how';b.textContent='게임 설명';
+  document.querySelectorAll('.phS-btns').forEach(w=>{if(w.querySelector('.phS-how')||w._phRow||(w.parentElement&&w.parentElement.querySelector(':scope>.phS-howL')))return; /* 2026-10-31: HOW TO PLAY로 바뀐 뒤엔 '게임 설명' 버튼을 다시 만들지 않음 */const b=document.createElement('button');b.className='phS-b phS-how';b.textContent='게임 설명';
     b.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();phTutShow(cfg,null)});w.appendChild(b)})}
 function fill(){document.querySelectorAll('.phS-logo[data-word]').forEach(el=>{el.innerHTML=window.phLogo(el.dataset.word)});document.querySelectorAll('.phS [data-click]').forEach(b=>{if(b._ph)return;b._ph=1;b.addEventListener('click',e=>{e.stopPropagation();const t=document.getElementById(b.dataset.click);if(t)t.click()})})}
 /* 홈 화면 앱(게임 모음)에서 열었을 때: 위쪽 크레딧 줄을 'PARK HYONA\'S 게임이름' 버튼으로 (게임 목록으로 돌아가기) */
@@ -494,7 +494,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   '.phRkRow>.phRkB{flex:0 0 auto!important;width:var(--phRkBw,24px);display:flex!important;justify-content:flex-start;align-items:center;gap:4px;margin:0!important}.phRkRow>.phRkB>*{margin:0!important;flex:0 0 auto}'+
   '.phRkRow>.phRkI{flex:0 0 auto!important;min-width:var(--phRkIw,0px);text-align:right!important;display:flex;justify-content:flex-end;align-items:center;margin:0!important;white-space:nowrap}'+
   '.phRkRow>.phRkS{flex:0 0 auto!important;min-width:var(--phRkSw,80px);text-align:right!important;margin:0!important;white-space:nowrap}';document.head.appendChild(s)}
- function fix(row){if(row._rk)return;const B=row.querySelectorAll('.lvb,.phDvB');if(!B.length&&!row.querySelector('.rbg'))return;row._rk=1;css();
+ function fix(row){if(row._rk)return;const B=row.querySelectorAll('.lvb,.phDvB');if(!B.length&&!row.querySelector('.rbg')&&!(row.parentElement&&row.parentElement.querySelector('.lvb,.phDvB,.rbg')))return; /* 2026-10-31: 배지 없는 줄도 같은 열에 맞춤 */row._rk=1;css();
   const kids=[...row.children];let name=kids.find(k=>k.classList.contains('nm')||k.querySelector('.nm'));if(!name)return;
   let score=row.querySelector(':scope>.s')||(row.tagName==='LI'?kids[kids.length-1]:null);if(!score||score===name)return;
   let info=row.querySelector(':scope>small,:scope>.m');
@@ -503,7 +503,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   if(info){info.classList.add('phRkI');row.insertBefore(box,info);row.insertBefore(score,null);row.insertBefore(info,score)}else row.insertBefore(box,score)}
  function scan(root){(root||document).querySelectorAll('li,div').forEach(r=>{if(r._rk||!r.children.length||r.children.length>8)return;if(r.querySelector(':scope>.nm,:scope>span>.nm,:scope>span .nm'))fix(r)});
   document.querySelectorAll('.phRkRow').forEach(r=>{const l=r.parentElement;if(!l||l._rkw)return;l._rkw=1;let bw=0,iw=0,sw=0;l.querySelectorAll(':scope>.phRkRow').forEach(x=>{const b=x.querySelector('.phRkB'),i=x.querySelector('.phRkI'),s=x.querySelector('.phRkS');if(b)bw=Math.max(bw,b.scrollWidth);if(i)iw=Math.max(iw,i.scrollWidth);if(s)sw=Math.max(sw,s.scrollWidth)});
-   l.style.setProperty('--phRkBw',Math.max(18,bw)+'px');l.style.setProperty('--phRkIw',iw+'px');l.style.setProperty('--phRkSw',Math.max(40,sw)+'px');setTimeout(()=>{l._rkw=0},50)})}
+   l.style.setProperty('--phRkBw',Math.max(18,bw)+'px');if(!l._rkMH){const cs=getComputedStyle(l);if(/auto|scroll/.test(cs.overflowY)&&parseFloat(cs.maxHeight)>0)l._rkMH=parseFloat(cs.maxHeight)}const rw=l.querySelector(':scope>.phRkRow');if(l._rkMH&&rw&&rw.offsetHeight){const n=Math.max(1,Math.floor(l._rkMH/rw.offsetHeight));l.style.maxHeight=(n*rw.offsetHeight)+'px'} /* 2026-10-31: 목록 끝 줄이 반만 보이지 않게 줄 단위로 높이 맞춤 */l.style.setProperty('--phRkIw',iw+'px');l.style.setProperty('--phRkSw',Math.max(40,sw)+'px');setTimeout(()=>{l._rkw=0},50)})}
  let t=0;const go=M=>{if(M&&!M.some(m=>[...m.addedNodes].some(n=>n.nodeType===1&&(n.classList.contains('nm')||n.querySelector&&n.querySelector('.nm')))))return;clearTimeout(t);t=setTimeout(()=>{try{scan()}catch(e){}},30)};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{new MutationObserver(go).observe(document.body,{childList:true,subtree:true})});else new MutationObserver(go).observe(document.body,{childList:true,subtree:true})})();
 

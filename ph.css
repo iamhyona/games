@@ -382,3 +382,11 @@ html body .phS>.phS-logo+.phS-show,html body .phS>.phS-logo+*+.phS-show{margin-t
 html body .phS>.phS-show{height:auto!important;min-height:34px}
 html body .phS>.phS-sp.b{flex:0 0 0!important;min-height:0!important} /* 간격은 위 규칙(26px)으로 */
 html body .phS .phS-howL{margin-top:18px!important} /* HOW TO PLAY 조금 위로 (무음 알림과 안 부딪히게) */
+
+/* 2026-10-31 난도 버튼: 평소엔 테두리만, 마우스 올림·누를 때만 은은하게 채움 (지난 난도 강조 없앰) */
+html body :is(#ovMode,#modeOv,#modeOv2,#x,body) .phDiff.phDiff.phDiff.phDiff:is(.sel,.last,.on,:focus,:focus-visible):not(:hover):not(:active){background:#12142a!important;box-shadow:none!important;outline:none!important}
+@media (hover:none){html body :is(#ovMode,#modeOv,#modeOv2,#x,body) .phDiff.phDiff.phDiff.phDiff:hover:not(:active){background:#12142a!important;box-shadow:none!important}}
+/* 2026-10-31 랭킹 불러오는 중: 모든 게임 같은 문구·글꼴 */
+html body .phLoad{display:inline-block;font:400 11px "Silkscreen",monospace!important;letter-spacing:.2em!important;color:#8a8fb0!important;text-transform:uppercase;white-space:nowrap}
+html body .phLoad::after{content:"";display:inline-block;width:2.2em;text-align:left;animation:phLoadD 1.2s steps(4) infinite}
+@keyframes phLoadD{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
