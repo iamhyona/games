@@ -373,3 +373,12 @@ html body .phPRow .phPMenu,html body .phPRow .phPAll{order:4!important}
 html body .phPRow>.phPRes.phBtn{--b:#10b870!important;--t:#9ff0c6!important;border-color:#10b870!important;color:#9ff0c6!important;height:52px!important;font-size:13px!important;letter-spacing:.2em!important}
 html body .phPRow>.phPRst.phBtn{--b:#3a3e66!important;--t:#dfe2ea!important;border-color:#3a3e66!important;color:#dfe2ea!important}
 html body #overlay:not(.paused) .phPRes{display:none!important}
+/* 2026-10-31: 시작 화면 덩어리 수직 가운데 정렬 */
+html body .phS>.phS-sp.a{flex:1 1 0!important;min-height:12px} /* 하단 글 제외한 덩어리를 위아래 가운데로 (위·아래 여백 같게) */
+html body .phS>.phS-sp.c{flex:1 1 0!important;min-height:12px}
+/* 2026-10-31: 타이틀과 아래 그림 사이 간격을 모든 게임 같게 */
+html body .phS>.phS-logo{min-height:0!important;height:auto!important;margin:0!important}
+html body .phS>.phS-logo+.phS-show,html body .phS>.phS-logo+*+.phS-show{margin-top:26px!important}
+html body .phS>.phS-show{height:auto!important;min-height:34px}
+html body .phS>.phS-sp.b{flex:0 0 0!important;min-height:0!important} /* 간격은 위 규칙(26px)으로 */
+html body .phS .phS-howL{margin-top:18px!important} /* HOW TO PLAY 조금 위로 (무음 알림과 안 부딪히게) */
