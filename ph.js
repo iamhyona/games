@@ -415,7 +415,7 @@ function phGoOne(ov){if(!ov._phGo){ov._phGo=1;ov.classList.add('phGoOv');
   const m=d[0]||['SCORE','0'];
   if(!ov._phSeen){ov._phTick=(ov._phTick||0)+1;if(ov._phTick>=2){ov._phSeen=1;top.querySelector('.phGoQ').textContent=phGoLine(ov,m);
     const time=/TIME/i.test(m[0]),v=goNum(m[1],time);ov.classList.remove('phGo1');
-    const t0=top.querySelector('.phGoT');if(window.__phWinTest||(!time&&v>0&&window.__phTopN!=null&&v>window.__phTopMax)){ov.classList.add('phGo1');t0.outerHTML=phDots('LEGEND','#ffd84d','phGoT');top.querySelector('.phGoQ').textContent='전설이 탄생했어요! 지금 랭킹 1위예요';phWin(ov,m)}else if(t0.getAttribute('aria-label')!=='GAME OVER')t0.outerHTML=phDots('GAME OVER','#f4fff0','phGoT')}}}
+    const t0=top.querySelector('.phGoT');if(window.__phWinTest||window.__phWin1||(!time&&v>0&&window.__phTopN!=null&&v>window.__phTopMax)){ /* __phWin1: 시간 기록 게임이 직접 알려 주는 1위 (2026-10-31) */ov.classList.add('phGo1');t0.outerHTML=phDots('LEGEND','#ffd84d','phGoT');top.querySelector('.phGoQ').textContent='전설이 탄생했어요! 지금 랭킹 1위예요';phWin(ov,m)}else if(t0.getAttribute('aria-label')!=='GAME OVER')t0.outerHTML=phDots('GAME OVER','#f4fff0','phGoT')}}}
 function phGo(){['overOv','ovOver','overlay'].forEach(id=>{const ov=document.getElementById(id);if(!ov)return;const on=id==='overOv'?!ov.hidden:id==='ovOver'?ov.classList.contains('show'):ov.classList.contains('over');
   if(on)phGoOne(ov);else if(ov._phSeen||ov._phTick){ov._phSeen=0;ov._phTick=0;const w=ov.querySelector('.phWin');if(w)w.remove()}})}
 setInterval(()=>{try{phGo()}catch(e){}},250);
