@@ -359,7 +359,7 @@ function phGoData(ov){const T=e=>e?e.textContent.trim():'';const P=[];
   if(st){[...st.children].forEach(d=>{const b=d.querySelector('b');if(!b)return;const v=T(b);P.push([T(d).replace(v,'').trim(),v])});return P}
   const hs=ov.querySelector('#oStats');if(hs){P.push(['SCORE',T(ov.querySelector('#oBig'))]);[...hs.children].forEach(d=>P.push([T(d.querySelector('small')),T(d.querySelector('b'))]));return P}
   const bs=ov.querySelector('#overScore');if(bs){P.push(['SCORE',T(bs)]);const m=/STAGE\s*(\d+)/i.exec(T(ov.querySelector('#overInfo')));if(m)P.push(['STAGE',m[1]]);return P}
-  const gs=ov.querySelector('.go-score b');if(gs){P.push(['SCORE',T(gs)]);const lv=document.getElementById('level'),ln=document.getElementById('lines');if(lv)P.push(['LEVEL',T(lv)]);if(ln)P.push(['LINES',T(ln)]);return P}
+  const gs=ov.querySelector('.go-score b');if(gs){P.push(['SCORE',T(gs)]);const lv=document.getElementById('level'),ln=document.getElementById('lines');if(lv){const lb=lv.parentElement&&lv.parentElement.querySelector('.phL');P.push([lb&&T(lb)||'LEVEL',T(lv)])} /* 2026-11-01: 칸 이름을 HUD와 같게 (페트리스 BASIC=STAGE, TIME ATTACK=TIME 남은 시간) */if(ln)P.push(['LINES',T(ln)]);return P}
   return P}
 const goNum=(v,time)=>{v=String(v).replace(/,/g,'');if(time||/:/.test(v)){const p=v.split(':').map(Number);return p.length>1?p[0]*60+p[1]:+p[0]}return parseFloat(v)||0};
 /* 게임 끝 한줄 평: 기록에 따라 재치 있는 문구를 무작위로 */
