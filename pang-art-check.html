@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>팡팡이 적용 점검</title><meta name="robots" content="noindex">
+<style>
+body{margin:0;background:#0b0b14;color:#e8e8f4;font:13px/1.6 ui-monospace,Menlo,monospace;padding:20px 16px}
+h1{font:600 16px -apple-system,sans-serif;margin:0 0 4px}p{color:#9a9ab8;margin:0 0 14px;font-family:-apple-system,sans-serif}
+table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #2a2a48;padding:6px 8px;text-align:left;vertical-align:top}
+.ok{color:#7ee0c0}.bad{color:#ff8a9a}button{background:#1c1c38;color:#e8e8f4;border:1px solid #2a2a48;border-radius:8px;padding:6px 12px;margin-right:6px}
+</style></head><body>
+<h1>팡팡이 적용 점검</h1>
+<p>7개 게임을 숨은 프레임으로 열어 공통 파일 로드·버전·게임별 연결을 확인합니다. <code>?next</code>를 붙이면 수정안(pang-art-next.js)으로 점검.</p>
+<button onclick="run(false)">현재본 점검</button><button onclick="run(true)">수정안(next) 점검</button>
+<table><thead><tr><th>게임</th><th>공통 파일</th><th>버전</th><th>게임별 연결</th><th>오류</th></tr></thead><tbody id="tb"></tbody></table>
+<script>
+const CHECK={
+ pang:w=>`IMG ${w.eval('Object.keys(IMG).length')}개 (10종×4표정=40)`,
+ switchpang:w=>{const A=w.PangArt;return `IMG ${w.eval('Object.keys(IMG).length')}개 · 게임ID9→공통8 ${w.pieceSVG(9,'')===A.pieceSVG(8,'')?'OK':'X'} · 무지개(ID8) ${w.eval('!!IMG["8"]')?'OK':'X'}`},
+ shootingpang:w=>`PangArt.pieceSVG ${typeof w.PangArt.pieceSVG}`,
+ bricks:w=>`PPSV ${Object.keys(w.PPSV||{}).join('/')} · 공 ${w.eval('Object.keys(PPBALLSVG).join("/")')}`,
+ twinstar:w=>`PPSV ${Object.keys(w.PPSV||{}).join('/')} (4=1P,11=2P,e1~e3=적)`,
+ hangulbi:w=>`PPSV ${Object.keys(w.PPSV||{}).join('/')}`,
+ mines:w=>{let r=[];const fc=w.document.getElementById('face');const had=w.document.documentElement.classList.contains('pp');w.document.documentElement.classList.add('pp');for(const f of ['smile','oh','dead','cool']){w.setFace(f);r.push(fc.innerHTML.includes('<svg')?f:'!'+f)}if(!had)w.document.documentElement.classList.remove('pp');w.setFace('smile');return '팡팡이 얼굴 '+r.join('/')}
+};
+async function run(next){
+ const tb=document.getElementById('tb');tb.innerHTML='';
+ for(const g of Object.keys(CHECK)){
+  const tr=document.createElement('tr');tr.innerHTML=`<td>${g}</td><td colspan=4>확인 중…</td>`;tb.appendChild(tr);
+  const f=document.createElement('iframe');f.style.cssText='position:fixed;left:-9999px;width:430px;height:800px';document.body.appendChild(f);
+  const errs=[];await new Promise(r=>{f.onload=r;f.src=`../${g}/?${next?'pangart=next&':''}t=${Date.now()}`});
+  f.contentWindow.addEventListener('error',e=>errs.push(e.message));await new Promise(r=>setTimeout(r,1500));
+  const w=f.contentWindow;let src=[...w.document.scripts].map(s=>s.src).find(s=>/pang-art/.test(s))||'없음';let info;
+  try{info=CHECK[g](w)}catch(e){info='점검 실패: '+e.message;errs.push(e.message)}
+  const ok=w.PangArt&&/pang-art/.test(src)&&!errs.length;
+  tr.innerHTML=`<td class="${ok?'ok':'bad'}">${ok?'✓':'✗'} ${g}</td><td>${src.split('/').pop()}</td><td>${w.PangArt?w.PangArt.version:'-'}</td><td>${info}</td><td class="${errs.length?'bad':''}">${errs.join('<br>')||'없음'}</td>`;
+  f.remove();
+ }
+}
+run(/[?&]next\b/.test(location.search));
+</script></body></html>
