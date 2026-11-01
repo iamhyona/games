@@ -62,10 +62,10 @@ SVG 안 gradient/mask ID(g, m, s, flowerVolume)가 고정이라 DOM에 여러 �
 ## 6. 이번 작업 결과 (디자인 변경 없음, 구조만 통합)
 | 저장소 | 최종 커밋 | 확인 |
 |---|---|---|
-| games | `1d03e12` 공통 파일·preview·안내, `972abbc` archive (+ 이 문서/점검 페이지 커밋) | 공개본 해시 = 승인 v4 |
+| games | `1d03e12` 공통 파일·preview·안내 · `972abbc` archive · `a08ba23` 이 문서·점검 페이지 · `ad3e87e` 비교 도구 | 공개본 해시 = 승인 v4 |
 | pang | `5fc7424` | 그림 자산 40개 이전과 동일 |
 | switchpang | `76e0ead` | 동일 · 9→8 마름모 OK · 무지개 OK |
-| shootingpang | `7fac342` (+ characters.js 삭제 커밋) | 동일 |
+| shootingpang | `f8fe83a` 로더 교체 · `7fac342` characters.js 삭제 | 동일 |
 | bricks | `3ac51cb` | 동일 · 공 난도색 4종 OK |
 | twinstar | `d8ef689` | 동일 · 1P/2P/적 3종 OK |
 | hangulbi | `08a8587` | 동일 |
