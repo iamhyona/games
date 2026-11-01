@@ -497,7 +497,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  function fix(row){if(row._rk)return;const B=row.querySelectorAll('.lvb,.phDvB');if(!B.length&&!row.querySelector('.rbg')&&!(row.parentElement&&row.parentElement.querySelector('.lvb,.phDvB,.rbg')))return; /* 2026-10-31: 배지 없는 줄도 같은 열에 맞춤 */row._rk=1;css();
   const kids=[...row.children];let name=kids.find(k=>k.classList.contains('nm')||k.querySelector('.nm'));if(!name)return;
   let score=row.querySelector(':scope>.s')||(row.tagName==='LI'?kids[kids.length-1]:null);if(!score||score===name)return;
-  let info=row.querySelector(':scope>small,:scope>.m');
+  let info=row.querySelector(':scope>small,:scope>.m:not(.lvb):not(.phDvB)'); /* 2026-11-02: MASTER 배지(class m)를 보조 정보 칸으로 잘못 잡아 배지가 사라지던 문제 */
   let box=row.querySelector(':scope>.rbg');if(!box){box=document.createElement('span');[...B].forEach(b=>box.appendChild(b))}
   box.classList.add('phRkB');row.classList.add('phRkRow');name.classList.add('phRkN');score.classList.add('phRkS');
   if(info){info.classList.add('phRkI');row.insertBefore(box,info);row.insertBefore(score,null);row.insertBefore(info,score)}else row.insertBefore(box,score)}
