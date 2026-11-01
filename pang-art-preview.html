@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>팡팡이 공통 원본 미리보기</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--bg:#0b0b14;--card:#141428;--line:#2a2a48;--t:#e8e8f4;--m:#9a9ab8;--acc:#7ee0c0}
+body{margin:0;background:var(--bg);color:var(--t);font:14px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif;padding:20px 16px 60px}
+h1{font-size:18px;margin:0 0 4px}p.m{color:var(--m);margin:0 0 18px;font-size:12px}
+h2{font-size:13px;color:var(--acc);margin:26px 0 8px;letter-spacing:.04em}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:720px){.cols{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.card b{display:block;font-size:12px;color:var(--m);margin-bottom:8px}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.cell{display:flex;flex-direction:column;align-items:center;font-size:10px;color:var(--m);width:52px}
+.cell img{width:44px;height:44px}
+.chg{outline:2px solid #ff6f8a;border-radius:8px}
+.links a{display:inline-block;margin:4px 6px 4px 0;padding:6px 10px;border:1px solid var(--line);border-radius:8px;color:var(--t);text-decoration:none;font-size:12px}
+.err{color:#ff8a9a}
+</style></head><body>
+<h1>팡팡이 공통 원본 미리보기</h1>
+<p class="m">왼쪽 = 현재 배포본 <code>pang-art.js</code> · 오른쪽 = 수정안 <code>pang-art-next.js</code> · 달라진 칸은 빨간 테두리</p>
+<div id="out"></div>
+<h2>실제 게임 적용 미리보기 (수정안으로 열기)</h2>
+<div class="links" id="links"></div>
+<script>
+const GAMES=[['pang','팡야팡야'],['switchpang','스위치팡'],['shootingpang','슈팅팡'],['bricks','벽돌깨기'],['twinstar','트윈스타'],['hangulbi','한글비'],['mines','지뢰찾기']];
+document.getElementById('links').innerHTML=GAMES.map(([r,n])=>`<a href="../${r}/?pangart=next" target="_blank">${n} · next</a>`).join('');
+function load(src){return fetch(src+'?t='+Date.now()).then(r=>{if(!r.ok)throw new Error(src+' 없음');return r.text()}).then(t=>{const w={};new Function('window',t)(w);return w.PangArt})}
+Promise.all([load('pang-art.js'),load('pang-art-next.js').catch(()=>null)]).then(([cur,nxt])=>{
+  const url=s=>'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s);
+  const NAMES={1:'하트',2:'꽃',3:'물방울',4:'별',5:'육각',6:'새싹',7:'원',8:'마름모',9:'방해',10:'팔각'};
+  const sets=[
+    ['기본 표정',A=>[1,2,3,4,5,6,7,8,9,10].map(c=>[NAMES[c],A.pieceSVG(c,'')])],
+    ['웃는 눈 b',A=>[1,2,3,4,5,6,7,8,9,10].map(c=>[NAMES[c],A.pieceSVG(c,'b')])],
+    ['놀람 o',A=>[1,2,3,4,5,6,7,8,9,10].map(c=>[NAMES[c],A.pieceSVG(c,'o')])],
+    ['X눈 x',A=>[1,2,3,4,5,6,7,8,9,10].map(c=>[NAMES[c],A.pieceSVG(c,'x')])],
+    ['트윈스타 (1P·2P·적)',A=>[['1P',A.pieceSVG(4,'')],['2P',A.recolor(A.pieceSVG(4,''),4,5)],['적1',A.angrySVG(8,2)],['적2',A.angrySVG(1,-1)],['보스',A.angrySVG(10,0)]]],
+    ['벽돌깨기 공 (쉬움·보통·어려움·최고)',A=>[4,3,1,8].map((id,i)=>{let s=A.pieceSVG(7,'');A.COL[7].forEach((h,k)=>{s=s.split(h).join(A.COL[id][k])});return[['E','N','H','M'][i],s]})],
+    ['스위치팡 (게임ID 9→마름모, 8=무지개)',A=>{const st=["#ff4d6d","#ff9f1c","#ffd23f","#5bd16b","#3fa7ff","#9b5cff"].map((c,i)=>`<stop offset="${i/5}" stop-color="${c}"/>`).join("");const rb=A.pieceSVG(7,'').replace(/<radialGradient id="g"[^]*?<\/radialGradient>/,`<linearGradient id="g" x1="0" y1="0" x2="1" y2="1">${st}</linearGradient>`);return [1,2,3,4,5,6,7].map(c=>[NAMES[c],A.pieceSVG(c,'')]).concat([['9→8',A.pieceSVG(8,'')],['10',A.pieceSVG(10,'')],['무지개',rb]])}],
+    ['지뢰찾기 난도별 얼굴',A=>[6,3,10,1,4].map((id,i)=>['Lv'+(i+1),A.pieceSVG(id,'')])],
+  ];
+  let h='';
+  for(const [title,f] of sets){
+    const a=f(cur),b=nxt?f(nxt):null;
+    const row=(arr,mark)=>`<div class="row">${arr.map(([n,s],i)=>`<div class="cell"><img class="${mark&&a[i][1]!==s?'chg':''}" src="${url(s)}">${n}</div>`).join('')}</div>`;
+    h+=`<h2>${title}</h2><div class="cols"><div class="card"><b>현재</b>${row(a)}</div><div class="card"><b>수정안</b>${b?row(b,1):'<span class="err">pang-art-next.js 없음</span>'}</div></div>`;
+  }
+  document.getElementById('out').innerHTML=h;
+}).catch(e=>{document.getElementById('out').innerHTML='<p class="err">'+e.message+'</p>'});
+</script>
+</body></html>
