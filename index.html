@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* auto refresh: load + every 60s + when app comes back */(function(){var V="1793524731";function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0)location.replace(location.pathname+"?v="+m[1])}).catch(function(){})}catch(e){}}chk();setInterval(chk,60000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()});addEventListener("pageshow",function(e){if(e.persisted)chk()})})();</script>
+<script>/* auto refresh: load + every 60s + when app comes back */(function(){var V="1793532000";function chk(){try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0)location.replace(location.pathname+"?v="+m[1])}).catch(function(){})}catch(e){}}chk();setInterval(chk,60000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()});addEventListener("pageshow",function(e){if(e.persisted)chk()})})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>PARK HYONA GAMES</title>
 <meta name="description" content="박현아가 심심해서 만든 비상업적 게임 모음. 골라서 플레이하세요!">
@@ -42,6 +42,7 @@ html,body{margin:0;min-height:100%;background:#1c1d22;color:var(--txt);font-fami
 .it{position:relative;display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;border:2px solid var(--line2);border-radius:16px;background:#141519;padding:16px 14px 16px 14px;transition:transform .12s,border-color .15s,box-shadow .15s}
 .it:hover,.it:focus-visible{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 0 18px color-mix(in srgb,var(--c) 28%,transparent);outline:none}
 .it:active{transform:scale(.985)}
+.it.wip{cursor:default;opacity:.55}.it.wip:hover{border-color:#2a2b35;box-shadow:none}.it.wip:active{transform:none}.wb{position:absolute;top:12px;right:12px;font-size:10px;color:#8a8b98;letter-spacing:.02em}
 .ic{flex-shrink:0;width:60px;height:60px;border-radius:15px;background:#1c1d26;border:2px solid color-mix(in srgb,var(--c) 45%,#2c2d36);overflow:hidden}
 .ic img{width:100%;height:100%;display:block;object-fit:cover}
 .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px}
@@ -144,15 +145,15 @@ html .lcd-label .copy{font:400 9px "Silkscreen",monospace!important;letter-spaci
 <script>
 const G=[
  {id:"fruitpang",en:"MARBLE PANG",nm:"구슬팡",c:"#ff6ec7",ds:"구슬 합쳐 오로라볼까지",tg:["퍼즐","타임어택"]},
- {id:"petris",en:"PETRIS",nm:"페트리스",c:"#7ad35a",ds:"게임보이 감성 블록 쌓기",tg:["블록","대결"]},
- {id:"switchpang",en:"SWITCH PANG",nm:"스위치팡",c:"#f2b000",ds:"옆과 바꿔서 셋이면 팡",tg:["퍼즐","대결"]},
- {id:"pang",en:"PANGYA PANGYA",nm:"팡야팡야",c:"#ff6b9a",ds:"넷이 모이면 연쇄 팡",tg:["연쇄","대결"]},
- {id:"shootingpang",en:"SHOOTING PANG",nm:"슈팅팡",c:"#f6a51e",ds:"쏘아서 셋이면 팡",tg:["퍼즐","슈팅"]},
- {id:"mines",en:"MINESWEEPER",nm:"지뢰찾기",c:"#6ea0ff",ds:"숫자 보고 지뢰 피하기",tg:["클래식"]},
+ {id:"shootingpang",en:"SHOOTING PANG",nm:"슈팅팡",c:"#ff8a2a",ds:"쏘아서 셋이면 팡",tg:["퍼즐","슈팅"]},
+ {id:"switchpang",en:"SWITCH PANG",nm:"스위치팡",c:"#f2c200",ds:"옆과 바꿔서 셋이면 팡",tg:["퍼즐","대결"]},
+ {id:"pang",en:"PANGYA PANGYA",nm:"팡야팡야",c:"#a77bff",ds:"넷이 모이면 연쇄 팡",tg:["연쇄","대결"]},
+ {id:"petris",en:"PETRIS",nm:"페트리스",c:"#8fd14f",ds:"게임보이 감성 블록 쌓기",tg:["블록","대결"]},
+ {id:"mines",en:"MINESWEEPER",nm:"지뢰찾기",c:"#5b8cff",ds:"숫자 보고 지뢰 피하기",tg:["클래식"]},
  {id:"twinstar",en:"TWIN STAR",nm:"트윈스타",c:"#3fd0ff",ds:"둘이 함께 지키는 우주 슈팅",tg:["슈팅","협동"]},
- {id:"bricks",en:"BRICKS",nm:"벽돌깨기",c:"#46e09a",ds:"아이템 쓰며 우주 벽돌깨기",tg:["아케이드"]},
- {id:"hangulbi",en:"HANGULBI",nm:"한글비",c:"#3fc9b0",ds:"헷갈리는 우리말 타자게임",tg:["타자","대결"]},
- {id:"farm",en:"PANG FARM",nm:"팡팡농장",c:"#7cc95a",ds:"팡팡이와 나만의 농장",tg:["힐링","방치"]},
+ {id:"bricks",en:"BRICKS",nm:"벽돌깨기",c:"#2fdc9a",ds:"아이템 쓰며 우주 벽돌깨기",tg:["아케이드"]},
+ {id:"hangulbi",en:"HANGULBI",nm:"한글비",c:"#ff5a5a",ds:"헷갈리는 우리말 타자게임",tg:["타자","대결"]},
+ {id:"farm",en:"PANG FARM",nm:"팡팡농장",c:"#c9a06a",ds:"팡팡이와 나만의 농장",tg:["힐링","방치"],wip:1},
  {id:"kart",en:"PANG KART",nm:"팡카트",c:"#ff8a3d",ds:"",tg:[],hide:1},
  {id:"peekaboo",en:"PEEKABOO",nm:"틀린그림",c:"#8fd3ff",ds:"",tg:[],hide:1}];
 /* 게임 썸네일 = 각 게임의 웹앱 아이콘 */
@@ -164,7 +165,7 @@ function dots(word){const c=10;let o="",x=0,k=0;for(const ch of word){if(ch===" 
  return `<svg viewBox="0 0 ${x-c} ${7*c}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${word}">${o}</svg>`}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ARR='<svg viewBox="0 0 6 10" shape-rendering="crispEdges" fill="currentColor"><rect x="0" y="0" width="2" height="2"/><rect x="2" y="2" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect x="2" y="6" width="2" height="2"/><rect x="0" y="8" width="2" height="2"/></svg>';
-document.getElementById("list").innerHTML=G.filter(g=>!g.hide).map(g=>`<a class="it" style="--c:${g.c}" href="/${g.id}/"><span class="ic"><img src="/${g.id}/${IC[g.id]}?v=7" alt="" loading="lazy"></span>${g.nw?'<span class="nwb">NEW</span>':""}<div class="tx"><div class="gn"><b>${esc(g.nm)}</b><i>${g.en}</i></div></div><span class="pl"><svg viewBox="0 0 10 12" shape-rendering="crispEdges" fill="currentColor"><rect x="0" y="0" width="2" height="12"/><rect x="2" y="1" width="2" height="10"/><rect x="4" y="3" width="2" height="6"/><rect x="6" y="4" width="2" height="4"/><rect x="8" y="5" width="2" height="2"/></svg></span></a>`).join("");
+document.getElementById("list").innerHTML=G.filter(g=>!g.hide).map(g=>g.wip?`<div class="it wip" style="--c:${g.c}" aria-disabled="true"><span class="ic"><img src="/${g.id}/${IC[g.id]}?v=8" alt="" loading="lazy"></span><div class="tx"><div class="gn"><b>${esc(g.nm)}</b><i>${g.en}</i></div></div><span class="wb">작업중</span></div>`:`<a class="it" style="--c:${g.c}" href="/${g.id}/"><span class="ic"><img src="/${g.id}/${IC[g.id]}?v=8" alt="" loading="lazy"></span>${g.nw?'<span class="nwb">NEW</span>':""}<div class="tx"><div class="gn"><b>${esc(g.nm)}</b><i>${g.en}</i></div></div><span class="pl"><svg viewBox="0 0 10 12" shape-rendering="crispEdges" fill="currentColor"><rect x="0" y="0" width="2" height="12"/><rect x="2" y="1" width="2" height="10"/><rect x="4" y="3" width="2" height="6"/><rect x="6" y="4" width="2" height="4"/><rect x="8" y="5" width="2" height="2"/></svg></span></a>`).join("");
 
 
 try{if(navigator.standalone||matchMedia("(display-mode: standalone)").matches)document.getElementById("inst").remove()}catch(e){}
@@ -180,7 +181,7 @@ try{if(navigator.standalone||matchMedia("(display-mode: standalone)").matches)do
 </div></div>
 <script id="hubStatJs">/* 전체 랭킹 · 통계 (2026-10-31) */
 (function(){var U='https://script.google.com/macros/s/AKfycbzkdjVleobj98oyxlC77cUf5txCRiSB6D1zgRWU56pX22ElXAx9R8xFRGnV0nKAUbwC/exec';
-var GM=[['pang','팡야팡야','#ff6aa8','pang'],['switchpang','스위치팡','#f2b000','switchpang'],['petris','페트리스','#5fe08a',''],['fruitpang','구슬팡','#ff6ec7','fruit'],['hangulbi','한글비','#3fd0b0','hangulbi'],['bricks','벽돌깨기','#5fe08a','bricks'],['twinstar','트윈스타','#4ab8ff','twinstar'],['mines','지뢰찾기','#7fa0ff','mines'],['shootingpang','슈팅팡','#f6a51e','shootingpang']];
+var GM=[['pang','팡야팡야','#a77bff','pang'],['switchpang','스위치팡','#f2c200','switchpang'],['petris','페트리스','#8fd14f',''],['fruitpang','구슬팡','#ff6ec7','fruit'],['hangulbi','한글비','#ff5a5a','hangulbi'],['bricks','벽돌깨기','#2fdc9a','bricks'],['twinstar','트윈스타','#3fd0ff','twinstar'],['mines','지뢰찾기','#5b8cff','mines'],['shootingpang','슈팅팡','#ff8a2a','shootingpang']];
 function q(id){return document.getElementById(id)}function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 document.querySelectorAll('#list').forEach(function(l){l.addEventListener('click',function(e){var a=e.target.closest('a.it');if(!a||e.defaultPrevented)return;if(e.target.closest('a.it')===a&&!e.metaKey&&!e.ctrlKey){e.preventDefault();location.href=a.href}})});
 function top3(k,rows){rows=(rows||[]).filter(function(r){return r&&r.n});
