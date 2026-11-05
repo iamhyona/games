@@ -154,6 +154,7 @@ const G=[
  {id:"bricks",en:"BRICKS",nm:"벽돌깨기",c:"#2fdc9a",ds:"아이템 쓰며 우주 벽돌깨기",tg:["아케이드"]},
  {id:"hangulbi",en:"HANGULBI",nm:"한글비",c:"#ff5a5a",ds:"헷갈리는 우리말 타자게임",tg:["타자","대결"]},
  {id:"farm",en:"PANG FARM",nm:"팡팡농장",c:"#c9a06a",ds:"팡팡이와 나만의 농장",tg:["힐링","방치"],wip:1},
+ {id:"ssagirang",en:"SSAGIRANG",nm:"싹이랑",c:"#8fc567",ds:"반려식물 친구 키우기",tg:["육성","힐링"],wip:1},
  {id:"kart",en:"PANG KART",nm:"팡카트",c:"#ff8a3d",ds:"",tg:[],hide:1},
  {id:"peekaboo",en:"PEEKABOO",nm:"틀린그림",c:"#8fd3ff",ds:"",tg:[],hide:1}];
 /* 게임 썸네일 = 각 게임의 웹앱 아이콘 */
@@ -165,7 +166,7 @@ function dots(word){const c=10;let o="",x=0,k=0;for(const ch of word){if(ch===" 
  return `<svg viewBox="0 0 ${x-c} ${7*c}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${word}">${o}</svg>`}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ARR='<svg viewBox="0 0 6 10" shape-rendering="crispEdges" fill="currentColor"><rect x="0" y="0" width="2" height="2"/><rect x="2" y="2" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect x="2" y="6" width="2" height="2"/><rect x="0" y="8" width="2" height="2"/></svg>';
-document.getElementById("list").innerHTML=G.filter(g=>!g.hide).map(g=>g.wip?`<div class="it wip" style="--c:${g.c}" aria-disabled="true"><span class="ic"><img src="/${g.id}/${IC[g.id]}?v=8" alt="" loading="lazy"></span><div class="tx"><div class="gn"><b>${esc(g.nm)}</b><i>${g.en}</i></div></div><span class="wb">작업중</span></div>`:`<a class="it" style="--c:${g.c}" href="/${g.id}/"><span class="ic"><img src="/${g.id}/${IC[g.id]}?v=8" alt="" loading="lazy"></span>${g.nw?'<span class="nwb">NEW</span>':""}<div class="tx"><div class="gn"><b>${esc(g.nm)}</b><i>${g.en}</i></div></div><span class="pl"><svg viewBox="0 0 10 12" shape-rendering="crispEdges" fill="currentColor"><rect x="0" y="0" width="2" height="12"/><rect x="2" y="1" width="2" height="10"/><rect x="4" y="3" width="2" height="6"/><rect x="6" y="4" width="2" height="4"/><rect x="8" y="5" width="2" height="2"/></svg></span></a>`).join("");
+document.getElementById("list").innerHTML=G.filter(g=>!g.hide).map(g=>g.wip?`<div class="it wip" style="--c:${g.c}" aria-disabled="true"><span class="ic">${g.id==="ssagirang"?"🌱":`<img src="/${g.id}/${IC[g.id]}?v=8" alt="" loading="lazy">`}</span><div class="tx"><div class="gn"><b>${esc(g.nm)}</b><i>${g.en}</i></div></div><span class="wb">작업중</span></div>`:`<a class="it" style="--c:${g.c}" href="/${g.id}/"><span class="ic"><img src="/${g.id}/${IC[g.id]}?v=8" alt="" loading="lazy"></span>${g.nw?'<span class="nwb">NEW</span>':""}<div class="tx"><div class="gn"><b>${esc(g.nm)}</b><i>${g.en}</i></div></div><span class="pl"><svg viewBox="0 0 10 12" shape-rendering="crispEdges" fill="currentColor"><rect x="0" y="0" width="2" height="12"/><rect x="2" y="1" width="2" height="10"/><rect x="4" y="3" width="2" height="6"/><rect x="6" y="4" width="2" height="4"/><rect x="8" y="5" width="2" height="2"/></svg></span></a>`).join("");
 
 
 try{if(navigator.standalone||matchMedia("(display-mode: standalone)").matches)document.getElementById("inst").remove()}catch(e){}
